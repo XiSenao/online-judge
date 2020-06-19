@@ -282,7 +282,8 @@
 	import CodeMirror from '../../components/CodeMirror'
 	import UploadDemo from '../../components/Upload' 
 	import Clipboard from 'clipboard'
-	import { CONSTANTS_TEMPLATE, CONSTANTS_SPJ_TEMPLATE, LANGUAGES } from '@/utils/constants'
+  import { CONSTANTS_TEMPLATE, CONSTANTS_SPJ_TEMPLATE, LANGUAGES } from '@/utils/constants'
+  import { exFormatText } from '@/utils/JudgeServer/poj'
   import api from '../../api'
   import ProblemMixin from './problemMixin'
   const Base64 = require('js-base64').Base64
@@ -421,7 +422,6 @@
 					return
         }
         let data = {}
-        console.log(newVal)
         // use deep copy to avoid infinite loop
 				let languages = JSON.parse(JSON.stringify(newVal)).sort()
         for (let item of languages) {
@@ -447,23 +447,6 @@
 			}
     },
     methods: {
-      exFormatText (str) {
-        var imgReg = /<img.*?(?:>|\/>)/gi;
-        //匹配src属性
-        var srcReg = /src=[\'\"]?([^\'\"]*)[\'\"]?/i;
-        if (!str) {
-          return str
-        }
-        var arr = str.match(imgReg);
-        if (!arr) {
-          return str
-        }
-        for (var i = 0; i < arr.length; i++) {
-          var src = arr[i].match(srcReg);
-          str = str.replace(src[0], "src=http://poj.org/" + src[1])	
-        }
-        return str 
-      },
       compileSPJ () {
         if (!this.problem.spj_code || !this.problem.judgeType) {
           this.$error('未填写特判代码或未选择评测机')
@@ -512,7 +495,6 @@
 				this.zipFileLists = newZipFileLists
 			},
       switchSpj () {
-        console.log(this.problem.spj_language)
         const spjTemplate = CONSTANTS_SPJ_TEMPLATE
         // 编辑问题处理
         if (this.testCaseUploaded) {
@@ -629,9 +611,9 @@
             if (data.sourceName.indexOf('@') === 0) {
               data.sourceName = data.sourceName.substring(1)
             }
-            data.description = this.exFormatText(data.description)
-            data.output_description = this.exFormatText(data.output_description)
-            data.input_description = this.exFormatText(data.input_description)
+            data.description = exFormatText(data.description)
+            data.output_description = exFormatText(data.output_description)
+            data.input_description = exFormatText(data.input_description)
             this.problem = {
               description: data.description,
               hint: data.hint,

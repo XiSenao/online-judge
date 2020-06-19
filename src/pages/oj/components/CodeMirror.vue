@@ -36,7 +36,7 @@
   </div>
 </template>
 <script>
-  import utils from '@/utils/utils'
+  import { LANGUAGES } from '@/utils/constants'
   import { codemirror } from 'vue-codemirror-lite'
 
   // theme
@@ -110,14 +110,12 @@
       }
     },
     mounted () {
-      utils.getLanguages().then(languages => {
-        let mode = {}
-        languages.forEach(lang => {
-          mode[lang.name] = lang.content_type
-        })
-        this.mode = mode
-        this.editor.setOption('mode', this.mode[this.language])
+      let { languages } = LANGUAGES, mode = {}
+      languages.forEach(lang => {
+        mode[lang.name] = lang.content_type
       })
+      this.mode = mode
+      this.editor.setOption('mode', this.mode[this.language])
       this.editor.focus()
     },
     methods: {

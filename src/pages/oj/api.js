@@ -177,9 +177,6 @@ export default {
   getOwnCertType () {
     return ajax('user/userCertification', 'get')
   },
-  getLanguages () {
-    return ajax('languages', 'get')
-  },
   getCertTypeList () {
     return ajax('user/userCertification/certTypeList', 'get')
   },

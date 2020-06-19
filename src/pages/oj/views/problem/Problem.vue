@@ -1,13 +1,13 @@
 <template>
-  <div class="flex-container">
+  <div class="flex-container spin-container">
     <div id="problem-main">
+      <Spin fix v-if="isLoading"></Spin>
       <!--problem main-->
       <Panel :padding="40" shadow>
         <div slot="title">{{problem.title}}</div>
         <div id="problem-content" class="markdown-body" v-katex>
           <p class="title">{{$t('m.Description')}}</p>
           <p class="content" v-html=problem.description></p>
-          <!-- {{$t('m.music')}} -->
           <p class="title">{{$t('m.Input')}} <span v-if="problem.ioMode=='File IO'">({{$t('m.FromFile')}}: {{ problem.ioMode }})</span></p>
           <p class="content" v-html=problem.inputDescription></p>
           <p class="title">{{$t('m.Output')}} <span v-if="problem.ioMode=='File IO'">({{$t('m.ToFile')}}: {{ problem.ioMode }})</span></p>
@@ -206,6 +206,7 @@
   import storage from '@/utils/storage'
   import {FormMixin} from '@oj/components/mixins'
   import {JUDGE_STATUS, CONTEST_STATUS, buildProblemCodeKey, CONSTANTS_TEMPLATE, JUDGE_SERVER} from '@/utils/constants'
+  import { exFormatText } from '@/utils/JudgeServer/poj'
   import api from '@oj/api'
   import {pie, largePie} from './chartData'
 
@@ -217,6 +218,7 @@
     mixins: [FormMixin],
     data () {
       return {
+        isLoading: true,
         submissionResult: '',
         statusVisible: false,
         captchaRequired: false,
@@ -271,6 +273,7 @@
       ...mapActions(['changeDomTitle']),
       init () {
         this.$Loading.start()
+        this.isLoading = true
         clearTimeout(this.refreshStatus)
         this.contestID = this.$route.params.contestID
         this.problemID = this.$route.params.problemID
@@ -281,6 +284,7 @@
         }
         api[func](ID).then(res => {
           this.$Loading.finish()
+          this.isLoading = false
           let problem = res.data.data
           this.changeDomTitle({title: problem.title})
           if (this.profile.id) {
@@ -334,10 +338,10 @@
             }
           }
           problem.codeTemplate = templateLists
-          problem.description = this.exFormatText(problem.description)
-          problem.hint = this.exFormatText(problem.hint)
-          problem.inputDescription = this.exFormatText(problem.inputDescription)
-          problem.outputDescription = this.exFormatText(problem.outputDescription)
+          problem.description = exFormatText(problem.description)
+          problem.hint = exFormatText(problem.hint)
+          problem.inputDescription = exFormatText(problem.inputDescription)
+          problem.outputDescription = exFormatText(problem.outputDescription)
           // 延迟
           let samples = [], inputSamples = [], outputSamples = []
           // 样例格式统一
@@ -369,24 +373,8 @@
         }, (_) => {
           this.$router.go(-1)
           this.$Loading.error()
+          this.isLoading = false
         })
-      },
-      exFormatText (str) {
-        var imgReg = /<img.*?(?:>|\/>)/gi;
-        //匹配src属性
-        var srcReg = /src=[\'\"]?([^\'\"]*)[\'\"]?/i;
-        if (!str) {
-          return str
-        }
-        var arr = str.match(imgReg);
-        if (!arr) {
-          return str
-        }
-        for (var i = 0; i < arr.length; i++) {
-          var src = arr[i].match(srcReg);
-          str = str.replace(src[0], "src=http://poj.org/" + src[1])	
-        }
-        return str 
       },
       changePie (problemData) {
         let status = problemData.statistic
@@ -602,7 +590,9 @@
   .card-title {
     margin-left: 8px;
   }
-
+  .spin-container {
+    position: relative;
+  }
   .flex-container {
     #problem-main {
       flex: auto;
