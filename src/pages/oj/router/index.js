@@ -16,7 +16,12 @@ const createRouter = () => new VueRouter({
     if (savedPosition) {
       return savedPosition
     } else {
-      return { x: 0, y: 0 }
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({ x: 0, y: 1 });
+        }, 0);
+      });
+      // return { x: 0, y: 0 }
     }
   },
   routes: constantRoutes

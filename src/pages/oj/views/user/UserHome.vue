@@ -74,13 +74,13 @@
           </div>
         </div>
         <div id="icons">
-          <a :href="profile.github">
+          <a :href="profile.github" v-if="!!profile.github">
             <Icon type="social-github-outline" size="30"></Icon>
           </a>
-          <a :href="'mailto:'+ profile.email">
+          <a :href="'mailto:'+ profile.email" v-if="!!profile.email">
             <Icon class="icon" type="ios-email-outline" size="30"></Icon>
           </a>
-          <a :href="profile.blog">
+          <a :href="profile.blog" v-if="!!profile.blog">
             <Icon class="icon" type="ios-world-outline" size="30"></Icon>
           </a>
         </div>
@@ -173,6 +173,21 @@
       '$route' (newVal, oldVal) {
         if (newVal !== oldVal) {
           this.init()
+        }
+      },
+      'profile' (newVal, oldVal) {
+        if (newVal) {
+          let reg = /^http(s)?/ig
+          newVal.blog = newVal.blog ? newVal.blog.replace(/\s+/g, '') : null
+          newVal.github = newVal.github ? newVal.github.replace(/\s+/g, '') : null
+          if (newVal.blog) {
+            newVal.blog = !newVal.blog.search(reg) ? newVal.blog : `http://${ newVal.blog }`
+          }
+          if (newVal.github) {
+            newVal.github = !newVal.github.search(reg) ? newVal.github : `http://${ newVal.github }`
+          }
+          this.profile.blog = newVal.blog
+          this.problems.github = newVal.github
         }
       }
     }

@@ -7,6 +7,7 @@
       </transition>
       <div class="footer">
         <p v-html="website.website_footer"></p>
+        <p><a href="#">闽ICP备20011652</a></p>
         <p>Powered by <a href="https://github.com/czeta/online-judge">OnlineJudge</a>
           <span v-if="version">&nbsp; Version: {{ version }}</span>
         </p>
@@ -33,11 +34,9 @@
     created () {
       try {
         document.body.removeChild(document.getElementById('app-loader'))
-        console.log("%c ", "background: url(http://117.78.10.137/static/image/superadmin.png) no-repeat center;padding-left:314px;padding-bottom: 249px;")
+        console.log("%c ", "background: url(http://yfoj.org.cn/static/image/show.png) no-repeat center;padding-left:314px;padding-bottom: 249px;")
         console.log("\n%c Welcome to Online Judge! %c %c Github: https://github.com/FinalAshen/Online-Judge\n\n", "color: #73c9e5; font-weight:600","","color:orange;font-weight:900")
-        // console.log("Welcome to Online Judge, github: https://github.com/FinalAshen/Online-Judge\n\n\n")
-      } catch (e) {
-      }
+      } catch (_) {}
     },
     mounted () {
       this.getWebsiteConfig()

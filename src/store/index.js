@@ -11,7 +11,8 @@ const rootState = {
     mode: 'login', // or 'register',
     visible: false
   },
-  identity: null
+  identity: null,
+  storgeQueue: []
 }
 
 const rootGetters = {
@@ -53,8 +54,10 @@ const rootActions = {
   },
   changeDomTitle ({commit, state}, payload) {
     if (payload && payload.title) {
-      window.document.title = 'QDOJ' + ' | ' + payload.title
-    } 
+      window.document.title = `${ payload.title } - Online Judge`
+    } else {
+      window.document.title = `${ state.route.meta.title } - Online Judge`
+    }
   }
 }
 

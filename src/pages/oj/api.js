@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import store from '@/store'
 import axios from 'axios'
-import IMGUtils from '@/utils/util'
-// import { getToken } from '@/utils/auth'
 import { getToken as getUserToken } from '@/utils/uauth' 
 import { getToken as getAdminToken} from '@/utils/auth'
 Vue.prototype.$http = axios
@@ -10,9 +8,9 @@ axios.defaults.baseURL = '/api'
 // axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 // axios.defaults.xsrfCookieName = 'csrftoken'
 // 原本以为api.js是智能的, 谁发起就先使用谁的拦截器, 没想到后来发现都是从user -> admin, 因此要想实现管理员和用户同时登录就不能使用拦截器(无法了解是谁发起的)
-// axios.interceptors.request.use(config => {    //配置axios请求头，axios每次发起请求携带token，在Network中的headers看的到
+// axios.interceptors.request.use(config => {    // 配置axios请求头，axios每次发起请求携带token，在Network中的headers看的到
 //   if (!!getToken()) {
-//     config.headers.common.token = getToken()  //Authorization  是请求头要求加上的字段
+//     config.headers.common.token = getToken()  // Authorization  是请求头要求加上的字段
 //   }
 //   return config
 // })
@@ -64,11 +62,6 @@ export default {
     return ajax('logout', 'post')
   },
   getHeadImageCopy (headImageName) {
-    const url = "http://121.36.27.155:80/api/user/head/" + headImageName
-    const settings = IMGUtils.getSettings(url, "", 'GET')
-    settings.responseType = 'arraybuffer'
-    settings.headers.token = getUserToken()
-    return axios(settings)
     // 不能将responseType放在headers中
     return ajax(`user/head/${headImageName}`, 'get', {
       responseType: 'arraybuffer'

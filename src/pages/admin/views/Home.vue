@@ -18,6 +18,7 @@
         <router-view></router-view>
       </transition>
       <div class="footer">
+        <p><a href="#">闽ICP备20011652</a></p>
         Build Version: {{ version }}
       </div>
     </div>

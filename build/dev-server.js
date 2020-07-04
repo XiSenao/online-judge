@@ -15,7 +15,7 @@ const webpackConfig = require('./webpack.dev.conf')
 
 // default port where dev server listens for incoming traffic
 const port = process.env.PORT || config.dev.port
-console.log(process.env.PORT, config.dev.port)
+
 // automatically open browser, if not set will be false
 const autoOpenBrowser = !!config.dev.autoOpenBrowser
 // Define HTTP proxies to your custom API backend
@@ -56,7 +56,14 @@ Object.keys(proxyTable).forEach(function (context) {
   app.use(proxyMiddleware(options.filter || context, options))
 })
 
-// handle fallback for HTML5 history API
+/*
+*   handle fallback for HTML5 history API
+*   Single Page Applications (SPA) typically only utilise one index file that is accessible by web browsers: usually index.html. 
+*   Navigation in the application is then commonly handled using JavaScript with the help of the HTML5 History API. 
+*   This results in issues when the user hits the refresh button or is directly accessing a page other than the landing page, e.g. 
+*   help or /help/online as the web server bypasses the index file to locate the file at this location. 
+*   As your application is a SPA, the web server will fail trying to retrieve the file and return a 404 - Not Found message to the user.
+*/
 const rewrites = {
   rewrites: [{
     from: '/admin/', // 正则或者字符串
@@ -72,8 +79,6 @@ app.use(devMiddleware)
 // serve pure static assets
 const staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
 app.use(staticPath, express.static('./static'))
-
-const uri = 'http://localhost:' + port
 
 var _resolve
 var _reject

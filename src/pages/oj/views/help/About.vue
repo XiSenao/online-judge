@@ -5,7 +5,7 @@
       <div class="content markdown-body">
         <ul>
           <li v-for="lang in languages">{{lang.name}} ( {{lang.description}} )
-            <pre>{{lang.config.compile.compile_command}}</pre>
+            <pre>{{lang.config.compile_command}}</pre>
           </li>
         </ul>
       </div>
@@ -39,18 +39,18 @@
 
 <script>
   import utils from '@/utils/utils'
+  import { LANGUAGES } from '@/utils/constants'
 
   export default {
     data () {
       return {
-        languages: []
+        languages: ''
       }
     },
     beforeRouteEnter (to, from, next) {
-      utils.getLanguages().then(languages => {
-        next(vm => {
-          vm.languages = languages
-        })
+      let { languages } = LANGUAGES
+      next(vm => {
+        vm.languages = languages
       })
     }
   }

@@ -1,5 +1,4 @@
-import Cookies from 'js-cookie'
-
+import Cookies from './storage'
 const TokenKey = 'Admin-Token'
 const AccountKey = 'Admin-Account'
 

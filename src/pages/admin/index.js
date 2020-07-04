@@ -21,17 +21,22 @@ import Panel from './components/Panel.vue'
 import IconBtn from './components/btn/IconBtn.vue'
 import Save from './components/btn/Save.vue'
 import Cancel from './components/btn/Cancel.vue'
+import VueWorker from 'vue-worker'
 import './style.less'
 import './permission'
 // register global utility filters.
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
-
 Vue.use(VueAnalytics, {
   id: GOOGLE_ANALYTICS_ID,
-  router
+  disableScriptLoader: true,
+  router,
+  autoTracking: {
+    pageviewOnLoad: false
+  }
 })
+Vue.use(VueWorker)
 Vue.use(iView)
 Vue.use(Element, {locale})
 Vue.use(katex)

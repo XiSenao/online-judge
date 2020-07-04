@@ -192,5 +192,28 @@ export const m = {
   Rating_Score: '分數',
   Message: '消息中心',
   Join_Successfully: '成功參賽',
-  Join: '參與比賽'
+  Join: '參與比賽',
+  Success: '成功',
+
+   // ProfileSetting.vue
+   Update_Error_Info: '請檢查您所填寫的資訊!',
+   Update_Avatar_Success: '头像更新成功!',
+   Update_Avatar_Check: '頭像更新成功?',
+   Update_Error_Url: '您所填寫的Url有誤!',
+   Update_Error_Mood: '您所填寫的內容超過32個字元!',
+   File_Type_Not_Support: '檔案類型不支持.',
+   Exceed_Max_Size_Limit: '超出最大大小限制.',
+   File_Type_Desc: '{ fileName } 檔案格式不正確，只能選擇尾碼為 ( gif、 jpg、 jpeg、 png、 bmp、 GIF、 JPG、 PNG ).',
+   File_Type_Size: '{ fileName } 檔案尺寸太大，您可以上傳高達2MB的影像.',
+ 
+   // CertificationSetting.vue
+   Quick_Select_Info: '你可以嘗試直接選取學校、學院、專業.如果有的話.',
+   Think_It_Over_Title: '請考慮周到!',
+   Think_It_Over_Content: '管理員會重新稽核您所填寫的認證資訊，當然如果管理員有空閒時間的話，那麼您先前的認證資訊將會被覆蓋.',
+ 
+   // AccountSetting.vue
+   Update_Success_Password: '您將在5s之後強制重新登入.',
+   Update_Not_Match_Password: '密碼匹配失敗.',
+   Update_Not_Change_Password: '新密碼不能和舊密碼重複.',
+   Update_Again_Password: '請重新輸入密碼.'
 }

@@ -304,5 +304,27 @@ export const m = {
   Recent_Submission_Time: '近期申请时间',
   Message: '消息中心',
   Join_Successfully: '成功参赛',
-  Join: '参与比赛'
+  Join: '参与比赛',
+
+  // ProfileSetting.vue
+  Update_Error_Info: '请检查您所填写的信息!',
+  Update_Avatar_Success: '头像更新成功!',
+  Update_Avatar_Check: '您确定要修改头像吗?',
+  Update_Error_Url: '您所填写的Url有误!',
+  Update_Error_Mood: '您所填写的内容超过32个字符!',
+  File_Type_Not_Support: '文件类型不支持.',
+  Exceed_Max_Size_Limit: '超出最大大小限制.',
+  File_Type_Desc: '{ fileName } 文件格式不正确, 只能选择后缀为( gif、 jpg、 jpeg、 png、 bmp、 GIF、 JPG、 PNG ).',
+  File_Type_Size: '{ fileName } 文件尺寸太大, 您可以上传高达2MB的图像.',
+
+  // CertificationSetting.vue
+  Quick_Select_Info: '你可以尝试直接选取学校、学院、专业. 如果有的话.',
+  Think_It_Over_Title: '请考虑周到!',
+  Think_It_Over_Content: '管理员会重新审核您所填写的认证信息, 当然如果管理员有空闲时间的话, 那么您先前的认证信息将会被覆盖.',
+
+  // AccountSetting.vue
+  Update_Success_Password: '您将在5s之后强制重新登录.',
+  Update_Not_Match_Password: '密码匹配失败.',
+  Update_Not_Change_Password: '新密码不能和旧密码重复.',
+  Update_Again_Password: '请重新输入密码.'
 }

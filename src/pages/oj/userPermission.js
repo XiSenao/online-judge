@@ -59,9 +59,9 @@ router.beforeEach(async(to, from, next) => {
 		} else {
       // other pages that do not have permission to access are redirected to the 401/404 page.
       if (store.getters['upermission/sumRoutesPath'].some(res => utils.comparePath(res, to.path))) {
-        next('/401')
+        next({ path: '/401', replace: true})
       } else {
-        next('/404')
+        next({ path: '/404', replace: true})
       }
 			NProgress.done()
 		}

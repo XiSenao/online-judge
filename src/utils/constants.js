@@ -94,7 +94,8 @@ export const LANGUAGES = {
     {
       name: "C",
       config: {
-        template: "//PREPEND BEGIN\n#include <stdio.h>\n//PREPEND END\n\n//TEMPLATE BEGIN\nint add(int a, int b) {\n  // Please fill this blank\n  return ___________;\n}\n//TEMPLATE END\n\n//APPEND BEGIN\nint main() {\n  printf(\"%d\", add(1, 2));\n  return 0;\n}\n//APPEND END"
+        template: "//PREPEND BEGIN\n#include <stdio.h>\n//PREPEND END\n\n//TEMPLATE BEGIN\nint add(int a, int b) {\n  // Please fill this blank\n  return ___________;\n}\n//TEMPLATE END\n\n//APPEND BEGIN\nint main() {\n  printf(\"%d\", add(1, 2));\n  return 0;\n}\n//APPEND END",
+        compile_command: `/usr/bin/gcc -DONLINE_JUDGE -O2 -w -fmax-errors=3 -std=c11 {src_path} -lm -o {exe_path}`
       },
       description: "GCC 5.4",
       content_type: "text/x-csrc"
@@ -102,7 +103,8 @@ export const LANGUAGES = {
     {
       name: "C++",
       config: {
-        template: "//PREPEND BEGIN\n#include <iostream>\n//PREPEND END\n\n//TEMPLATE BEGIN\nint add(int a, int b) {\n  // Please fill this blank\n  return ___________;\n}\n//TEMPLATE END\n\n//APPEND BEGIN\nint main() {\n  std::cout << add(1, 2);\n  return 0;\n}\n//APPEND END"
+        template: "//PREPEND BEGIN\n#include <iostream>\n//PREPEND END\n\n//TEMPLATE BEGIN\nint add(int a, int b) {\n  // Please fill this blank\n  return ___________;\n}\n//TEMPLATE END\n\n//APPEND BEGIN\nint main() {\n  std::cout << add(1, 2);\n  return 0;\n}\n//APPEND END",
+        compile_command: `/usr/bin/g++ -DONLINE_JUDGE -O2 -w -fmax-errors=3 -std=c++14 {src_path} -lm -o {exe_path}`
       },
       description: "G++ 5.4",
       content_type: "text/x-c++src"
@@ -110,7 +112,8 @@ export const LANGUAGES = {
     {
       name: "Java",
       config: {
-        template: "//PREPEND BEGIN\n//PREPEND END\n\n//TEMPLATE BEGIN\n//TEMPLATE END\n\n//APPEND BEGIN\n//APPEND END"
+        template: "//PREPEND BEGIN\n//PREPEND END\n\n//TEMPLATE BEGIN\n//TEMPLATE END\n\n//APPEND BEGIN\n//APPEND END",
+        compile_command: `/usr/bin/javac {src_path} -d {exe_dir} -encoding UTF8`
       },
       description: "OpenJDK 1.8",
       content_type: "text/x-java"
@@ -118,7 +121,8 @@ export const LANGUAGES = {
     {
       name: "Python2",
       config: {
-        template: "//PREPEND BEGIN\n//PREPEND END\n\n//TEMPLATE BEGIN\n//TEMPLATE END\n\n//APPEND BEGIN\n//APPEND END"
+        template: "//PREPEND BEGIN\n//PREPEND END\n\n//TEMPLATE BEGIN\n//TEMPLATE END\n\n//APPEND BEGIN\n//APPEND END",
+        compile_command: `/usr/bin/python -m py_compile {src_path}`
       },
       description: "Python 2.7",
       content_type: "text/x-python"
@@ -126,7 +130,8 @@ export const LANGUAGES = {
     {
       name: "Python3",
       config: {
-        template: "//PREPEND BEGIN\n//PREPEND END\n\n//TEMPLATE BEGIN\n//TEMPLATE END\n\n//APPEND BEGIN\n//APPEND END"
+        template: "//PREPEND BEGIN\n//PREPEND END\n\n//TEMPLATE BEGIN\n//TEMPLATE END\n\n//APPEND BEGIN\n//APPEND END",
+        compile_command: `/usr/bin/python3 -m py_compile {src_path}`
       },
       description: "Python 3.5",
       content_type: "text/x-python"
@@ -362,6 +367,18 @@ export const PAWSTRENGTH = [
   }
 ]
 
+export const URL_REG = '^((https|http|ftp)://)?'// (https或http或ftp):// 可有可无
+　　+ '(([\\w_!~*\'()\\.&=+$%-]+: )?[\\w_!~*\'()\\.&=+$%-]+@)?' // ftp的user@ 可有可无
+　　+ '(([0-9]{1,3}\\.){3}[0-9]{1,3}' // IP形式的URL- 3位数字.3位数字.3位数字.3位数字
+　　+ '|' // 允许IP和DOMAIN（域名）
+　　+ '(localhost)|'    //匹配localhost
+　　+ '([\\w_!~*\'()-]+\\.)*' // 域名- 至少一个[英文或数字_!~*\'()-]加上.
+　　+ '\\w+\\.' // 一级域名 -英文或数字 加上.
+　　+ '[a-zA-Z]{1,6})' // 顶级域名- 1-6位英文
+　　+ '(:[0-9]{1,5})?' // 端口- :80 ,1-5位数字
+　　+ '((/?)|' // url无参数结尾 - 斜杆或这没有
+　　+ '(/[\\w_!~*\'()\\.;?:@&=+$,%#-]+)+/?)$' // 请求参数结尾- 英文或数字和[]内的各种字符
+
 export const STORAGE_KEY = {
   AUTHED: 'authed',
   PROBLEM_CODE: 'problemCode',
@@ -378,4 +395,4 @@ export function buildProblemCodeKey (problemID, contestID = null) {
   return `${STORAGE_KEY.PROBLEM_CODE}_NaN_${problemID}`
 }
 
-export const GOOGLE_ANALYTICS_ID = 'UA-111499601-1'
+export const GOOGLE_ANALYTICS_ID = 'UA-170628607-1'

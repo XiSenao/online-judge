@@ -51,12 +51,14 @@
   // active-line.js
   import 'codemirror/addon/selection/active-line.js'
 
+  import 'codemirror/keymap/sublime.js'
+
   // foldGutter
   import 'codemirror/addon/fold/foldgutter.css'
   import 'codemirror/addon/fold/foldgutter.js'
   import 'codemirror/addon/fold/brace-fold.js'
   import 'codemirror/addon/fold/indent-fold.js'
-
+  
   export default {
     name: 'CodeMirror',
     components: {
@@ -94,10 +96,18 @@
           // 代码折叠
           foldGutter: true,
           gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+          // 自动缩进
+          smartIndent: true,
+          indentUnit: 4,
           // 选中文本自动高亮，及高亮方式
           styleSelectedText: true,
           lineWrapping: true,
-          highlightSelectionMatches: {showToken: /\w/, annotateScrollbar: true}
+          matchBrackets: true,
+          keyMap: 'sublime',
+          highlightSelectionMatches: {showToken: /\w/, annotateScrollbar: true},
+          hintOptions: {
+            completeSingle: false
+          },
         },
         mode: {
           'C++': 'text/x-csrc'
@@ -117,6 +127,9 @@
       this.mode = mode
       this.editor.setOption('mode', this.mode[this.language])
       this.editor.focus()
+      this.myEditor.on("cursorActivity", () => {
+        this.myEditor.showHint();
+      });  
     },
     methods: {
       onEditorCodeChange (newCode) {

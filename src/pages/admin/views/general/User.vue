@@ -52,7 +52,7 @@
         <el-table-column fixed="right" label="Option" width="200">
           <template slot-scope="{row}">
             <icon-btn name="Reset" icon="refresh" @click.native="resetPassword(row.username)"></icon-btn>
-            <icon-btn name="Forbid" :icon="row.status ? 'ban' : 'check-square-o'" @click.native="exchangeAccountStatus(row.username, row.status)"></icon-btn>
+            <icon-btn :name="row.status ? 'Forbid' : 'Enable'" :icon="row.status ? 'ban' : 'check-square-o'" @click.native="exchangeAccountStatus(row.username, row.status)"></icon-btn>
           </template>
         </el-table-column>
       </el-table>

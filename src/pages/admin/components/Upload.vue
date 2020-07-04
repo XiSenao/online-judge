@@ -59,7 +59,7 @@
 			// The name of the button
 			buttonName: {
 				type: String,
-        		default: 'Show'
+        default: 'Show'
 			},
 			// Whether to display the upload button
 			showButton: {
@@ -213,12 +213,12 @@
 								})
 							}
 							if (!this.checkItemLegal(contentValue)) {
-								this.$Message.info("上传不符合规格, 请查询开发手册");
+								this.$Message.info("上传不符合规格, 请查询开发手册")
 								return
 							}
 							// Animation effects
-							let keyID = Math.random().toString().substr(2);
-							ifile['keyID'] = keyID;
+							let keyID = Math.random().toString().substr(2)
+							ifile['keyID'] = keyID
 							this.file.push(ifile)
 							this.uploadFile.push(ifile)
 							this.getZipFileValueLists(contentValue)

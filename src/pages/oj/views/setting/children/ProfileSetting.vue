@@ -63,10 +63,10 @@
     </Modal>
 
     <div class="section-title">{{$t('m.Profile_Setting')}}</div>
-    <Form ref="formProfile" :model="formProfile">
+    <Form ref="formProfile" :model="formProfile" :rules="formValidate">
       <Row type="flex" :gutter="30" justify="space-around">
         <Col :span="11">
-          <FormItem label="Mood">
+          <FormItem label="Mood" prop="mood">
             <Input v-model="formProfile.mood"/>
           </FormItem>
           <FormItem label="Language">
@@ -74,16 +74,15 @@
               <Option v-for="lang in languages" :key="lang.value" :value="lang.value">{{lang.label}}</Option>
             </Select>
           </FormItem>
-          <Form-item>
+          <Form-item> 
             <Button type="primary" @click="updateProfile" :loading="loadingSaveBtn">Save All</Button>
           </Form-item>
         </Col>
-
         <Col :span="11">
-          <Form-item label="Github">
+          <Form-item label="Github" prop="github">
             <Input v-model="formProfile.github"/>
           </Form-item>
-          <Form-item label="Blog">
+          <Form-item label="Blog" prop="blog">
             <Input v-model="formProfile.blog"/>
           </Form-item>
         </Col>
@@ -99,6 +98,7 @@
   import {types} from '@/store'
   import {languages} from '@/i18n'
   import { mapGetters, mapActions } from 'vuex'
+  import { URL_REG } from '@/utils/constants'
   export default {
     components: {
       VueCropper
@@ -121,6 +121,17 @@
           blog: '',
           github: '',
           viewLanguage: ''
+        },
+        formValidate: {
+          mood: [
+            { validator: (rule, value, cb) => this.checkMyMood(value, cb), trigger: 'change' }
+          ],
+          github: [
+            { validator: (rule, value, cb) => this.checkMyURL(value, 'github', cb), trigger: 'change' }
+          ],
+          blog: [
+            { validator: (rule, value, cb) => this.checkMyURL(value, 'blog', cb), trigger: 'change' }
+          ]
         }
       }
     },
@@ -137,11 +148,28 @@
       ...mapActions({
         getProfile: 'user/getProfile'
       }),
+      checkMyMood (value, cb) {
+        value = value ? value.trim() : null
+        if (value && value.length > 33) {
+          cb(new Error(this.$t('m.Update_Error_Mood')))
+        }
+        this.formProfile.mood = value
+        cb()
+      },
+      checkMyURL (value, option, cb) {
+        value = value ? value.trim() : null
+        const re = new RegExp(URL_REG, 'i');
+        if (value && !re.test(encodeURI(value))) {
+          cb(new Error(this.$t('m.Update_Error_Url')))
+        }
+        this.formProfile[option] = value
+        cb()
+      },
       checkFileType (file) {
         if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(file.name)) {
           this.$Notice.warning({
-            title: 'File type not support',
-            desc: 'The format of ' + file.name + ' is incorrect ，please choose image only.'
+            title: this.$t('m.File_Type_Not_Support'),
+            desc: this.$t('m.File_Type_Desc', { fileName: file.name })
           })
           return false
         }
@@ -151,8 +179,8 @@
         // max size is 2MB
         if (file.size > 2 * 1024 * 1024) {
           this.$Notice.warning({
-            title: 'Exceed max size limit',
-            desc: 'File ' + file.name + ' is too big, you can upload a image up to 2MB in size'
+            title: this.$t('m.Exceed_Max_Size_Limit'),
+            desc: this.$t('m.File_Type_Size', { fileName: file.name })
           })
           return false
         }
@@ -182,7 +210,7 @@
       },
       reselect () {
         this.$Modal.confirm({
-          content: 'Are you sure to disgard the changes?',
+          content: this.$t('m.Update_Avatar_Check'),
           onOk: () => {
             this.avatarOption.imgSrc = ''
           }
@@ -202,7 +230,7 @@
           this.loadingUploadBtn = true
           api.uploadHead(form).then(res => {
             this.loadingUploadBtn = false
-            this.$success('Successfully set new avatar')
+            this.$success(this.$t('m.Update_Avatar_Success'))
             this.uploadModalVisible = false
             this.avatarOption.imgSrc = ''
             this.getProfile()
@@ -212,14 +240,20 @@
         })
       },
       updateProfile () {
-        this.loadingSaveBtn = true
-        let updateData = Object.assign({}, this.formProfile)
-        api.updateProfile(updateData).then(res => {
-          this.$success('Success')
-          this.getProfile()
-          this.loadingSaveBtn = false
-        }, _ => {
-          this.loadingSaveBtn = false
+        this.$refs['formProfile'].validate((valid) => {
+          if (valid) {
+            this.loadingSaveBtn = true
+            let updateData = Object.assign({}, this.formProfile)
+            api.updateProfile(updateData).then(res => {
+              this.$success(this.$t('m.Success'))
+              this.getProfile()
+              this.loadingSaveBtn = false
+            }, _ => {
+              this.loadingSaveBtn = false
+            })
+          } else {
+            this.$Message.error(this.$t('m.Update_Error_Info'));
+          }
         })
       }
     },

@@ -22,9 +22,9 @@ router.beforeEach(async(to, from, next) => {
         next()
       } else if (store.getters['permission/sumRoutesPath'].some(res => utils.comparePath(res, to.path))) {
         // 用户访问无权限页面
-        next('/401')
+        next({ path: '/401', replace: true})
       } else {
-        next('/404')
+        next({ path: '/404', replace: true})
       }
     } else {
       try { // 页面刷新 重新获取roles(由于服务端权限管理模块未完善, 因此权限是通过请求特定的接口来进行确认的
@@ -46,9 +46,9 @@ router.beforeEach(async(to, from, next) => {
 		} else {
       // other pages that do not have permission to access are redirected to the login page.
       if (store.getters['permission/sumRoutesPath'].some(res => utils.comparePath(res, to.path))) {
-        next('/401')
+        next({ path: '/401', replace: true})
       } else {
-        next('/404')
+        next({ path: '/404', replace: true})
       }
 			NProgress.done()
 		}

@@ -1,4 +1,11 @@
-const localStorage = window.localStorage
+import Cookies from 'js-cookie'
+let storage = null, available = true
+if (window.localStorage) {
+  storage = window.localStorage
+} else {
+  available = false
+  storage = Cookies
+}
 
 export default {
   name: 'storage',
@@ -9,7 +16,11 @@ export default {
    * @param {Object} value 值
    */
   set (key, value) {
-    localStorage.setItem(key, JSON.stringify(value))
+    if (available) {
+      storage.setItem(key, JSON.stringify(value))
+    } else {
+      storage.set(key, value)
+    }
   },
 
   /**
@@ -18,7 +29,11 @@ export default {
    * @return {Object}
    */
   get (key) {
-    return JSON.parse(localStorage.getItem(key)) || null
+    if (available) {
+      return JSON.parse(storage.getItem(key)) || null
+    } else {
+      return storage.get(key)
+    }
   },
 
   /**
@@ -26,12 +41,18 @@ export default {
    * @param {string} key 键
    */
   remove (key) {
-    localStorage.removeItem(key)
+    if (available) {
+      storage.removeItem(key)
+    } else {
+      storage.remove(key)
+    }
   },
   /**
    * clear all
    */
   clear () {
-    localStorage.clear()
+    if (available) {
+      storage.clear()
+    }
   }
 }

@@ -107,6 +107,16 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
+      },
+      {
+        test: /\.worker\.js$/, 
+        use: {
+          loader: 'worker-loader' ,
+          options: { 
+            inline: true, 
+            name: 'workerName.[hash].js' 
+          }
+        }
       }
     ]
   },
@@ -120,10 +130,6 @@ module.exports = {
       files: ['index.html', 'admin/index.html'],
       append: false
     }),
-    // new webpack.HotModuleReplacementPlugin(),
     // new BundleAnalyZerPlugin()
-  ],
-  // devServer: {
-  //   hot: true
-  // }
+  ]
 }

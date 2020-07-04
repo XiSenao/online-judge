@@ -58,7 +58,6 @@ function formatDate(date) {
 }
 
 function downloadFile (url) {
-  
   return new Promise((resolve, reject) => {
     Vue.prototype.$http.get(url, {responseType: 'blob'}).then(resp => {
       let headers = resp.headers
@@ -158,6 +157,18 @@ function comparePath (obj, point) {
   return true
 }	
 
+function createWorker(f) {
+  let worker = null, url = null, blob = null
+  if (window.Worker) {
+    try {
+      blob = new Blob(['(' + f.toString() +')()'])
+      url = window.URL.createObjectURL(blob)
+      worker = new Worker(url)
+    } catch (_) {}
+  }
+  return worker
+}
+
 export default {
   submissionMemoryFormat: submissionMemoryFormat,
   submissionTimeFormat: submissionTimeFormat,
@@ -169,5 +180,6 @@ export default {
   timeOut: timeOut,
   ratingColor: ratingColor,
   serializationDFS: serializationDFS,
-  comparePath: comparePath
+  comparePath: comparePath,
+  createWorker: createWorker
 }

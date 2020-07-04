@@ -282,10 +282,14 @@
 	import CodeMirror from '../../components/CodeMirror'
 	import UploadDemo from '../../components/Upload' 
 	import Clipboard from 'clipboard'
-  import { CONSTANTS_TEMPLATE, CONSTANTS_SPJ_TEMPLATE, LANGUAGES } from '@/utils/constants'
-  import { exFormatText } from '@/utils/JudgeServer/poj'
-  import api from '../../api'
+  import { CONSTANTS_SPJ_TEMPLATE, LANGUAGES } from '@/utils/constants'
+  import utils from '@/utils/utils'
+  import api from '@/pages/admin/api'
   import ProblemMixin from './problemMixin'
+  // webWorker
+  import Worker from './webworker/problem.worker' 
+  import myWorker from './webworker/toData.worker'
+
   const Base64 = require('js-base64').Base64
   export default {
     name: 'Problem',
@@ -552,95 +556,44 @@
             outputSamples = JSON.parse(outputSamples)
             currentPromiseQueue.push(api.getZipFile(data.id))
           }
-          Promise.all(currentPromiseQueue).then(res => {
-            let nowTags = res[0].data.data, exTags = [], zipFile = [], Sample = []
-            let length = Math.min(inputSamples.length, outputSamples.length)
-            var JSZip = require("jszip")
-            var new_zip = new JSZip()
-            if (!this.spiderFlag) {
-              zipFile = res[1].data
-              new_zip.loadAsync(zipFile).then(file => {
-                let promiseQueue = [], contentValue = [], fileNameLists = []
-                Object.keys(file.files).forEach(fileName => {
-                  fileNameLists.push(fileName)
-                  promiseQueue.push(new_zip.file(fileName).async("string"))
-                })
-                Promise.all(promiseQueue).then(res => {
-                  for (let i = 0; i < res.length; ++i) {
-                    contentValue.push({
-                      fileName: fileNameLists[i],
-                      fileValue: res[i]
-                    })
-                  }
-                  this.getZIPFileValueLists(contentValue)
-                })
-              }).catch(_ => {
-                this.$error('Failed to parse file')
-              })
-            }
-            for (let i = 0; i < length; ++i) {
-              Sample.push({
-                input: inputSamples[i],
-                output: outputSamples[i]
-              })
-            }
-            Object.keys(nowTags).forEach(res => {
-              let now = nowTags[res]
-              exTags.push({
-                id: now.tagId,
-                value: now.name
-              })
-            }) 
-            let template = data.codeTemplate ? JSON.parse(Base64.decode(data.codeTemplate)) : {}, templateLists = {}
-            Object.keys(template).forEach(res => {
-              let nowValue = template[res]
-              let nowName = template[res].key, mode = ''
-              Object.keys(CONSTANTS_TEMPLATE).forEach(res => {
-                let now = CONSTANTS_TEMPLATE[res]
-                if (now.name === nowName) {
-                  mode = now.content_type
-                }
-              })
-              templateLists[nowName] = {
-                checked: false,
-                code: nowValue.value,
-                mode
-              }
+          let length = Math.min(inputSamples.length, outputSamples.length), Sample = []
+          for (let i = 0; i < length; ++i) {
+            Sample.push({
+              input: inputSamples[i],
+              output: outputSamples[i]
             })
-            this.template = templateLists
-            if (data.sourceName.indexOf('@') === 0) {
-              data.sourceName = data.sourceName.substring(1)
-            }
-            data.description = exFormatText(data.description)
-            data.output_description = exFormatText(data.output_description)
-            data.input_description = exFormatText(data.input_description)
-            this.problem = {
-              description: data.description,
-              hint: data.hint,
-              _id: data.id,
-              samples: Sample,
-              inputSamples: Sample,
-              io_mode: data.ioMode,
-              judgeTypeId: data.judgeTypeId,
-              languages: data.language.split(','),
-              difficulty: data.level,
-              memory_limit: data.memoryLimit,
-              output_description: data.outputDescription,
-              input_description: data.inputDescription,
-              contest_id: data.sourceId || 0,
-              source: data.sourceName,
-              spj: data.spj ? true : false,
-              visible: data.status > -1 ? true : false,
-              tags: exTags,  
-              time_limit: data.timeLimit,
-              title: data.title,
-              judgeType: data.judgeType,
-              spj_language: data.spjLanguage,
-              spj_code: data.spjCode
-            }
-            this.currentSpj = this.problem.spj
+          } 
+          // 启动线程处理事务
+          let myworker = new myWorker()
+          myworker.postMessage(JSON.stringify(data))
+          myworker.onmessage = event => {
+            let data = JSON.parse(event.data)
+            data.samples = Sample
+            data.inputSamples = Sample
+            this.problem = data
             this.utilProblemSpin = false
-            this.utilSpin = false
+            this.currentSpj = this.problem.spj
+            myworker.terminate()
+          }
+          Promise.all(currentPromiseQueue).then(res => {
+            // 启动线程处理事务
+            let myworker = new Worker(), resValue = []
+            resValue.push(res[0].data.data)
+            if (!this.spiderFlag) {
+              resValue.push(res[1].data)
+            }
+            myworker.postMessage({ spiderFlag: this.spiderFlag, resValue })
+            myworker.onmessage = event => {
+              let message = event.data ? JSON.parse(event.data) : null
+              this.problem.tags = message.exTags
+              if (message.contentValue) {
+                this.zipFileLists = message.contentValue
+              } else if (message.contentValue === null) {
+                this.$error('Failed to parse file')
+              }
+              this.utilSpin = false
+              myworker.terminate()
+            }
           })
         })
 			},
@@ -878,7 +831,7 @@
   }
 </style>
 
-<style>
+<style scoped>
   .dialog-compile-error {
     width: auto;
     max-width: 80%;

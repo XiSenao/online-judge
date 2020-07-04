@@ -17,7 +17,7 @@
             <Input v-model="formPassword.tfa_code"/>
           </FormItem>
           <FormItem v-if="visible.passwordAlert">
-            <Alert type="success">You will need to login again after 5 seconds..</Alert>
+            <Alert type="success">{{$t('m.Update_Success_Password')}}</Alert>
           </FormItem>
           <Button type="primary" @click="changePassword">{{$t('m.Update_Password')}}</Button>
         </Form>
@@ -59,17 +59,17 @@
       const tfaCheck = [{required: true, trigger: 'change'}]
       const CheckAgainPassword = (rule, value, callback) => {
         if (value !== this.formPassword.new_password) {
-          callback(new Error('password does not match'))
+          callback(new Error(this.$t('m.Update_Not_Match_Password')))
         }
         callback()
       }
       const CheckNewPassword = (rule, value, callback) => {
         if (this.formPassword.old_password !== '') {
           if (this.formPassword.old_password === this.formPassword.new_password) {
-            callback(new Error('The new password doesn\'t change'))
+            callback(new Error($t('m.Update_Not_Change_Password')))
           } else {
             // 对第二个密码框再次验证
-            this.$refs.formPassword.validateField('again_password')
+            this.$refs.formPassword.validateField(this.$t('m.Update_Again_Password'))
           }
         }
         callback()

@@ -7,7 +7,7 @@ Vue.use(VueRouter)
 
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
-  // 手动捕获因接连访问同一个路由地址而发送的错误
+  // 手动捕获因接连访问同一个路由地址而发生的错误
   return originalPush.call(this, location).catch(err => err)
 }
 

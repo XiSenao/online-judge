@@ -300,5 +300,27 @@ export const m = {
   Identity_Verification_Failure: 'Certification Failure',
   Message: 'Message',
   Join_Successfully: 'Enjoy',
-  Join: 'Join'
+  Join: 'Join',
+
+  // ProfileSetting.vue
+  Update_Error_Info: 'Please check your information!',
+  Update_Avatar_Success: 'Successfully set new avatar',
+  Update_Avatar_Check: 'Are you sure to disgard the changes?',
+  Update_Error_Url: 'URL exception!',
+  Update_Error_Mood: 'Too Long... Over 32 characters!',
+  File_Type_Not_Support: 'File type not support',
+  Exceed_Max_Size_Limit: 'Exceed max size limit',
+  File_Type_Desc: 'The format of { fileName } is incorrect ，please choose image only.',
+  File_Type_Size: 'File { fileName } is too big, you can upload a image up to 2MB in size',
+
+  // CertificationSetting.vue
+  Quick_Select_Info: 'You Can Choose Class/College/Major Quickly',
+  Think_It_Over_Title: 'Please think it over!',
+  Think_It_Over_Content: 'If you select, the administrator will re audit your information, and your previously authenticated information will be overwritten',
+
+  // AccountSetting.vue
+  Update_Success_Password: 'You will need to login again after 5 seconds..',
+  Update_Not_Match_Password: 'password does not match',
+  Update_Not_Change_Password: 'The new password doesn\'t change',
+  Update_Again_Password: 'again_password'
 }

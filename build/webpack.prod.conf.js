@@ -98,7 +98,8 @@ const webpackConfig = merge(baseWebpackConfig, {
         removeAttributeQuotes: true
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
-      }
+      },
+      ga: 'UA-170628607-1'
     }),
     // admin
     new HtmlWebpackPlugin({
@@ -112,7 +113,8 @@ const webpackConfig = merge(baseWebpackConfig, {
         removeAttributeQuotes: true
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
-      }
+      },
+      ga: 'UA-170628607-1'
     })
   ]
 })
