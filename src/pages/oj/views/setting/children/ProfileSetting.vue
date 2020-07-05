@@ -149,7 +149,7 @@
         getProfile: 'user/getProfile'
       }),
       checkMyMood (value, cb) {
-        value = value ? value.trim() : null
+        value = value ? value.trim() : ''
         if (value && value.length > 33) {
           cb(new Error(this.$t('m.Update_Error_Mood')))
         }
@@ -157,7 +157,7 @@
         cb()
       },
       checkMyURL (value, option, cb) {
-        value = value ? value.trim() : null
+        value = value ? value.trim() : ''
         const re = new RegExp(URL_REG, 'i');
         if (value && !re.test(encodeURI(value))) {
           cb(new Error(this.$t('m.Update_Error_Url')))

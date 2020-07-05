@@ -11,7 +11,10 @@ const state = {
     viewLanguage: 'en-US'
   },
   roles: [],
-  token: null
+  token: null,
+  problemMap: {
+    cacheTime: 2 * 60 * 1000 // 2min
+  }
 }
 
 const getters = {
@@ -20,7 +23,8 @@ const getters = {
   roles: state => state.roles,
   isAuthenticated: (state, getters) => {
     return !!getters.profile.id
-  }
+  },
+  problemMap: state => state.problemMap
 }
 
 const mutations = {
@@ -36,16 +40,19 @@ const mutations = {
   },
   [types.SET_ROLES] (state, roles) {
     state.roles = roles
+  },
+  [types.CHANGE_PROBLEM_MAP] (state, payload) {
+    state.problemMap = payload
   }
 }
 
 const actions = {
   
-  setIMGBuffer ({commit}, imageBuffer) {
+  setIMGBuffer ({ commit }, imageBuffer) {
     commit(types.SET_IMGBUFFER, imageBuffer)
   },
 
-  setToken ({commit}, token) {
+  setToken ({ commit }, token) {
     commit(types.CHANGE_TOKEN, token)
   },
 
@@ -73,7 +80,7 @@ const actions = {
     })
   },
 
-  logout ({dispatch}) {
+  logout ({ dispatch }) {
     return new Promise((resolve, reject) => {
       api.logout().then(res => {
         dispatch('clearStatus')
@@ -121,8 +128,40 @@ const actions = {
       })
     })
   },
+  
+  getSolvedProblems ({ state, commit }, payload) {
+    let [promiseRequestQueue, solovedProbles, notSolovedProblems] = [[], [], []], { userId, forceReload } = payload
+    return new Promise((resolve, _) => {
+      if (!forceReload) {
+        let currentTime = new Date().getTime()
+        // cache: 2min
+        if (state.problemMap.time && currentTime - state.problemMap.time <= state.problemMap.cacheTime) {
+          resolve(state.problemMap)
+          return
+        }
+      }
+      promiseRequestQueue.push(api.getSolvedProblems(userId))
+      promiseRequestQueue.push(api.getNotSolvedProblems(userId))
+      Promise.all(promiseRequestQueue).then(res => {
+        solovedProbles = res[0].data.data.sort((a, b) => a > b)
+        notSolovedProblems = res[1].data.data.sort((a, b) => a > b)
+        let problemMap = {
+          ac: solovedProbles,
+          error: notSolovedProblems,
+          time: new Date().getTime(),
+        }
+        commit(types.CHANGE_PROBLEM_MAP, Object.assign(state.problemMap, problemMap))
+        resolve(problemMap)
+      }).catch(_ => {
+        resolve({
+          ac: solovedProbles,
+          error: notSolovedProblems
+        })
+      })
+    })
+  },
 
-  clearStatus ({ commit, dispatch }) {
+  clearStatus ({ commit }) {
     commit(types.CHANGE_TOKEN, null)
     commit(types.SET_ROLES, [])
     commit(types.CHANGE_PROFILE, {

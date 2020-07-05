@@ -127,9 +127,6 @@
       this.mode = mode
       this.editor.setOption('mode', this.mode[this.language])
       this.editor.focus()
-      this.myEditor.on("cursorActivity", () => {
-        this.myEditor.showHint();
-      });  
     },
     methods: {
       onEditorCodeChange (newCode) {

@@ -73,7 +73,7 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
   import api from '@oj/api'
   import utils from '@/utils/utils'
   import { ProblemMixin } from '@oj/components/mixins'
@@ -89,6 +89,7 @@
       return {
         tagList: [],
         difficulty: '',
+        problemMap: null,
         problemTableColumns: [
           {
             title: '#',
@@ -174,9 +175,13 @@
       }
     },
     mounted () {
+      // problemMap
       this.init()
     },
     methods: {
+      ...mapActions({
+        getProblemMaps: 'user/getSolvedProblems'
+      }),
       init (simulate = false) {
         this.routeName = this.$route.name
         let query = this.$route.query
@@ -187,7 +192,10 @@
         if (!simulate) {
           this.getTagList()
         }
-        this.getProblemList()
+        this.getProblemMaps({ userId: this.profile.id }).then(res => {
+          this.problemMap = res
+          this.getProblemList()
+        })
       },
       pushRouter () {
         this.$router.push({
@@ -298,7 +306,8 @@
     },
     computed: {
       ...mapGetters({
-        isAuthenticated: 'user/isAuthenticated'
+        isAuthenticated: 'user/isAuthenticated',
+        profile: 'user/profile'
       })
     },
     watch: {

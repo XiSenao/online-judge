@@ -15,11 +15,11 @@ export default {
       if (this.statusColumn) return
       // 只在有做题记录时才添加column
       // 在前面添加做题标记
-      let needAdd = dataProblems.some((item, index) => {
-        if (item.my_status !== null && item.my_status !== undefined) {
-          return true
-        }
-      })
+      let sumMap = this.problemMap.ac.concat(this.problemMap.error)
+      if (!sumMap.length) {
+        return
+      }
+      let needAdd = dataProblems.some(item => sumMap.includes(item.id))
       if (!needAdd) {
         return
       }
@@ -27,17 +27,18 @@ export default {
         width: 60,
         title: ' ',
         render: (h, params) => {
-          let status = params.row.my_status
-          if (status === null || status === undefined) {
-            return undefined
+          let id = params.row.id, status = null
+          if (!sumMap.includes(id)) {
+            return 
           }
+          status = this.problemMap.ac.includes(id)
           return h('Icon', {
             props: {
-              type: status === 0 ? 'checkmark-round' : 'minus-round',
+              type: status ? 'checkmark-round' : 'minus-round',
               size: '16'
             },
             style: {
-              color: status === 0 ? '#19be6b' : '#ed3f14'
+              color: status ? '#19be6b' : '#ed3f14'
             }
           })
         }

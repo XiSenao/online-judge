@@ -112,7 +112,8 @@
     },
     methods: {
       ...mapActions({
-        changeDomTitle: 'changeDomTitle'
+        changeDomTitle: 'changeDomTitle',
+        getProblemMaps: 'user/getSolvedProblems'
       }),
       init () {
         this.userID = this.$route.query.id
@@ -130,19 +131,17 @@
         this.getSolvedProblems()
       },
       getSolvedProblems () {
-        let promiseRequestQueue = []
-        promiseRequestQueue.push(api.getSolvedProblems(this.userID))
-        promiseRequestQueue.push(api.getNotSolvedProblems(this.userID))
-        Promise.all(promiseRequestQueue).then(res => {
-          this.solovedProbles = res[0].data.data.sort((a, b) => a > b)
-          this.notSolovedProblems = res[1].data.data.sort((a, b) => a > b)
+        // cache: 2min
+        this.getProblemMaps({ userId: this.userID }).then(res => {
+          this.solovedProbles = res.ac
+          this.notSolovedProblems = res.error
           this.spinShow = false
         }).catch(_ => {
           this.spinShow = false
         })
       },
       goProblem (problemID) {
-        this.$router.push({name: 'problem-details', params: {problemID: problemID}})
+        this.$router.push({name: 'problem-details', params: { problemID: problemID }})
       },
       freshProblemDisplayID () {
         api.freshDisplayID().then(res => {
