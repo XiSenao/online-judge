@@ -192,10 +192,14 @@
         if (!simulate) {
           this.getTagList()
         }
-        this.getProblemMaps({ userId: this.profile.id }).then(res => {
-          this.problemMap = res
-          this.getProblemList()
-        })
+        if (this.profile.id) {
+          this.getProblemMaps({ userId: this.profile.id }).then(res => {
+            this.problemMap = res
+            this.getProblemList()
+          }) 
+          return
+        } 
+        this.getProblemList()
       },
       pushRouter () {
         this.$router.push({

@@ -167,6 +167,9 @@ const actions = {
     commit(types.CHANGE_PROFILE, {
       profile: {}
     })
+    commit(types.CHANGE_PROBLEM_MAP, {
+      cacheTime: 2 * 60 * 1000 // 2min
+    })
     removeToken()
   }
 }
