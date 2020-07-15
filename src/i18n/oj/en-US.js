@@ -322,5 +322,7 @@ export const m = {
   Update_Success_Password: 'You will need to login again after 5 seconds..',
   Update_Not_Match_Password: 'password does not match',
   Update_Not_Change_Password: 'The new password doesn\'t change',
-  Update_Again_Password: 'again_password'
+  Update_Again_Password: 'again_password',
+
+  Dark_Model: 'Dark Side'
 }

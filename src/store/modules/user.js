@@ -5,6 +5,8 @@ import { DEFAULT_AVATAR } from '@/utils/constants'
 import utils from '@/utils/utils'
 import { setToken, getToken, removeToken } from '@/utils/uauth'
 import router, { resetRouter } from '@/pages/oj/router'
+import storage from '@/utils/storage'
+import { THEME_KEY } from '@/utils/constants'
 
 const state = {
   profile: {
@@ -14,17 +16,19 @@ const state = {
   token: null,
   problemMap: {
     cacheTime: 2 * 60 * 1000 // 2min
-  }
+  },
+  theme: storage.get(THEME_KEY) || 'white'
 }
 
 const getters = {
-  token: state => getToken(),
+  token: _ => getToken(),
   profile: state => state.profile || {},
   roles: state => state.roles,
   isAuthenticated: (state, getters) => {
     return !!getters.profile.id
   },
-  problemMap: state => state.problemMap
+  problemMap: state => state.problemMap,
+  theme: _ => storage.get(THEME_KEY)
 }
 
 const mutations = {
@@ -43,6 +47,9 @@ const mutations = {
   },
   [types.CHANGE_PROBLEM_MAP] (state, payload) {
     state.problemMap = payload
+  },
+  [types.CHANGE_THEME_MODEL] (state, payload) {
+    state.theme = payload
   }
 }
 
@@ -54,6 +61,11 @@ const actions = {
 
   setToken ({ commit }, token) {
     commit(types.CHANGE_TOKEN, token)
+  },
+
+  setTheme ({ commit }, payload) {
+    storage.set(THEME_KEY, payload)
+    commit(types.CHANGE_THEME_MODEL, payload)
   },
 
   login({ state, commit, dispatch }, userInfo) {
@@ -143,8 +155,8 @@ const actions = {
       promiseRequestQueue.push(api.getSolvedProblems(userId))
       promiseRequestQueue.push(api.getNotSolvedProblems(userId))
       Promise.all(promiseRequestQueue).then(res => {
-        solovedProbles = res[0].data.data.sort((a, b) => a > b)
-        notSolovedProblems = res[1].data.data.sort((a, b) => a > b)
+        solovedProbles = res[0].data.data.sort((a, b) => a - b)
+        notSolovedProblems = res[1].data.data.sort((a, b) => a - b)
         let problemMap = {
           ac: solovedProbles,
           error: notSolovedProblems,
@@ -170,6 +182,8 @@ const actions = {
     commit(types.CHANGE_PROBLEM_MAP, {
       cacheTime: 2 * 60 * 1000 // 2min
     })
+    storage.remove(THEME_KEY)
+    utils.changeTheme(storage.get(THEME_KEY))
     removeToken()
   }
 }

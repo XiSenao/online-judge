@@ -5,12 +5,6 @@ import { Announcement, Conf, AuthenticatedUser, Contest, ContestList, Home, Judg
   Problem, SpiderProblem, ProblemList, User, PruneTestCase, Dashboard, ProblemImportOrExport, error401, error404 } from './views'
 Vue.use(VueRouter)
 
-const originalPush = VueRouter.prototype.push;
-VueRouter.prototype.push = function push(location) {
-  // 手动捕获因接连访问同一个路由地址而发生的错误
-  return originalPush.call(this, location).catch(err => err)
-}
-
 export const constantRoutes = [
   {
     path: '/login',

@@ -326,7 +326,13 @@
 </script>
 
 <style lang="less" scoped>
-
+  .ivu-card {
+    color: var(--font-color-white);
+    background: var(--table-card-top);
+  }
+  /deep/.ivu-form .ivu-form-item-label {
+    color: var(--font-color-white);
+  }
   .flex-container {
     justify-content: flex-start;
     .left {
@@ -411,7 +417,7 @@
   .i-name {
     display: inline-block;
     vertical-align: top;
-    color: #666;
+    color: var(--font-certify-color); 
     font-weight: bold;
     margin-right: 4px;
     text-align: center;
@@ -433,7 +439,7 @@
   } 
 
   .i-value {
-    color: #464c5b;
+    color: var(--font-certify-r-color); 
     font-size: 14px;
     font-weight: bold;
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;

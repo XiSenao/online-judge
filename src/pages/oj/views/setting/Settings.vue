@@ -19,7 +19,7 @@
             </div>
             <Menu-item name="/setting/profile">{{$t('m.Profile')}}</Menu-item>
             <Menu-item name="/setting/account">{{$t('m.Account')}}</Menu-item>
-            <!-- <Menu-item name="/setting/security-setting" @click.native="undeveloped">{{$t('m.Security')}}</Menu-item> -->
+            <Menu-item name="/setting/security-setting" @click.native="undeveloped">{{$t('m.Security')}}</Menu-item>
             <Menu-item name="/setting/certification">{{$t('m.Certification')}}</Menu-item>
           </Menu>
         </div>
@@ -42,7 +42,7 @@
         this.$router.push(routePath)
       },
       undeveloped () {
-        this.$error('还未开发')
+        this.$error('Not yet developed')
       }
     },
     computed: {
@@ -61,7 +61,13 @@
 
 <style lang="less" scoped>
   @avatar-radius: 50%;
-
+  .ivu-card, .ivu-menu-light {
+    color: var(--font-color-setting-white);
+    background: var(--table-card-top);
+  } 
+  .ivu-menu-vertical .ivu-menu-item:hover, .ivu-menu-vertical .ivu-menu-submenu-title:hover {
+    background: var(--setting-choose-bg-color); 
+  }
   .container {
     width: 90%;
     min-width: 800px;

@@ -18,8 +18,9 @@
 </template>
 
 <script>
-  import { mapActions, mapState } from 'vuex'
+  import { mapActions, mapState, mapGetters } from 'vuex'
   import NavBar from '@oj/components/NavBar.vue'
+  import utils from '@/utils/utils'
 
   export default {
     name: 'app',
@@ -33,9 +34,10 @@
     },
     created () {
       try {
-        document.body.removeChild(document.getElementById('app-loader'))
+        document.body.removeChild(document.getElementById('app-loader'))  
         console.log("%c ", "background: url(http://yfoj.org.cn/static/image/show.png) no-repeat center;padding-left:314px;padding-bottom: 249px;")
         console.log("\n%c Welcome to Online Judge! %c %c Github: https://github.com/FinalAshen/Online-Judge\n\n", "color: #73c9e5; font-weight:600","","color:orange;font-weight:900")
+        utils.changeTheme(this.theme || 'white')
       } catch (_) {}
     },
     mounted () {
@@ -45,7 +47,10 @@
       ...mapActions(['getWebsiteConfig', 'changeDomTitle'])
     },
     computed: {
-      ...mapState(['website'])
+      ...mapState(['website']),
+      ...mapGetters({
+        theme: 'user/theme'
+      })
     },
     watch: {
       'website' () {

@@ -1,3 +1,6 @@
+import variables from "@/styles/themes/variables"
+import variablesWhite from "@/styles/themes/variables-white"
+
 export const JUDGE_STATUS = {
   'CompileError': {
     name: 'Compile Error',
@@ -249,6 +252,24 @@ int spj(FILE *input, FILE *user_output){
 export const DEFAULT_AVATAR = '/static/image/defaultAvatar.png'
 
 export const TIME_TIME_OUT = 6000
+
+export const THEME_KEY = '__theme__' 
+
+export const THEMES = {
+  white: "white",
+  dark: "dark",
+}
+
+export const THEME_MAP = {
+    [THEMES.dark]: {
+      title: "深色",
+      file: variables
+    },
+    [THEMES.white]: {
+      title: "浅色",
+      file: variablesWhite
+    }
+  }
 
 export const CONTEST_STATUS = {
   'NOT_START': '1',

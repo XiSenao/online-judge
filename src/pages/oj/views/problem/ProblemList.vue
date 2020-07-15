@@ -343,4 +343,36 @@
   #pick-one {
     margin-top: 10px;
   }
+  /deep/.ivu-card {
+    color: var(--font-color-white);
+    background: var(--table-card-top);
+  }
+  /deep/.ivu-card-body .ivu-table th {
+    color: var(--font-color-origin);
+    background: var(--table-card-head);
+  }
+  /deep/.ivu-table td {
+    color: var(--font-color-origin);
+    background: var(--table-card-body);
+  }
+  /deep/.ivu-btn-text {
+    color: var(--font-color-origin);
+  } 
+  /deep/.ivu-input {
+    background: var(--search-bg-color);
+    color: var(--header-input-placeholder-color);
+  }
+  /deep/.ivu-btn-ghost {
+    color: var(--font-color-white);
+  }
+  /deep/.ivu-dropdown-item:hover {
+    background: var(--dropdown-difficulty);
+  }
+  /deep/.ivu-dropdown-item {
+    color: var(--font-color-white);
+    border-bottom: #fff;
+  }
+  /deep/.ivu-select-dropdown {
+    background-color: var(--dropdown-diff-bg-color);
+  }
 </style>

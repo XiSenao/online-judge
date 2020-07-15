@@ -87,7 +87,7 @@
               return h('span',
                 {
                   style: {
-                    color: '#57a3f3',
+                    color: 'var(--font-status-problemid)',
                     cursor: 'pointer'
                   },
                   on: {
@@ -354,8 +354,29 @@
   .ivu-btn-text {
     color: #57a3f3;
   }
-
+  /deep/.ivu-card {
+    background: var(--table-card-top);
+    color: var(--font-color-white);
+  }
+  /deep/.ivu-table th {
+    color: var(--font-color-origin);
+    background: var(--table-card-head);
+  }
+  /deep/.ivu-table td {
+    color: var(--font-color-origin);
+    background: var(--table-card-body) !important;
+  }
+  /deep/.ivu-select-dropdown {
+    background: var(--dropdown-diff-bg-color);
+  }
+  /deep/.ivu-dropdown-item {
+    color: var(--font-color-white);
+  }
+  /deep/.ivu-dropdown-item:hover {
+    color: var(--dropdown-status-bg-color);
+  }
   .flex-container {
+    color: var(--font-color-white);
     #main {
       flex: auto;
       margin-right: 18px;

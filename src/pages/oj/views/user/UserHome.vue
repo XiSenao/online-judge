@@ -194,6 +194,16 @@
 </script>
 
 <style lang="less" scoped>
+  /deep/.ivu-card {
+    color: var(--font-color-white);
+    background: var(--table-card-top);
+  }
+  /deep/.ivu-btn-ghost {
+    color: var(--font-color-white);
+  }
+  /deep/.ivu-poptip-inner {
+    background: var(--table-rank-bg-color);
+  }
   .container {
     position: relative;
     width: 75%;

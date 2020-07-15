@@ -128,6 +128,17 @@
 </script>
 
 <style scoped lang="less">
+  .announcement {
+    background: var(--table-card-top);
+    color: var(--font-color-white);
+  }
+  .ivu-card {
+    color: var(--font-color-white);
+    background: var(--table-card-top);
+  }
+  /deep/.ivu-btn-ghost {
+    color: var(--font-color-white);
+  }
   .announcements-container {
     margin-top: -10px;
     margin-bottom: 10px;
@@ -147,7 +158,7 @@
           text-align: left;
           padding-left: 10px;
           a.entry {
-            color: #495060;
+            color: var(--font-color-white);
             &:hover {
               color: #2d8cf0;
               border-bottom: 1px solid #2d8cf0;

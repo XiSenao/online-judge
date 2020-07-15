@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { TIME_TIME_OUT } from '@/utils/constants'
+import { TIME_TIME_OUT, THEME_MAP } from '@/utils/constants'
 
 function submissionMemoryFormat (memory) {
   if (memory === null || memory === '') return '--'
@@ -169,6 +169,17 @@ function createWorker(f) {
   return worker
 }
 
+function changeTheme (themeKey) {
+  if (!themeKey) {
+    return
+  }
+  const theme = THEME_MAP[themeKey].file
+  Object.keys(theme).forEach(key => {
+    const value = theme[key]
+    document.documentElement.style.setProperty(key, value)
+  })
+}
+
 export default {
   submissionMemoryFormat: submissionMemoryFormat,
   submissionTimeFormat: submissionTimeFormat,
@@ -181,5 +192,6 @@ export default {
   ratingColor: ratingColor,
   serializationDFS: serializationDFS,
   comparePath: comparePath,
-  createWorker: createWorker
+  createWorker: createWorker,
+  changeTheme: changeTheme
 }

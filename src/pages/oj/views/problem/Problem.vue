@@ -115,7 +115,7 @@
           </VerticalMenu-item>
         </template>
 
-        <VerticalMenu-item v-if="!this.contestID || OIContestRealTimePermission" :route="submissionRoute">
+        <VerticalMenu-item class="cursor-sub" v-if="!this.contestID || OIContestRealTimePermission" :route="submissionRoute">
           <Icon type="navicon-round"></Icon>
            {{$t('m.Submissions')}}
         </VerticalMenu-item>
@@ -587,9 +587,26 @@
 </script>
 
 <style lang="less" scoped>
+  /deep/.ivu-card {
+    background: var(--table-card-top);
+    color: var(--font-color-white);
+  }
+  /deep/.markdown-body pre {
+    background: var(--problem-mark-bg-color)
+  }
+  /deep/ .CodeMirror-gutters {
+    background: var(--problem-codenav-bg-color);
+  }
+  /deep/.CodeMirror {
+    background: var(--problem-codebody-bg-color);
+  }
+  /deep/.ivu-modal-content {
+    background: var(--problem-canvas-bg-color);
+  }
   .card-title {
     margin-left: 8px;
   }
+
   .spin-container {
     position: relative;
   }
@@ -601,9 +618,18 @@
     #right-column {
       flex: none;
       width: 220px;
+      li,
+      .ivu-btn-ghost {
+        color: var(--font-color-white);
+      }
+      .cursor-sub {
+        cursor: pointer;
+      }
+      li:hover {
+        background: var(--rightnav-bg-color);
+      }
     }
   }
-
   #problem-content {
     margin-top: -50px;
     .title {

@@ -61,11 +61,15 @@
           <Button type="text" class="drop-menu-title">{{ profile.username }}
             <Icon type="arrow-down-b"></Icon>
           </Button>
-          <Dropdown-menu slot="list">
+          <Dropdown-menu slot="list" class="drop-menu-list">
             <Dropdown-item name="/user-home">{{$t('m.MyHome')}}</Dropdown-item>
             <Dropdown-item name="/user/message">{{$t('m.Message')}}</Dropdown-item>
             <Dropdown-item :name="'/status?creatorKey=' + profile.username || null">{{$t('m.MySubmissions')}}</Dropdown-item>
             <Dropdown-item name="/setting/profile">{{$t('m.Settings')}}</Dropdown-item>
+            <Dropdown-item name="/changeTheme" style="display: flex; justify-content: center;">
+              <span>{{$t('m.Dark_Model')}}</span>
+              <i-switch size="small" @on-change="changeTheme" v-model="isDark" :value="isDark" style="margin-left: 12px;"/>
+            </Dropdown-item>
             <Dropdown-item divided name="/logout">{{$t('m.Logout')}}</Dropdown-item>
           </Dropdown-menu>
         </Dropdown>
@@ -80,21 +84,41 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex'
+  import { mapGetters, mapActions, mapMutations } from 'vuex'
   import login from '@oj/views/user/Login'
   import register from '@oj/views/user/Register'
-
+  import { THEME_KEY, THEMES } from '@/utils/constants'
+  import utils from '@/utils/utils'
+  
   export default {
     components: {
       login,
       register
     },
+    data () {
+      return {
+        isDark: true
+      }
+    },
+    created () {
+      this.isDark = this.theme === THEMES.dark
+    },
     methods: {
       ...mapActions({
-        changeModalStatus: 'changeModalStatus'
+        changeModalStatus: 'changeModalStatus',
+        changeMyTheme: 'user/setTheme'
       }),
+      changeTheme () {
+        this.isDark = !this.isDark
+        let themeKey = this.isDark ? THEMES.dark : THEMES.white
+        utils.changeTheme(themeKey)
+        this.changeMyTheme(themeKey)
+      },
       handleRoute (route) {
         if (route && route.indexOf('admin') < 0) {
+          if (route === '/changeTheme') {
+            return this.changeTheme()
+          }
           this.$router.push(route)
         } else {
           window.open('/admin/')
@@ -112,7 +136,8 @@
         website: 'website', 
         modalStatus: 'modalStatus', 
         profile: 'user/profile', 
-        isAuthenticated: 'user/isAuthenticated'
+        isAuthenticated: 'user/isAuthenticated',
+        theme: 'user/theme'
       }),
       // 追踪导航栏位置, 当页面刷新时导航栏位置不发生变化
       activeMenu () {
@@ -142,28 +167,65 @@
     background-color: #fff;
     box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
     .oj-menu {
-      background: #fdfdfd;
+      background: var(--body-bgcolor);
     }
 
     .logo {
       margin-left: 2%;
       margin-right: 2%;
       font-size: 20px;
+      color: var(--font-color-white);
       float: left;
       line-height: 60px;
     }
-
+    .ivu-menu-horizontal .ivu-menu-submenu .ivu-select-dropdown .ivu-menu-item:hover {
+      background: var(--font-color-dropdown); 
+    }
+    .drop-menu {
+      /deep/ .ivu-select-dropdown {
+        background: var(--body-bgcolor); 
+      };
+      /deep/ .ivu-dropdown-item {
+        color: var(--font-color-white);
+      };
+      /deep/ .ivu-dropdown-item:hover {
+        background: var(--font-color-dropdown-user);
+      };
+      /deep/ .ivu-dropdown-item-divided:before {
+        background: var(--dropdown-divide)
+      }
+    }
+    .ivu-menu-item,
+    .ivu-menu-submenu {
+      color: var(--font-color-white);
+      /deep/.ivu-select-dropdown {
+        background: var(--body-bgcolor); 
+      }
+    }; 
+    .ivu-menu-submenu {
+      .ivu-select-dropdown {
+        background: var(--body-bgcolor);
+      }
+    }
+    .ivu-menu-submenu {
+      background: var(--body-bgcolor);
+    }
     .drop-menu {
       float: right;
       margin-right: 30px;
       position: absolute;
       right: 10px;
+      .ivu-select-dropdown {
+      background: var(--body-bgcolor);
+    }
       &-title {
+        color: var(--font-color);
         font-size: 18px;
       }
     }
     .btn-menu {
       font-size: 16px;
+      color: var(--font-color);
       float: right;
       margin-right: 10px;
     }
@@ -171,6 +233,7 @@
 
   .modal {
     &-title {
+      color: var(--font-color);
       font-size: 18px;
       font-weight: 600;
     }

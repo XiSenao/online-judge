@@ -27,5 +27,7 @@ export default keyMirror({
   'CHANGE_CONTEST_RANK_LIMIT': null,
   'CONTEST_ACCESS': null,
   'CLEAR_CONTEST': null,
-  'CHANGE_PROBLEM_MAP': null
+  'CHANGE_PROBLEM_MAP': null,
+  'CHANGE_THEME': null,
+  'CHANGE_THEME_MODEL': null
 })

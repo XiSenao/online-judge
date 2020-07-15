@@ -270,7 +270,27 @@
   pre {
     display: inline-block;
   }
-
+  /deep/.ivu-card {
+    background: var(--table-card-top);
+    color: var(--font-color-white);
+  }
+  /deep/.ivu-table th {
+    color: var(--font-color-origin);
+    background: var(--table-card-head);
+  }
+  /deep/.ivu-table td {
+    color: var(--font-color-origin);
+    background: var(--table-card-body);
+  }
+  /deep/.ivu-card-body li {
+    color: var(--font-color-white);
+  }
+  /deep/.ivu-tag-dot {
+    background: var(--tag-dot-bg-color) !important;
+  }
+  /deep/.ivu-tag-text {
+    color: var(--font-color-white);
+  }
   #countdown {
     font-size: 16px;
   }

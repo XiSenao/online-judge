@@ -187,7 +187,9 @@
 </script>
 
 <style lang="less" scoped>
-
+  /deep/.ivu-form .ivu-form-item-label {
+    color: var(--font-color-white);
+  }
   .flex-container {
     justify-content: flex-start;
     .left {

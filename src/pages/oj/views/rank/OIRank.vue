@@ -183,6 +183,18 @@
 </script>
 
 <style scoped lang="less">
+  /deep/.ivu-card {
+    background: var(--table-card-canvas-top); 
+    color: var(--font-color-white);
+  }
+  /deep/.ivu-table th {
+    color: var(--font-color-origin);
+    background: var(--table-card-head);
+  }
+  /deep/.ivu-table td {
+    color: var(--font-color-origin);
+    background: var(--table-card-body) !important;
+  }
   .echarts {
     margin: 0 auto;
     width: 95%;

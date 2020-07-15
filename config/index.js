@@ -4,12 +4,12 @@
 const path = require('path')
 const commonProxy = {
   onProxyReq: (proxyReq, req, res) => {
-    proxyReq.setHeader('Referer', "http://cdn.yfoj.org.cn")
+    proxyReq.setHeader('Referer', process.env.Target)
   },
-  target: "http://cdn.yfoj.org.cn",
+  target: process.env.Target,
   changeOrigin: true
 }
-console.log(process.env.PORT)
+
 module.exports = {
   build: {
     env: require('./prod.env'),

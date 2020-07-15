@@ -36,6 +36,10 @@
 </script>
 
 <style lang="less" scoped>
+  .ivu-card {
+    background: var(--table-card-top); 
+    color: var(--font-color-white);
+  }
   .content {
     font-size: 16px;
     margin: 0 50px 40px 50px;

@@ -234,7 +234,20 @@
   }
 </script>
 <style lang="less" scoped>
+  /deep/.ivu-card {
+    background: var(--table-card-top);
+  }
+  /deep/.ivu-select-dropdown {
+    background: var(--dropdown-contest-bg-color);
+  }
+  /deep/.ivu-dropdown-item {
+    color: var(--font-color-white);
+  }
+  /deep/.ivu-dropdown-item:hover {
+    background-color: var(--item-contest-dropdown);
+  }
   #contest-card {
+    color: var(--font-color-white);
     #keyword {
       width: 80%;
       margin-right: 30px;
@@ -259,7 +272,7 @@
           .title {
             font-size: 18px;
             a.entry {
-              color: #495060;
+              color: var(--font-color-white);
               &:hover {
                 color: #2d8cf0;
                 border-bottom: 1px solid #2d8cf0;

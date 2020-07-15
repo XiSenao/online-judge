@@ -284,6 +284,9 @@
 </script>
 
 <style lang="less" scoped>
+  /deep/.ivu-form .ivu-form-item-label {
+    color: var(--font-color-white);
+  }
   .inline {
     display: inline-block;
   }

@@ -215,5 +215,7 @@ export const m = {
    Update_Success_Password: '您將在5s之後強制重新登入.',
    Update_Not_Match_Password: '密碼匹配失敗.',
    Update_Not_Change_Password: '新密碼不能和舊密碼重複.',
-   Update_Again_Password: '請重新輸入密碼.'
+   Update_Again_Password: '請重新輸入密碼.',
+
+   Dark_Model: '黑夜模式'
 }

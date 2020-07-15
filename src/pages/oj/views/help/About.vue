@@ -57,6 +57,21 @@
 </script>
 
 <style scoped lang="less">
+  /deep/.ivu-card {
+    background: var(--table-card-top); 
+    color: var(--font-color-white);
+  }
+  /deep/.ivu-table th {
+    color: var(--font-color-origin);
+    background: var(--table-card-head);
+  }
+  /deep/.ivu-table td {
+    color: var(--font-color-origin);
+    background: var(--table-card-body) !important;
+  }
+  /deep/.markdown-body pre {
+    background: var(--problem-mark-bg-color)
+  }
   .container {
     margin-bottom: 20px;
 
