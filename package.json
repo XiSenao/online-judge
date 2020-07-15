@@ -5,7 +5,7 @@
   "author": "Ashen <https://github.com/FinalAshen>",
   "private": true,
   "scripts": {
-    "dev": "cross-env PORT=8080 Target=http://cdn.yfoj.org.cn node build/dev-server",
+    "dev": "cross-env PORT=8080 Target=http://Your-backend node build/dev-server",
     "Idev": "node build/dev-server.js",
     "start": "npm run dev",
     "build": "node build/build.js",

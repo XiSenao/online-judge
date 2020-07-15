@@ -25,6 +25,9 @@ Install nodejs **v8.12.0** first.
 ```bash
 npm install
 
+# the package.json will set proxy table to your backend
+TARGET=http://Your-backend
+
 # serve with hot reload at localhost:8080
 npm run dev
 ```
