@@ -51,6 +51,13 @@ export default {
 
   ['--font-certify-color']: '#666',
   ['--font-certify-r-color']: '#464c5b',
+
+  ['--font-setting-profile-color']: '#495060',
+  ['--setting-profile-input-bg-color']: '#fff',
+  ['--dropdown-selected']: 'rgba(40,123,211,.91)',
+  ['--drag-upload-bg-color']: '#fff',
+
+  ['--login-model-bg-color']: '#fff',
   // contest
   ['--item-contest-dropdown']: '#f3f3f3',
   ['--dropdown-contest-bg-color']: '#fff',

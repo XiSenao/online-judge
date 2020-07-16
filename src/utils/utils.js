@@ -94,7 +94,7 @@ function downloadFile (url) {
 function timeOut (time = TIME_TIME_OUT) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      reject(new Error('Time Out'))
+      reject({ status: 200, data: { message: 'Time Out!' } })
     }, time)
   })
 }
@@ -169,14 +169,13 @@ function createWorker(f) {
   return worker
 }
 
-function changeTheme (themeKey) {
-  if (!themeKey) {
-    return
-  }
-  const theme = THEME_MAP[themeKey].file
-  Object.keys(theme).forEach(key => {
-    const value = theme[key]
-    document.documentElement.style.setProperty(key, value)
+function changeTheme (themeKey = 'white') {
+  Promise.resolve().then(() => {
+    const theme = THEME_MAP[themeKey].file
+    Object.keys(theme).forEach(key => {
+      const value = theme[key]
+      document.documentElement.style.setProperty(key, value)
+    })
   })
 }
 

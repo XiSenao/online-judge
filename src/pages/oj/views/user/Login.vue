@@ -71,8 +71,13 @@
               this.$success(this.$i18n.t('m.Welcome_back'))
             })
             .catch(res => {
-              this.$error(res.data ? res.data.message : this.$i18n.t('m.Time_out'))
-              this.btnLoginLoading = false
+              try {
+                this.$error(res.data.message)
+              } catch (e) {
+                this.$error('Server Error.')
+              } finally {
+                this.btnLoginLoading = false
+              }
             })
         })
       },
