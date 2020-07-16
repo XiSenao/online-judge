@@ -287,10 +287,31 @@
   /deep/.ivu-form .ivu-form-item-label {
     color: var(--font-color-white);
   }
+  /deep/.ivu-input,
+  /deep/.ivu-select-selection {
+    background: var(--setting-profile-input-bg-color);
+    color: var(--font-setting-profile-color);
+  }
+  /deep/.ivu-select-dropdown {
+    background: var(--dropdown-diff-bg-color);
+  }
+  /deep/.ivu-select-item {
+    color: var(--font-color-white);
+  }
   .inline {
     display: inline-block;
   }
-
+  .ivu-select-item:hover {
+    background: var(--dropdown-difficulty);
+  }
+  .ivu-select-item-selected, .ivu-select-item-selected:hover {
+    background: var(--dropdown-selected);
+  }
+  /deep/.ivu-upload-drag,
+  /deep/.ivu-modal-content {
+    background: var(--drag-upload-bg-color); 
+    color: var(--font-color-white)
+  }
   .copper-img {
     width: 400px;
     height: 300px;

@@ -599,6 +599,7 @@
   }
   /deep/.CodeMirror {
     background: var(--problem-codebody-bg-color);
+    color: var(--font-color-white);
   }
   /deep/.ivu-modal-content {
     background: var(--problem-canvas-bg-color);

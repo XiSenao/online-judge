@@ -7,7 +7,7 @@ export default {
   ['--font-color-dropdown-user']: '#878484',
   ['--dropdown-divide']: '#252525',
   ['--font-color-shallow']: '#6f6f6f',
-  ['--font-color-white']: '#dcdde4',
+  ['--font-color-white']: '#d4d4d4',
   ['--font-color-setting-white']: '#dcdde4',
   ['--font-color-grey']: '#5C5C5C',
   ['--font-color-grey2']: '#808080',
@@ -48,6 +48,12 @@ export default {
 
   ['--font-certify-color']: '#cdcdcd',
   ['--font-certify-r-color']: '#999a9c',
+  ['--setting-profile-input-bg-color']: '#d4d4d4',
+  ['--font-setting-profile-color']: '#141212',
+  ['--dropdown-selected']: 'rgba(78, 79, 80, 0.9)',
+  ['--drag-upload-bg-color']: '#6a6a6a',
+
+  ['--login-model-bg-color']: '#717171',
   // contest-list
   ['--item-contest-dropdown']: '#5b5656',
   ['--dropdown-contest-bg-color']: '#666',

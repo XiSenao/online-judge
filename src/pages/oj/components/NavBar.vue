@@ -68,7 +68,7 @@
             <Dropdown-item name="/setting/profile">{{$t('m.Settings')}}</Dropdown-item>
             <Dropdown-item name="/changeTheme" style="display: flex; justify-content: center;">
               <span>{{$t('m.Dark_Model')}}</span>
-              <i-switch size="small" @on-change="changeTheme" v-model="isDark" :value="isDark" style="margin-left: 12px;"/>
+              <i-switch size="small" @on-change="isDark = !isDark" v-model="isDark" :value="isDark" style="margin-left: 12px;"/>
             </Dropdown-item>
             <Dropdown-item divided name="/logout">{{$t('m.Logout')}}</Dropdown-item>
           </Dropdown-menu>
@@ -97,32 +97,20 @@
     },
     data () {
       return {
-        isDark: true
+        runDarkModel: null
       }
-    },
-    created () {
-      this.isDark = this.theme === THEMES.dark
     },
     methods: {
       ...mapActions({
         changeModalStatus: 'changeModalStatus',
         changeMyTheme: 'user/setTheme'
       }),
-      changeTheme () {
-        this.isDark = !this.isDark
-        let themeKey = this.isDark ? THEMES.dark : THEMES.white
-        utils.changeTheme(themeKey)
-        this.changeMyTheme(themeKey)
-      },
       handleRoute (route) {
-        if (route && route.indexOf('admin') < 0) {
-          if (route === '/changeTheme') {
-            return this.changeTheme()
-          }
-          this.$router.push(route)
-        } else {
-          window.open('/admin/')
+        if (route === '/changeTheme') {
+          this.isDark = !this.isDark
+          return 
         }
+        this.$router.push(route)
       },
       handleBtnClick (mode) {
         this.changeModalStatus({
@@ -150,12 +138,29 @@
         set (value) {
           this.changeModalStatus({visible: value})
         }
-      }
+      },
+      isDark: {
+        get () {
+          if (this.runDarkModel !== null) {
+            return this.runDarkModel
+          }
+          return this.runDarkModel = this.theme() === THEMES.dark
+        },
+        set (value) {
+          this.runDarkModel = value
+          let themeKey = value ? THEMES.dark : THEMES.white
+          utils.changeTheme(themeKey)  
+          this.changeMyTheme(themeKey)
+        }
+      },
     }
   }
 </script>
 
 <style lang="less" scoped>
+  /deep/.ivu-btn-ghost {
+    color: var(--font-color-white);
+  }
   #header {
     min-width: 1100px;
     position: fixed;

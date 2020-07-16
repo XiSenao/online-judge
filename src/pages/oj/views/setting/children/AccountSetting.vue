@@ -190,6 +190,10 @@
   /deep/.ivu-form .ivu-form-item-label {
     color: var(--font-color-white);
   }
+  /deep/.ivu-input {
+    background: var(--setting-profile-input-bg-color);
+    color: var(--font-setting-profile-color);
+  }
   .flex-container {
     justify-content: flex-start;
     .left {

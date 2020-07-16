@@ -330,8 +330,27 @@
     color: var(--font-color-white);
     background: var(--table-card-top);
   }
+  /deep/.ivu-input,
+  /deep/.ivu-select-selection,
+  /deep/.el-input__inner {
+    background: var(--setting-profile-input-bg-color);
+    color: var(--font-setting-profile-color);
+  }
   /deep/.ivu-form .ivu-form-item-label {
     color: var(--font-color-white);
+  }
+  /deep/.ivu-select-item:hover {
+    background: var(--dropdown-difficulty);
+    color: var(--font-color-white);
+  }
+  /deep/.ivu-select-item-selected, /deep/.ivu-select-item-selected:hover,
+  /deep/.ivu-select-item-selected.ivu-select-item-focus {
+    background: var(--dropdown-selected);
+  }
+  /deep/.ivu-select-item,
+  /deep/.ivu-select-dropdown {
+    background: var(--dropdown-diff-bg-color);
+     color: var(--font-color-white);
   }
   .flex-container {
     justify-content: flex-start;

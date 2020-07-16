@@ -17,7 +17,7 @@ const state = {
   problemMap: {
     cacheTime: 2 * 60 * 1000 // 2min
   },
-  theme: storage.get(THEME_KEY) || 'white'
+  theme: ''
 }
 
 const getters = {
@@ -28,7 +28,9 @@ const getters = {
     return !!getters.profile.id
   },
   problemMap: state => state.problemMap,
-  theme: _ => storage.get(THEME_KEY)
+  theme: _ => () => {
+    return storage.get(THEME_KEY) || 'white'
+  }
 }
 
 const mutations = {
@@ -173,7 +175,7 @@ const actions = {
     })
   },
 
-  clearStatus ({ commit }) {
+  clearStatus ({ getters, commit }) {
     commit(types.CHANGE_TOKEN, null)
     commit(types.SET_ROLES, [])
     commit(types.CHANGE_PROFILE, {
@@ -183,7 +185,7 @@ const actions = {
       cacheTime: 2 * 60 * 1000 // 2min
     })
     storage.remove(THEME_KEY)
-    utils.changeTheme(storage.get(THEME_KEY))
+    utils.changeTheme(getters.theme())
     removeToken()
   }
 }
