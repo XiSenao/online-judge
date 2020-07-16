@@ -35,14 +35,6 @@ import 'echarts/lib/component/markPoint'
 import { behavior } from '@/utils/behavior'
 import './userPermission'
 
-// if (module.hot) {
-//   module.hot.accept(_ => {
-//     if (!!_) {
-//       console.log(_)
-//     }
-//   })
-// }
-
 // register global utility filters.
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

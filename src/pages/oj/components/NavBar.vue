@@ -68,7 +68,7 @@
             <Dropdown-item name="/setting/profile">{{$t('m.Settings')}}</Dropdown-item>
             <Dropdown-item name="/changeTheme" style="display: flex; justify-content: center;">
               <span>{{$t('m.Dark_Model')}}</span>
-              <i-switch size="small" @on-change="isDark = !isDark" v-model="isDark" :value="isDark" style="margin-left: 12px;"/>
+              <i-switch size="small" @on-change="isDark = !isDark" v-model="isDark" style="margin-left: 12px;"/>
             </Dropdown-item>
             <Dropdown-item divided name="/logout">{{$t('m.Logout')}}</Dropdown-item>
           </Dropdown-menu>
@@ -84,7 +84,7 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions, mapMutations } from 'vuex'
+  import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
   import login from '@oj/views/user/Login'
   import register from '@oj/views/user/Register'
   import { THEME_KEY, THEMES } from '@/utils/constants'
@@ -120,6 +120,9 @@
       }
     },
     computed: {
+      ...mapState({
+        myTheme: state => state.user.theme
+      }),
       ...mapGetters({
         website: 'website', 
         modalStatus: 'modalStatus', 
@@ -144,7 +147,7 @@
           if (this.runDarkModel !== null) {
             return this.runDarkModel
           }
-          return this.runDarkModel = this.theme() === THEMES.dark
+          return this.theme() === THEMES.dark
         },
         set (value) {
           this.runDarkModel = value
@@ -152,7 +155,12 @@
           utils.changeTheme(themeKey)  
           this.changeMyTheme(themeKey)
         }
-      },
+      }
+    },
+    watch: {
+      'myTheme' (newValue) {
+        this.isDark = newValue ? newValue === THEMES.dark : false
+      }
     }
   }
 </script>

@@ -175,7 +175,7 @@ const actions = {
     })
   },
 
-  clearStatus ({ getters, commit }) {
+  clearStatus ({ getters, commit, dispatch }) {
     commit(types.CHANGE_TOKEN, null)
     commit(types.SET_ROLES, [])
     commit(types.CHANGE_PROFILE, {
@@ -184,7 +184,7 @@ const actions = {
     commit(types.CHANGE_PROBLEM_MAP, {
       cacheTime: 2 * 60 * 1000 // 2min
     })
-    storage.remove(THEME_KEY)
+    dispatch('setTheme', null)
     utils.changeTheme(getters.theme())
     removeToken()
   }
