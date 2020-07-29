@@ -33,6 +33,7 @@ import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/toolbox'
 import 'echarts/lib/component/markPoint'
 import { behavior } from '@/utils/behavior'
+import '@/utils/cache'
 import './userPermission'
 
 // register global utility filters.

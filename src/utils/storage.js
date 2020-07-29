@@ -6,7 +6,6 @@ if (window.localStorage) {
   available = false
   storage = Cookies
 }
-
 export default {
   name: 'storage',
 
@@ -54,5 +53,29 @@ export default {
     if (available) {
       storage.clear()
     }
+  },
+  
+  clearCache (name) {
+    if (available) {
+      for (let param in storage) {
+        if (storage.hasOwnProperty(param) && !param.indexOf(`${ name }$_`)) {
+          storage.removeItem(param)
+        }
+      }
+    }
+  },
+
+  getDuplicate (name) {
+    let duplicateArr = []
+    for (let param in storage) {
+      if (storage.hasOwnProperty(param) && !param.indexOf(`${ name }$_`)) {
+        duplicateArr.push({
+          key: param.slice(name.length + 2),
+          value: storage.getItem(param)
+        })
+        storage.removeItem(param)
+      }
+    }
+    return duplicateArr
   }
 }

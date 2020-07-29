@@ -12,7 +12,7 @@ const whiteList = ['notFound', 'notAuthority'] // no redirect whitelist
 
 router.beforeEach(async(to, from, next) => {
   // start progress bar
-  NProgress.start()
+	NProgress.start()
   // determine whether the user has logged in
 	const hasToken = getToken()
 	let roles = []

@@ -179,6 +179,35 @@ function changeTheme (themeKey = 'white') {
   })
 }
 
+function weight (key, value) {
+  let kb = 0, str = '' + key + value, { length } = str, byte = 0
+  for (var i = 0; i < length; i++) {
+    var iCode = str.charCodeAt(i)
+    if (iCode >= 0 && iCode <= 255 || iCode >= 0xff61 && iCode <= 0xff9f) {
+      byte++
+    } else {
+      byte += 2
+    }
+  }
+  kb = Math.ceil(byte / 1024)
+  if (kb < 50) {
+    return 1
+  } else if (kb < 100) {
+    return 2
+  } else if (kb < 200) {
+    return 3
+  } else if (kb < 500) {
+    return 4
+  } else if (kb < 600) {
+    return 3
+  } else if (kb < 800) {
+    return 2
+  } else if (kb < 2048) {
+    return 1
+  } else {
+    return 0
+  }
+}
 export default {
   submissionMemoryFormat: submissionMemoryFormat,
   submissionTimeFormat: submissionTimeFormat,
@@ -192,5 +221,6 @@ export default {
   serializationDFS: serializationDFS,
   comparePath: comparePath,
   createWorker: createWorker,
-  changeTheme: changeTheme
+  changeTheme: changeTheme,
+  weight: weight
 }

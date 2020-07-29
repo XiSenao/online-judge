@@ -81,7 +81,7 @@
       },
       theme: {
         type: String,
-        default: 'solarized'
+        default: 'monokai'
       }
     },
     data () {
@@ -90,7 +90,7 @@
           // codemirror options
           tabSize: 4,
           mode: 'text/x-csrc',
-          theme: 'solarized',
+          theme: 'monokai',
           lineNumbers: true,
           line: true,
           // 代码折叠

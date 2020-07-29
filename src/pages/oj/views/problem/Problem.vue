@@ -209,7 +209,6 @@
   import { exFormatText } from '@/utils/JudgeServer/poj'
   import api from '@oj/api'
   import {pie, largePie} from './chartData'
-
   export default {
     name: 'Problem',
     components: {
@@ -231,7 +230,7 @@
         submitting: false,
         code: '',
         language: 'C++',
-        theme: 'solarized',
+        theme: 'monokai',
         submissionId: '',
         submitted: false,
         result: {
@@ -261,13 +260,27 @@
       }
     },
     beforeRouteEnter (to, from, next) {
-      // todo: 缓存
-      next(vm => {
-        vm.init()
-      })
+      let problemCode = storage.get(buildProblemCodeKey(to.params.problemID, to.params.contestID))
+      if (problemCode) {
+        next(vm => {
+          vm.language = problemCode.language
+          vm.code = problemCode.code
+          vm.theme = problemCode.theme
+        })
+      } else {
+        next()
+      }
     },
     mounted () {
       this.$store.commit(`contest/${types.CHANGE_CONTEST_ITEM_VISIBLE}`, {menu: false})
+      this.init()
+      window.addEventListener("beforeunload",() => {
+         storage.set(buildProblemCodeKey(this.problem.id, this.contestID), {
+          code: this.code,
+          language: this.language,
+          theme: this.theme
+        })
+      })
     },
     methods: {
       ...mapActions(['changeDomTitle']),
@@ -277,10 +290,26 @@
         clearTimeout(this.refreshStatus)
         this.contestID = this.$route.params.contestID
         this.problemID = this.$route.params.problemID
+        let problemDetail = this.cache.get(buildProblemCodeKey(this.problemID, this.contestID))
         let func = this.$route.name === 'problem-details' ? 'getProblem' : 'getContestProblem'
         let ID = {
           contestID: this.contestID,
           problemID: this.problemID
+        }
+        if (problemDetail) {
+          this.$Loading.finish()
+          this.isLoading = false
+          this.problem = problemDetail.problem
+          this.submissionExists = problemDetail.submissionExists
+          this.changeDomTitle({title: this.problem.title})
+          this.changePie(this.problem)
+          if (this.code !== '') {
+            return
+          }
+          // try to load problem template
+          // this.language = firstLanguage
+          // this.code = firstCode
+          return 
         }
         api[func](ID).then(res => {
           this.$Loading.finish()
@@ -294,7 +323,7 @@
               }
             })
           }
-          problem.language = problem.language.split(',').sort((a, b) => a < b)
+          problem.language = problem.language.split(',').sort((a, b) => a - b)
           let Base64 = require('js-base64').Base64
 					let template = problem.codeTemplate ? JSON.parse(Base64.decode(problem.codeTemplate)) : null, templateLists = {}, firstLanguage = '', firstCode = ''
           if (!!template) {
@@ -360,8 +389,10 @@
             })
           }
           problem.samples = samples
-          
           this.problem = problem
+
+          this.cache.set(buildProblemCodeKey(this.problem.id, this.contestID), {problem: this.problem, submissionExists: this.submissionExists})
+
           this.changePie(problem)
           // 在beforeRouteEnter中修改了, 说明本地有code，无需加载template 
           if (this.code !== '') {
@@ -571,7 +602,7 @@
       // 防止切换组件后仍然不断请求
       clearTimeout(this.refreshStatus)
       this.$store.commit(`contest/${types.CHANGE_CONTEST_ITEM_VISIBLE}`, {menu: true})
-      storage.set(buildProblemCodeKey(this.problem._id, from.params.contestID), {
+      storage.set(buildProblemCodeKey(this.problem.id, from.params.contestID), {
         code: this.code,
         language: this.language,
         theme: this.theme
@@ -599,7 +630,6 @@
   }
   /deep/.CodeMirror {
     background: var(--problem-codebody-bg-color);
-    color: var(--font-color-white);
   }
   /deep/.ivu-modal-content {
     background: var(--problem-canvas-bg-color);

@@ -78,7 +78,6 @@
   import utils from '@/utils/utils'
   import { ProblemMixin } from '@oj/components/mixins'
   import Pagination from '@oj/components/Pagination'
-
   export default {
     name: 'ProblemList',
     mixins: [ProblemMixin],

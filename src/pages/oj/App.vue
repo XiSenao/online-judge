@@ -21,6 +21,7 @@
   import { mapActions, mapState, mapGetters } from 'vuex'
   import NavBar from '@oj/components/NavBar.vue'
   import utils from '@/utils/utils'
+  import storage from '@/utils/storage'
 
   export default {
     name: 'app',
@@ -42,6 +43,8 @@
     },
     mounted () {
       this.getWebsiteConfig()
+      storage.clearCache('LRU')
+	    storage.clearCache('LFU')
     },
     methods: {
       ...mapActions(['getWebsiteConfig', 'changeDomTitle'])

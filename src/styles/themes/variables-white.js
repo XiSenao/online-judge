@@ -35,8 +35,8 @@ export default {
 
   // problem 
   ['--problem-mark-bg-color']: '#f8f8f9',
-  ['--problem-codenav-bg-color']: '#f7f7f7',
-  ['--problem-codebody-bg-color']: '#f3f3f3',
+  ['--problem-codenav-bg-color']: '#272822',
+  ['--problem-codebody-bg-color']: '#263238',
 
   ['--rightnav-bg-color']: '#f8f8f9',
 
