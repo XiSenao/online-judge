@@ -1,12 +1,38 @@
 import api from '@/pages/admin/api'
 
 export default {
+	data () {
+		return {
+			cacheJudgeType: {
+				funcMap: {
+					getSpiderServer: 'spider',
+					getJudgeUniqueStyleLists: 'judge'
+				},
+				spider: {
+					value: null,
+					time: 0
+				},
+				judge: {
+					value: null,
+					time: 0
+				},
+				cacheTime: 1/2 * 60 * 1000 // 30s
+			},
+			cacheTagList: {
+				items: {
+					value: null,
+					time: 0
+				},
+				cacheTime: 1/4 * 60 * 1000 // 15s
+			}
+		}
+	},
   methods: {
 		querySearch (queryString, cb, cp) {
-			api.getProblemTagList().then(res => {
+			let	doTagList = curTagList => {
 				let tagList = [], flag = false, backupTagList = []
-				for (let tag of res.data.data) {
-					if (!this.tagInput.replace(/(^\s*)|(\s*$)/g, '') || tag.name.indexOf(this.tagInput) !== -1) {
+				for (let tag of curTagList) {
+					if (!queryString.replace(/(^\s*)|(\s*$)/g, '') || tag.name.indexOf(queryString) !== -1) {
 						flag = true
 						tagList.push({id: tag.id, value: tag.name, status: tag.status})
 					}
@@ -16,15 +42,38 @@ export default {
 					tagList = backupTagList
 				}
 				cb && cb(tagList)
-				cp && cp(tagList) 
-			}).catch(() => {
+				cp && cp(tagList)
+				return tagList
+			}
+			let { items: { value, time }, cacheTime } = this.cacheTagList
+			if (time) {
+				let current = new Date().getTime()
+				if (current - time <= cacheTime) {
+					return doTagList(value)
+				}
+			}
+			api.getProblemTagList().then(res => {
+				let curTagList = res.data.data
+				this.cacheTagList.items = { value: curTagList, time: new Date().getTime() }
+				doTagList(curTagList)
+			}).catch((_) => {
 				this.error('Error!')
 			})
 		},
 		queryjudgeType (queryString, cb, cp) {
 			let funcName = this.spiderFlag ? 'getSpiderServer' : 'getJudgeUniqueStyleLists'
+			let cacheName = this.cacheJudgeType.funcMap[funcName], { value, time } = this.cacheJudgeType[cacheName], finalResult = null
+			if (time) {
+				let current = new Date().getTime(), limitTime = this.cacheJudgeType['cacheTime']
+				if (current - time <= limitTime) {
+					cp && cp(value)
+					finalResult = queryString ? value.filter(res => res.value.indexOf(queryString) > -1) : value
+					cb && cb(finalResult)
+					return 
+				}
+			}
 			api[funcName]().then(res => {
-				let judgeStyleLists = res.data.data, judgeAvailableStyleLists = [], finalResult
+				let judgeStyleLists = res.data.data, judgeAvailableStyleLists = []
 				Object.keys(judgeStyleLists).forEach(item => {
 					let now = judgeStyleLists[item]
 					if (now.status) {
@@ -39,7 +88,8 @@ export default {
 				finalResult = queryString ? judgeAvailableStyleLists.filter(res => res.value.indexOf(queryString) > -1) :
 				judgeAvailableStyleLists
 				this.judgeAvailableStyleLists = judgeAvailableStyleLists
-				cb && cb(judgeAvailableStyleLists)
+				this.cacheJudgeType[cacheName] = { value: judgeAvailableStyleLists, time: new Date().getTime() }
+				cb && cb(finalResult)
 			})
 		},
 		closeTag (tag, obj) {

@@ -30,7 +30,8 @@
     },
     data () {
       return {
-        version: process.env.VERSION
+        version: process.env.VERSION,
+        planeNumber: 0
       }
     },
     created () {
@@ -39,6 +40,19 @@
         console.log("%c ", "background: url(http://yfoj.org.cn/static/image/show.png) no-repeat center;padding-left:314px;padding-bottom: 249px;")
         console.log("\n%c Welcome to Online Judge! %c %c Github: https://github.com/FinalAshen/Online-Judge\n\n", "color: #73c9e5; font-weight:600","","color:orange;font-weight:900")
         utils.changeTheme(this.theme() || 'white')
+        document.onkeydown = event => {
+          var event = event || window.event, key = null
+          if (this.planeNumber > 4) { return }
+          console.log(this.planeNumber)
+          if (event.keyCode == 86 && event.ctrlKey) {  
+            var KICKASSVERSION='2.0'
+            var s = document.createElement('script')
+            s.type='text/javascript'
+            document.body.appendChild(s)
+            s.src='/static/js/PlaneGame.js'
+            this.planeNumber++
+          } 
+        }
       } catch (_) {}
     },
     mounted () {
