@@ -43,11 +43,11 @@ function breakLongWords (value, length = 16) {
   return value.replace(re, '$1\n')
 }
 
-function formatTen(num) {
+function formatTen (num) {
   return num > 9 ? (num + "") : ("0" + num);
 }
 
-function formatDate(date) {
+function formatDate (date) {
   var year = date.getFullYear();
   var month = date.getMonth() + 1;
   var day = date.getDate();
@@ -155,9 +155,24 @@ function comparePath (obj, point) {
     }
   }
   return true
-}	
+}
 
-function createWorker(f) {
+function serializationAdminDFS (obj, nowArr, res) {
+  if (!obj) {
+    res.push(nowArr.join('').substring(1))
+    return
+  }
+  for (let item in obj) {
+    let value = obj[item], { name, path, children } = value
+    if (path === '/') path = ''
+    if (name === 'Redirect') continue
+    nowArr.push('/' + path)
+    serializationAdminDFS(children, nowArr, res)
+    nowArr.pop()
+  }
+}
+
+function createWorker (f) {
   let worker = null, url = null, blob = null
   if (window.Worker) {
     try {
@@ -208,6 +223,11 @@ function weight (key, value) {
     return 0
   }
 }
+
+function isExternal (path) {
+  return /^(https?:|mailto:|tel:)/.test(path)
+}
+
 export default {
   submissionMemoryFormat: submissionMemoryFormat,
   submissionTimeFormat: submissionTimeFormat,
@@ -220,7 +240,9 @@ export default {
   ratingColor: ratingColor,
   serializationDFS: serializationDFS,
   comparePath: comparePath,
+  serializationAdminDFS: serializationAdminDFS,
   createWorker: createWorker,
   changeTheme: changeTheme,
-  weight: weight
+  weight: weight,
+  isExternal: isExternal
 }

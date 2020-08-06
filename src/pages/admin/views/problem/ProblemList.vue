@@ -163,24 +163,24 @@ export default {
 			row.isEditing = true
 		},
 		goEdit (problemId) {
-			if (this.routeName === 'problem-list') {
-				this.$router.push({name: 'edit-problem', params: {problemId}})
-			} else if (this.routeName === 'contest-problem-list') {
-				this.$router.push({name: 'edit-contest-problem', params: {problemId: problemId, contestId: this.contestId}})
+			if (this.routeName === 'ProblemList') {
+				this.$router.push({name: 'EditProblem', params: {problemId}})
+			} else if (this.routeName === 'ContestProblemList') {
+				this.$router.push({name: 'EditContestProblem', params: {problemId: problemId, contestId: this.contestId}})
 			}
 		},
 		goCreateProblem () {
-			if (this.routeName === 'problem-list') {
-				this.$router.push({name: 'create-problem'})
-			} else if (this.routeName === 'contest-problem-list') {
-				this.$router.push({name: 'create-contest-problem', params: {contestData: this.$route.params.contestData}})
+			if (this.routeName === 'ProblemList') {
+				this.$router.push({name: 'CreateMachineProblem'})
+			} else if (this.routeName === 'ContestProblemList') {
+				this.$router.push({name: 'CreateContestProblem', params: {contestData: this.$route.params.contestData}})
 			}
 		},
 		goCreateSpiderProblem () {
-			if (this.routeName === 'problem-list') {
-				this.$router.push({name: 'create-spider-problem'})
-			} else if (this.routeName === 'contest-problem-list') {
-				this.$router.push({name: 'create-contest-spider-problem', params: {contestData: this.$route.params.contestData}})
+			if (this.routeName === 'ProblemList') {
+				this.$router.push({name: 'CreateSpiderProblem'})
+			} else if (this.routeName === 'ContestProblemList') {
+				this.$router.push({name: 'CreateContestSpiderProblem', params: {contestData: this.$route.params.contestData}})
 			}
 		},
 		// 切换页码回调
@@ -190,7 +190,7 @@ export default {
 		},
 		getProblemList (page = 1) {
 			this.loading = true
-			let funcName = this.routeName === 'problem-list' ? 'getProblemList' : 'getContestProblemList'
+			let funcName = this.routeName === 'ProblemList' ? 'getProblemList' : 'getContestProblemList'
 			let params = {
 				limit: this.pageSize,
 				offset: page,

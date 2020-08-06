@@ -1,161 +1,202 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 // 引入 view 组件
-import { Announcement, Conf, AuthenticatedUser, Contest, ContestList, Home, JudgeServer, Login,
-  Problem, SpiderProblem, ProblemList, User, PruneTestCase, Dashboard, ProblemImportOrExport, error401, error404 } from './views'
+import { Announcement, AuthenticatedUser, Contest, ContestList, Home, JudgeServer, Login,
+  Problem, SpiderProblem, ProblemList, User, Dashboard, Redirect, Error401, Error404 } from './views'
 Vue.use(VueRouter)
 
 export const constantRoutes = [
   {
     path: '/login',
-    name: 'login',
-    component: Login
+    component: Login,
+    name: 'Login',
+    meta: { title: 'Login' },
+    hidden: true
+  },
+  {
+    path: '/redirect',
+    component: Home,
+    hidden: true,
+    name: 'Redirect',
+    children: [
+      {
+        path: '/redirect/:path(.*)',
+        component: Redirect,
+        name: 'Redirect'
+      }
+    ]
   },
   {
     path: '/',
-    name: 'home',
     component: Home,
+    redirect: '/dashboard',
+    meta: { title: 'Dashboard', icon: 'el-icon-fa-dashboard' },
     children: [
       {
-        path: '/dashboard',
-        name: 'dashboard',
-        component: Dashboard
+        path: 'dashboard',
+        component: Dashboard,
+        name: 'Dashboard',
+        meta: { title: 'Dashboard' }
+      }
+    ]
+  },
+  {
+    path: '/problem',
+    component: Home,
+    redirect: '/problem/problem_list',
+    name: 'Problem',
+    meta: { title: 'Problem', icon: 'el-icon-fa-bars' },
+    children: [
+      {
+        path: 'problem_list',
+        component: ProblemList,
+        name: 'ProblemList',
+        meta: { title: 'Problem List' }
       },
       {
-        path: '/conf',
-        name: 'conf',
-        component: Conf
+        path: 'machine/problem_create',
+        component: Problem,
+        name: 'CreateMachineProblem',
+        meta: { title: 'Create Machine Problem' }
       },
       {
-        path: '/prune-test-case',
-        name: 'prune-test-case',
-        component: PruneTestCase
+        path: 'machine/spider_create',
+        component: SpiderProblem,
+        name: 'CreateSpiderProblem',
+        meta: { title: 'Create Spider Problem' }
       },
       {
-        path: '/problems',
-        name: 'problem-list',
-        component: ProblemList
+        path: 'edit/:problemId',
+        component: Problem,
+        name: 'EditProblem',
+        meta: { title: 'Edit Problem' },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: '/contest',
+    component: Home,
+    redirect: '/contest/contest_list',
+    name: 'Contest',
+    meta: { title: 'Contest', icon: 'el-icon-fa-trophy' },
+    children: [
+      {
+        path: 'contest_list',
+        component: ContestList,
+        name: 'ContestList',
+        meta: { title: 'Contest List' }
       },
       {
-        path: '/problem/create',
-        name: 'create-problem',
-        component: Problem
+        path: 'create',
+        component: Contest,
+        name: 'CreateContest',
+        meta: { title: 'Create Contest' }
       },
       {
-        path: '/spiderProblem/create',
-        name: 'create-spider-problem',
-        component: SpiderProblem
+        path: ':contestId/edit',
+        component: Contest,
+        name: 'EditContest',
+        meta: { title: 'Edit Contest' },
+        hidden: true
       },
       {
-        path: '/problem/edit/:problemId',
-        name: 'edit-problem',
-        component: Problem
+        path: ':contestId/announcement',
+        component: Announcement,
+        name: 'ContestAnnouncement',
+        meta: { title: 'Contest Announcement' },
+        hidden: true
       },
       {
-        path: '/problem/batch_ops',
-        name: 'problem_batch_ops',
-        component: ProblemImportOrExport
+        path: 'authenticatedUser/:contestId',
+        component: Announcement,
+        name: 'ContestAuthenticatedUser',
+        meta: { title: 'Contest Authenticated User' },
+        hidden: true
       },
       {
-        path: '/spiderProblem/create',
-        name: 'create-spiderProblem',
-        component: SpiderProblem
+        path: 'authenticatedUser/:contestId',
+        component: Announcement,
+        name: 'ContestAuthenticatedUser',
+        meta: { title: 'Contest Authenticated User' },
+        hidden: true
       },
       {
-        path: '/contest/create',
-        name: 'create-contest',
-        component: Contest
+        path: ':contestData/problems',
+        component: ProblemList,
+        name: 'ContestProblemList',
+        meta: { title: 'Contest Problem List' },
+        hidden: true
       },
       {
-        path: '/contest',
-        name: 'contest-list',
-        component: ContestList
+        path: ':contestData/problem/create',
+        component: ProblemList,
+        name: 'CreateContestProblem',
+        meta: { title: 'Create Contest Problem' },
+        hidden: true
       },
       {
-        path: '/contest/:contestId/edit',
-        name: 'edit-contest',
-        component: Contest
+        path: ':contestData/spiderProblem/create',
+        component: SpiderProblem,
+        name: 'CreateContestSpiderProblem',
+        meta: { title: 'Create Contest Spider Problem' },
+        hidden: true
       },
       {
-        path: '/contest/:contestId/announcement',
-        name: 'contest-announcement',
-        component: Announcement
-      },
-      {
-        path: '/contest/authenticatedUser/:contestId',
-        name: 'contest-authenticated-user',
-        component: AuthenticatedUser
-      },
-      {
-        path: '/contest/:contestData/problems',
-        name: 'contest-problem-list',
-        component: ProblemList
-      },
-      {
-        path: '/contest/:contestData/problem/create',
-        name: 'create-contest-problem',
-        component: Problem
-      },
-      {
-        path: '/contest/:contestData/spiderProblem/create',
-        name: 'create-contest-spider-problem',
-        component: SpiderProblem
-      },
-      {
-        path: '/contest/:contestId/problem/:problemId/edit',
-        name: 'edit-contest-problem',
-        component: Problem
+        path: ':contestId/problem/:problemId/edit',
+        component: Problem,
+        name: 'EditContestProblem',
+        meta: { title: 'Edit Contest Problem' },
+        hidden: true
       }
     ]
   },
   {
     path: '/401',
-    name: 'notAuthority',
-    meta: {title: '401'},
-    component: error401
+    component: Error401,
+    name: 'NotAuthority',
+    meta: { title: 'Not Authority' },
+    hidden: true
   },
   {
     path: '/404',
-    name: 'notFound',
-    meta: {title: '404'},
-    component: error404
+    component: Error404,
+    name: 'NotFound',
+    meta: { title: 'Not Found' },
+    hidden: true
   }
-] 
+]
 
 export const asyncRoutes = [
   {
-    path: '/',
-    name: 'home',
+    path: '/general',
+    redirect: '/general/user',
     component: Home,
+    meta: { title: 'General', icon: 'el-icon-menu' },
     children: [
       {
-        path: '/announcement',
-        name: 'announcement',
-        meta: {
-          roles: ['superadmin']
-        },
-        component: Announcement
+        path: 'user',
+        component: User,
+        name: 'User',
+        meta: { title: 'User', roles: ['superadmin'] }
       },
       {
-        path: '/user',
-        name: 'user',
-        meta: {
-          roles: ['superadmin']
-        },
-        component: User
+        path: 'announcement',
+        component: Announcement,
+        name: 'Announcement',
+        meta: { title: 'Announcement', roles: ['superadmin'] }
       },
       {
-        path: '/authenticated-user',
-        name: 'authenticated-user',
-        meta: {
-          roles: ['superadmin']
-        },
-        component: AuthenticatedUser
+        path: 'authenticated-user',
+        component: AuthenticatedUser,
+        name: 'AuthenticatedUser',
+        meta: { title: 'Authenticated User', roles: ['superadmin'] }
       },
       {
-        path: '/judge-server',
-        name: 'judge-server',
-        component: JudgeServer
+        path: 'judge-server',
+        component: JudgeServer,
+        name: 'JudgeServer',
+        meta: { title: 'Judge Server' }
       }
     ]
   }
@@ -163,16 +204,17 @@ export const asyncRoutes = [
 
 const createRouter = () => new VueRouter({
   base: '/admin/',
-  mode: 'history', 
+  mode: 'history',
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })
 
 const router = createRouter()
 
-export function resetRouter() {
+// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
+export function resetRouter () {
   const newRouter = createRouter()
-  router.matcher = newRouter.matcher 
+  router.matcher = newRouter.matcher
 }
 
 export default router

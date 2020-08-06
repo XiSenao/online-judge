@@ -13,9 +13,10 @@ import Contest from './contest/Contest.vue'
 import Login from './general/Login.vue'
 import Home from './Home.vue'
 import ProblemImportOrExport from './problem/ImportAndExport.vue'
-import error401 from '@/pages/admin/components/401.vue'
-import error404 from '@/pages/admin/components/404.vue'
+import Redirect from './redirect'
+import Error401 from '@/pages/admin/components/401.vue'
+import Error404 from '@/pages/admin/components/404.vue'
 export {
   Announcement, User, Conf, AuthenticatedUser, JudgeServer, Problem, SpiderProblem, ProblemList, Contest,
-  ContestList, Login, Home, PruneTestCase, Dashboard, ProblemImportOrExport, error401, error404
+  ContestList, Login, Home, PruneTestCase, Dashboard, ProblemImportOrExport, Redirect, Error401, Error404
 }

@@ -138,13 +138,13 @@
         })
       },
       goEdit (contestId) {
-        this.$router.push({name: 'edit-contest', params: {contestId}})
+        this.$router.push({name: 'EditContest', params: {contestId}})
       },
       goContestAuthenticatedUser (contestId) {
-        this.$router.push({name: 'contest-authenticated-user', params: {contestId}})
+        this.$router.push({name: 'ContestAuthenticatedUser', params: {contestId}})
       },
       goContestAnnouncement (contestId) {
-        this.$router.push({name: 'contest-announcement', params: {contestId}})
+        this.$router.push({name: 'ContestAnnouncement', params: {contestId}})
       },
       goContestProblemList (scope) {
         let contestData = {
@@ -153,7 +153,7 @@
         }
         let Base64 = require('js-base64').Base64
         contestData = Base64.encode(JSON.stringify(contestData))
-        this.$router.push({name: 'contest-problem-list', params: {contestData}})
+        this.$router.push({name: 'ContestProblemList', params: {contestData}})
       },
       handleEndedSwitch (row) {
         if (row.status !== 1) {

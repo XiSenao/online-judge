@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!item.hidden">
+  <div v-if="!item.hidden"> 
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
@@ -9,7 +9,7 @@
     </template>
 
     <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
-      <template slot="title">
+      <template slot="title"> 
         <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
       </template>
       <sidebar-item
@@ -26,15 +26,13 @@
 
 <script>
 import path from 'path'
-import { isExternal } from '@/utils/validate'
 import Item from './Item'
 import AppLink from './Link'
-import FixiOSBug from './FixiOSBug'
+import utils from '@/utils/utils'
 
 export default {
   name: 'SidebarItem',
   components: { Item, AppLink },
-  mixins: [FixiOSBug],
   props: {
     // route object
     item: {
@@ -82,10 +80,10 @@ export default {
       return false
     },
     resolvePath(routePath) {
-      if (isExternal(routePath)) {
+      if (utils.isExternal(routePath)) {
         return routePath
       }
-      if (isExternal(this.basePath)) {
+      if (utils.isExternal(this.basePath)) {
         return this.basePath
       }
       return path.resolve(this.basePath, routePath)
@@ -93,3 +91,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  /deep/ .is-active>.el-submenu__title {
+    color: #409EFF !important;
+  }
+  /deep/ .is-active>.el-submenu__title i {
+    color: #409EFF !important;
+  }
+</style>
+

@@ -178,14 +178,14 @@
         let data = Object.assign({}, this.contest)
         this.$refs[contestValidateName].validate((valid) => {
           if (valid) {
-            let funcName = this.$route.name === 'edit-contest' ? 'editContest' : 'createContest'
+            let funcName = this.$route.name === 'EditContest' ? 'editContest' : 'createContest'
             data.id = data.id || null
             data.realtimeRank = data.realtimeRank ? 1 : 0
             data.status = data.status ? 1 : -1
             data.endTime = utils.formatDate(new Date(data.endTime))
             data.startTime = utils.formatDate(new Date(data.startTime))
             api[funcName](data).then(res => {
-              this.$router.push({name: 'contest-list', query: {refresh: 'true'}})
+              this.$router.push({name: 'ContestList', query: {refresh: 'true'}})
             }).catch(() => {})
           } else {
             return false
@@ -194,7 +194,7 @@
       }
     },
     mounted () {
-      if (this.$route.name === 'edit-contest') {
+      if (this.$route.name === 'EditContest') {
         this.title = 'Edit Contest'
         this.disableRuleType = true
         api.getContest(this.$route.params.contestId).then(res => {

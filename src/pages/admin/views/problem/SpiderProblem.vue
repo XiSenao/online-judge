@@ -197,10 +197,10 @@
 									api.createSpiderProblem(data).then(res => {
 										this.$success('创建成功')
 										this.showSpin = false
-										if (this.$route.name === 'create-spider-problem') {
-											this.$router.push({name: 'problem-list'})
+										if (this.$route.name === 'CreateSpiderProblem') {
+											this.$router.push({name: 'ProblemList'})
 										} else {
-											this.$router.push({name: 'contest-problem-list', params: { contestData: this.$route.params.contestData }})
+											this.$router.push({name: 'ContestProblemList', params: { contestData: this.$route.params.contestData }})
 										}
 									})
 								})

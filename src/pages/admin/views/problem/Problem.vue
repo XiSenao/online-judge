@@ -1,11 +1,11 @@
 <template>
   <div class="problem spin">
-		<Spin size="large" fix v-if="utilSpin"></Spin>
+		<Spin size="large" fix v-if="utilSpin" />
     <Panel :title="title">
       <el-form ref="form" :model="problem" :rules="rules" label-position="top" label-width="70px">
         <el-row :gutter="20">
          <el-col :span="6" class="spin">
-					 	<Spin size="large" fix v-if="utilProblemSpin"></Spin>
+					 	<Spin size="large" fix v-if="utilProblemSpin" />
             <el-form-item label="Judge Server" required>
               <el-autocomplete
                 class="inline-input"
@@ -27,19 +27,19 @@
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item prop="description" :label="$t('m.Description')" required>
-              <Simditor v-model="problem.description"></Simditor>
+              <Simditor v-model="problem.description" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item prop="input_description" :label="$t('m.Input_Description')" required>
-              <Simditor v-model="problem.input_description"></Simditor>
+              <Simditor v-model="problem.input_description" />
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item prop="output_description" :label="$t('m.Output_Description')" required>
-              <Simditor v-model="problem.output_description"></Simditor>
+              <Simditor v-model="problem.output_description" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -75,7 +75,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8" class="spin">
-						<Spin size="large" fix v-if="utilProblemSpin"></Spin>
+						<Spin size="large" fix v-if="utilProblemSpin" />
             <el-form-item :label="$t('m.Tag')" :error="error.tags" required>
               <span class="tags">
                 <el-tag
@@ -147,7 +147,7 @@
           </button>
         </div>
         <el-form-item style="margin-top: 20px" :label="$t('m.Hint')">
-          <Simditor v-model="problem.hint" placeholder=""></Simditor>
+          <Simditor v-model="problem.hint" />
         </el-form-item>
         <el-form-item :label="$t('m.Code_Template')">
           <el-row>
@@ -211,7 +211,7 @@
           </el-col>
 
           <el-col :span="24" class="spin">
-						<Spin size="large" fix v-if="utilProblemSpin"></Spin>
+						<Spin size="large" fix v-if="utilProblemSpin" />
 						<el-table
 						:data="zipFileLists"
 						style="width: 100%">
@@ -374,7 +374,7 @@
     },
     mounted () {
       this.routeName = this.$route.name
-      if (this.routeName === 'edit-problem' || this.routeName === 'edit-contest-problem') {
+      if (this.routeName === 'EditProblem' || this.routeName === 'EditContestProblem') {
         this.mode = 'edit'
       } else {
 				this.mode = 'add'
@@ -732,10 +732,10 @@
         }
         this.problem.languages = this.problem.languages.sort()
         let funcName = {
-          'create-problem': 'createProblem',
-          'edit-problem': 'editProblem',
-          'create-contest-problem': 'createContestProblem',
-          'edit-contest-problem': 'editContestProblem'
+          'CreateMachineProblem': 'createProblem',
+          'EditProblem': 'editProblem',
+          'CreateContestProblem': 'createContestProblem',
+          'EditContestProblem': 'editContestProblem'
         }[this.routeName]
         // edit contest problem 时, contest_id会被后来的请求覆盖掉
         if (funcName === 'editContestProblem') {
@@ -756,15 +756,15 @@
             }
             Promise.all(executeQueue).then(res => {
               this.utilSpin = false
-              if (this.routeName === 'create-contest-problem' || this.routeName === 'edit-contest-problem') {
+              if (this.routeName === 'CreateContestProblem' || this.routeName === 'EditContestProblem') {
                 let data = {
                   contestId: problem.sourceId,
                   title: problem.sourceName
                 }
                 let contestData = Base64.encode(JSON.stringify(data))
-                this.$router.push({name: 'contest-problem-list', params: { contestData }})
+                this.$router.push({name: 'ContestProblemList', params: { contestData }})
               } else {
-                this.$router.push({name: 'problem-list'})
+                this.$router.push({name: 'ProblemList'})
               }
             }).catch(_ => this.$error('上传文件失败'))
 					}).catch(_ => {

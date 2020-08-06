@@ -12,7 +12,7 @@ export const m = {
   ToFile: '寫入檔案',
   ShareSubmission: '分享提交',
   Problem_List: '試題列表',
-  Create_Problem: '增加題目',
+  Create_Machine_Problem: '增加題目',
   Export_Import_Problem: '匯入匯出題目',
   Contest: '比賽',
   Contest_List: '比賽列表',
@@ -106,5 +106,6 @@ export const m = {
   DashBoardJudge_Server: 'Judge 伺服器',
   HTTPS_Status: 'HTTPS 狀態',
   Force_HTTPS: '強制 HTTPS',
-  CDN_HOST: 'CDN HOST'
+  CDN_HOST: 'CDN HOST',
+  Authenticated_User: '認證用戶'
 }

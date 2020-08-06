@@ -49,7 +49,7 @@
               .then(() => {
                 this.logining = false
                 this.$success('Welcome your login')
-                this.$router.push({name: 'dashboard'})
+                this.$router.push({name: 'Dashboard'})
               })
               .catch(res => {
                 this.$error('You do not have permission to access')

@@ -1,6 +1,6 @@
 <template>
   <div id="tags-view-container" class="tags-view-container">
-    <scroll-pane ref="scrollPane" class="tags-view-wrapper">
+    <scroll-pane ref="scrollPane" class="tags-view-wrapper" @scroll="handleScroll">
       <router-link
         v-for="tag in visitedViews"
         ref="tag"
@@ -171,6 +171,7 @@ export default {
       }
     },
     openMenu(tag, e) {
+      // debugger
       const menuMinWidth = 105
       const offsetLeft = this.$el.getBoundingClientRect().left // container margin left
       const offsetWidth = this.$el.offsetWidth // container width
@@ -189,6 +190,9 @@ export default {
     },
     closeMenu() {
       this.visible = false
+    },
+    handleScroll() {
+      this.closeMenu()
     }
   }
 }
@@ -196,11 +200,14 @@ export default {
 
 <style lang="scss" scoped>
 .tags-view-container {
-  height: 34px;
+  height: 38px;
   width: 100%;
   background: #fff;
   border-bottom: 1px solid #d8dce5;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 0 3px 0 rgba(0, 0, 0, .04);
+  .el-scrollbar__bar.is-horizontal {
+    height: 4px;
+  }
   .tags-view-wrapper {
     .tags-view-item {
       display: inline-block;
@@ -214,6 +221,7 @@ export default {
       padding: 0 8px;
       font-size: 12px;
       margin-left: 5px;
+      margin-bottom: 8px;
       margin-top: 4px;
       &:first-of-type {
         margin-left: 15px;

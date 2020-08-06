@@ -6,7 +6,7 @@ import utils from '@/utils/utils'
  * @param roles
  * @param route
  */
-function hasPermission(roles, route) {
+function hasPermission (roles, route) {
   if (route.meta && route.meta.roles) {
     return roles.some(role => route.meta.roles.includes(role))
   } else {
@@ -19,7 +19,7 @@ function hasPermission(roles, route) {
  * @param routes asyncRoutes
  * @param roles
  */
-export function filterAsyncRoutes(routes, roles) {
+export function filterAsyncRoutes (routes, roles) {
   const res = []
 
   routes.forEach(route => {
@@ -46,7 +46,8 @@ const state = {
 
 const getters = {
   availableRoutesName: state => state.availableRoutesName,
-  sumRoutesPath: state => state.sumRoutesPath
+  sumRoutesPath: state => state.sumRoutesPath,
+  routes: state => state.routes
 }
 
 const mutations = {
@@ -54,8 +55,8 @@ const mutations = {
     state.addRoutes = routes
     state.routes = constantRoutes.concat(routes)
     let routesName = new Set()
-    utils.serializationDFS(constantRoutes.concat(routes), routesName, 'name')
-    state.availableRoutesName = Array.from(routesName)	
+    utils.serializationDFS(state.routes, routesName, 'name')
+    state.availableRoutesName = [ ...routesName ]
   },
   SET_SUM_ROUTES_PATH: (state, payload) => {
     state.sumRoutesPath = payload
@@ -63,7 +64,7 @@ const mutations = {
 }
 
 const actions = {
-  generateRoutes({ state, commit }, roles) {
+  generateRoutes ({ state, commit }, roles) {
     return new Promise(resolve => {
       let accessedRoutes
       if (roles.includes(ADMIN_TYPE.SUPERADMIN)) {
@@ -72,9 +73,8 @@ const actions = {
         accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
       }
       // 首次重加载所有路由名
-      let routesPath = new Set()
-      utils.serializationDFS(constantRoutes.concat(asyncRoutes), routesPath, 'path')
-      routesPath = [ ...routesPath ]
+      let routesPath = []
+      utils.serializationAdminDFS(constantRoutes.concat(asyncRoutes), [], routesPath)
       commit('SET_SUM_ROUTES_PATH', routesPath)
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)
