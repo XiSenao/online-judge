@@ -34,7 +34,7 @@ const getters = {
 }
 
 const mutations = {
-  [types.CHANGE_PROFILE] (state, {profile}) {
+  [types.CHANGE_PROFILE] (state, { profile }) {
     state.profile = profile
     i18n.locale = profile.viewLanguage || 'en-US'
   },
@@ -56,7 +56,6 @@ const mutations = {
 }
 
 const actions = {
-  
   setIMGBuffer ({ commit }, imageBuffer) {
     commit(types.SET_IMGBUFFER, imageBuffer)
   },
@@ -70,12 +69,12 @@ const actions = {
     commit(types.CHANGE_THEME_MODEL, payload)
   },
 
-  login({ state, commit, dispatch }, userInfo) {
+  login ({ state, commit, dispatch }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       Promise.race([utils.timeOut(), api.login(username, password)])
         .then(async res => {
-          let token = res.headers.token
+          const token = res.headers.token
           dispatch('clearStatus')
           commit(types.CHANGE_TOKEN, token)
           setToken(token)
@@ -108,7 +107,7 @@ const actions = {
   getHeadImage ({ commit }, headPortrait) {
     return new Promise((resolve, reject) => {
       api.getHeadImageCopy(headPortrait).then(response => {
-        let IMGBuffer = 'data:image/png;base64,' + btoa(new Uint8Array(response.data).reduce((data, byte) => data + String.fromCharCode(byte), ''))
+        const IMGBuffer = 'data:image/png;base64,' + btoa(new Uint8Array(response.data).reduce((data, byte) => data + String.fromCharCode(byte), ''))
         resolve(IMGBuffer)
       }).catch(_ => {
         reject(_)
@@ -116,12 +115,12 @@ const actions = {
     })
   },
 
-  getProfile ({state, commit, dispatch}, id) {
+  getProfile ({ state, commit, dispatch }, id) {
     return new Promise((resolve, reject) => {
       api.getUserInfo(id).then(async res => {
         res.data.data.headPortrait = res.data.data.headPortrait || DEFAULT_AVATAR
         if (res.data.data.headPortrait !== DEFAULT_AVATAR) {
-          let IMGBuffer = await dispatch('getHeadImage', res.data.data.headPortrait)
+          const IMGBuffer = await dispatch('getHeadImage', res.data.data.headPortrait)
           res.data.data.IMGBuffer = IMGBuffer
         }
         if (!(id && state.profile.id !== id)) {
@@ -142,12 +141,13 @@ const actions = {
       })
     })
   },
-  
+
   getSolvedProblems ({ state, commit }, payload) {
-    let [promiseRequestQueue, solovedProbles, notSolovedProblems] = [[], [], []], { userId, forceReload } = payload
+    var [promiseRequestQueue, solovedProbles, notSolovedProblems] = [[], [], []]
+    var { userId, forceReload } = payload
     return new Promise((resolve, _) => {
       if (!forceReload) {
-        let currentTime = new Date().getTime()
+        const currentTime = new Date().getTime()
         // cache: 2min
         if (state.problemMap.time && currentTime - state.problemMap.time <= state.problemMap.cacheTime) {
           resolve(state.problemMap)
@@ -159,10 +159,10 @@ const actions = {
       Promise.all(promiseRequestQueue).then(res => {
         solovedProbles = res[0].data.data.sort((a, b) => a - b)
         notSolovedProblems = res[1].data.data.sort((a, b) => a - b)
-        let problemMap = {
+        const problemMap = {
           ac: solovedProbles,
           error: notSolovedProblems,
-          time: new Date().getTime(),
+          time: new Date().getTime()
         }
         commit(types.CHANGE_PROBLEM_MAP, Object.assign(state.problemMap, problemMap))
         resolve(problemMap)

@@ -5,7 +5,7 @@ function submissionMemoryFormat (memory) {
   if (memory === null || memory === '') return '--'
   memory = memory.replace(/k/, '')
   // 1048576 = 1024 * 1024
-  let t = parseInt(memory) / 1024
+  const t = parseInt(memory) / 1024
   return String(t.toFixed(0)) + 'MB'
 }
 
@@ -15,13 +15,13 @@ function submissionTimeFormat (time) {
 }
 
 function getACRate (acCount, totalCount) {
-  let rate = acCount === 0 || totalCount === 0 ? 0.00 : (acCount / totalCount * 100).toFixed(2)
+  const rate = acCount === 0 || totalCount === 0 ? 0.00 : (acCount / totalCount * 100).toFixed(2)
   return String(rate) + '%'
 }
 
 // 去掉值为null的项，返回object
 function filterEmptyValue (object) {
-  let query = {}
+  const query = {}
   Object.keys(object).forEach(key => {
     if (object[key] || object[key] === 0 || object[key] === false) {
       query[key] = object[key]
@@ -44,44 +44,44 @@ function breakLongWords (value, length = 16) {
 }
 
 function formatTen (num) {
-  return num > 9 ? (num + "") : ("0" + num);
+  return num > 9 ? (num + '') : ('0' + num)
 }
 
 function formatDate (date) {
-  var year = date.getFullYear();
-  var month = date.getMonth() + 1;
-  var day = date.getDate();
-  var hour = date.getHours();
-  var minute = date.getMinutes();
-  var second = date.getSeconds();
-  return year + "-" + formatTen(month) + "-" + formatTen(day) + ' ' + formatTen(hour) + ':' + formatTen(minute) + ':' + formatTen(second);
+  var year = date.getFullYear()
+  var month = date.getMonth() + 1
+  var day = date.getDate()
+  var hour = date.getHours()
+  var minute = date.getMinutes()
+  var second = date.getSeconds()
+  return year + '-' + formatTen(month) + '-' + formatTen(day) + ' ' + formatTen(hour) + ':' + formatTen(minute) + ':' + formatTen(second)
 }
 
 function downloadFile (url) {
   return new Promise((resolve, reject) => {
-    Vue.prototype.$http.get(url, {responseType: 'blob'}).then(resp => {
-      let headers = resp.headers
+    Vue.prototype.$http.get(url, { responseType: 'blob' }).then(resp => {
+      const headers = resp.headers
       if (headers['content-type'].indexOf('json') !== -1) {
-        let fr = new window.FileReader()
+        const fr = new window.FileReader()
         if (resp.data.error) {
           Vue.prototype.$error(resp.data.error)
         } else {
           Vue.prototype.$error('Invalid file format')
         }
         fr.onload = (event) => {
-          let data = JSON.parse(event.target.result)
+          const data = JSON.parse(event.target.result)
           if (data.error) {
             Vue.prototype.$error(data.data)
           } else {
             Vue.prototype.$error('Invalid file format')
           }
         }
-        let b = new window.Blob([resp.data], {type: 'application/json'})
+        const b = new window.Blob([resp.data], { type: 'application/json' })
         fr.readAsText(b)
         return
       }
-      let link = document.createElement('a')
-      link.href = window.URL.createObjectURL(new window.Blob([resp.data], {type: headers['content-type']}))
+      const link = document.createElement('a')
+      link.href = window.URL.createObjectURL(new window.Blob([resp.data], { type: headers['content-type'] }))
       link.download = (headers['content-disposition'] || '').split('filename=')[1]
       document.body.appendChild(link)
       link.click()
@@ -94,7 +94,7 @@ function downloadFile (url) {
 function timeOut (time = TIME_TIME_OUT) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      reject({ status: 200, data: { message: 'Time Out!' } })
+      reject({ status: 200, data: { message: 'Time Out!' }})
     }, time)
   })
 }
@@ -125,8 +125,8 @@ function ratingColor (ratingValue) {
 }
 
 function serializationDFS (obj, arr, method) {
-  for (let i in obj) {
-    let now = obj[i]
+  for (const i in obj) {
+    const now = obj[i]
     if (typeof now === 'object') {
       serializationDFS(now, arr, method)
     } else {
@@ -138,16 +138,16 @@ function serializationDFS (obj, arr, method) {
 }
 
 function comparePath (obj, point) {
-  let flag = false
+  const flag = false
   obj = obj.split(/\//g)
   point = point.split(/\//g)
   if (obj.length !== point.length) {
     return flag
   }
-  let length = obj.length
+  const length = obj.length
   for (let i = 0; i < length; ++i) {
-    let currentNow = obj[i]
-    let currentPoint = point[i]
+    const currentNow = obj[i]
+    const currentPoint = point[i]
     if (currentPoint !== currentNow) {
       if (currentNow[0] !== ':') {
         return false
@@ -162,8 +162,10 @@ function serializationAdminDFS (obj, nowArr, res) {
     res.push(nowArr.join('').substring(1))
     return
   }
-  for (let item in obj) {
-    let value = obj[item], { name, path, children } = value
+  for (const item in obj) {
+    const value = obj[item]
+    const { name, children } = value
+    let { path } = value
     if (path === '/') path = ''
     if (name === 'Redirect') continue
     nowArr.push('/' + path)
@@ -173,13 +175,17 @@ function serializationAdminDFS (obj, nowArr, res) {
 }
 
 function createWorker (f) {
-  let worker = null, url = null, blob = null
+  let worker = null
+  let url = null
+  let blob = null
   if (window.Worker) {
     try {
-      blob = new Blob(['(' + f.toString() +')()'])
+      blob = new Blob(['(' + f.toString() + ')()'])
       url = window.URL.createObjectURL(blob)
       worker = new Worker(url)
-    } catch (_) {}
+    } catch (_) {
+      console.log(_)
+    }
   }
   return worker
 }
@@ -195,7 +201,9 @@ function changeTheme (themeKey = 'white') {
 }
 
 function weight (key, value) {
-  let kb = 0, str = '' + key + value, { length } = str, byte = 0
+  let kb = 0
+  const str = '' + key + value
+  let byte = 0
   for (var i = 0; i < length; i++) {
     var iCode = str.charCodeAt(i)
     if (iCode >= 0 && iCode <= 255 || iCode >= 0xff61 && iCode <= 0xff9f) {

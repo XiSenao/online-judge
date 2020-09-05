@@ -1,24 +1,26 @@
 <template>
   <panel shadow>
-    <div slot="title">{{$t('m.ACM_Helper')}}</div>
+    <div slot="title">{{ $t('m.ACM_Helper') }}</div>
     <div slot="extra">
       <ul class="filter">
         <li>
-          {{$t('m.Auto_Refresh')}} (10s)
-          <i-switch style="margin-left: 5px;" @on-change="handleAutoRefresh"></i-switch>
+          {{ $t('m.Auto_Refresh') }} (10s)
+          <i-switch style="margin-left: 5px;" @on-change="handleAutoRefresh" />
         </li>
         <li>
-          <Button type="info" @click="getACInfo">{{$t('m.Refresh')}}</Button>
+          <Button type="info" @click="getACInfo">{{ $t('m.Refresh') }}</Button>
         </li>
       </ul>
     </div>
-    <Table :data="pagedAcInfo" :columns="columns" :loading="loadingTable" disabled-hover></Table>
-    <pagination :total="total"
-                :page-size.sync="limit"
-                :current.sync="page"
-                @on-change="handlePage"
-                @on-page-size-change="handlePage(1)"
-                show-sizer></pagination>
+    <Table :data="pagedAcInfo" :columns="columns" :loading="loadingTable" disabled-hover />
+    <pagination
+      :total="total"
+      :page-size.sync="limit"
+      :current.sync="page"
+      show-sizer
+      @on-change="handlePage"
+      @on-page-size-change="handlePage(1)"
+    />
   </panel>
 </template>
 <script>
@@ -29,7 +31,7 @@
   import api from '@oj/api'
 
   export default {
-    name: 'acm-helper',
+    name: 'AcmHelper',
     components: {
       Pagination
     },
@@ -51,7 +53,7 @@
           {
             title: this.$i18n.t('m.First_Blood'),
             align: 'center',
-            render: (h, {row}) => {
+            render: (h, { row }) => {
               if (row.ac_info.is_first_ac) {
                 return h('Tag', {
                   props: {
@@ -66,7 +68,7 @@
           {
             title: this.$i18n.t('m.Username'),
             align: 'center',
-            render: (h, {row}) => {
+            render: (h, { row }) => {
               return h('a', {
                 style: {
                   display: 'inline-block',
@@ -76,7 +78,7 @@
                   click: () => {
                     this.$router.push({
                       name: 'contest-submission-list',
-                      query: {username: row.username}
+                      query: { username: row.username }
                     })
                   }
                 }
@@ -86,7 +88,7 @@
           {
             title: this.$i18n.t('m.RealName'),
             align: 'center',
-            render: (h, {row}) => {
+            render: (h, { row }) => {
               return h('span', {
                 style: {
                   display: 'inline-block',
@@ -98,7 +100,7 @@
           {
             title: this.$i18n.t('m.Status'),
             align: 'center',
-            render: (h, {row}) => {
+            render: (h, { row }) => {
               return h('Tag', {
                 props: {
                   color: row.checked ? 'green' : 'yellow'
@@ -111,7 +113,7 @@
             fixed: 'right',
             align: 'center',
             width: 100,
-            render: (h, {row}) => {
+            render: (h, { row }) => {
               return h('Button', {
                 props: {
                   type: 'ghost',
@@ -133,6 +135,20 @@
         problemsMap: []
       }
     },
+    computed: {
+      ...mapState({
+        'contest': state => state.contest.contest,
+        'contestProblems': state => state.contest.contestProblems
+      }),
+      limit: {
+        get () {
+          return this.$store.state.contest.rankLimit
+        },
+        set (value) {
+          this.$store.commit(types.CHANGE_CONTEST_RANK_LIMIT, { rankLimit: value })
+        }
+      }
+    },
     mounted () {
       this.contestID = this.$route.params.contestID
       if (this.contestProblems.length === 0) {
@@ -145,10 +161,13 @@
         this.getACInfo()
       }
     },
+    beforeDestroy () {
+      clearInterval(this.refreshFunc)
+    },
     methods: {
       ...mapActions(['getContestProblems']),
       mapProblemDisplayID () {
-        let problemsMap = {}
+        const problemsMap = {}
         this.contestProblems.forEach(ele => {
           problemsMap[ele.id] = ele._id
         })
@@ -156,12 +175,12 @@
       },
       getACInfo (page = 1) {
         this.loadingTable = true
-        let params = {
+        const params = {
           contest_id: this.$route.params.contestID
         }
         api.getACMACInfo(params).then(res => {
           this.loadingTable = false
-          let data = res.data.data
+          const data = res.data.data
           this.total = data.length
           this.acInfo = data
           this.handlePage()
@@ -170,7 +189,7 @@
         })
       },
       updateCheckedStatus (row) {
-        let data = {
+        const data = {
           rank_id: row.id,
           contest_id: this.contestID,
           problem_id: row.problem_id,
@@ -196,8 +215,8 @@
         if (page !== 1) {
           this.loadingTable = true
         }
-        let pageInfo = this.acInfo.slice((this.page - 1) * this.limit, this.page * this.limit)
-        for (let v of pageInfo) {
+        const pageInfo = this.acInfo.slice((this.page - 1) * this.limit, this.page * this.limit)
+        for (const v of pageInfo) {
           if (v.init) {
             continue
           } else {
@@ -209,23 +228,6 @@
         this.pagedAcInfo = pageInfo
         this.loadingTable = false
       }
-    },
-    computed: {
-      ...mapState({
-        'contest': state => state.contest.contest,
-        'contestProblems': state => state.contest.contestProblems
-      }),
-      limit: {
-        get () {
-          return this.$store.state.contest.rankLimit
-        },
-        set (value) {
-          this.$store.commit(types.CHANGE_CONTEST_RANK_LIMIT, {rankLimit: value})
-        }
-      }
-    },
-    beforeDestroy () {
-      clearInterval(this.refreshFunc)
     }
   }
 </script>

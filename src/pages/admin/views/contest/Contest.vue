@@ -1,17 +1,17 @@
 <template>
   <div class="view">
-    <Spin size="large" fix v-if="utilSpin"></Spin>
+    <Spin v-if="utilSpin" size="large" fix />
     <Panel :title="title">
-      <el-form label-position="top" :model="contest" :rules="contentRules" ref="contest">
+      <el-form ref="contest" label-position="top" :model="contest" :rules="contentRules">
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item :label="$t('m.ContestTitle')" prop="title">
-              <el-input v-model="contest.title" :placeholder="$t('m.ContestTitle')"></el-input>
+              <el-input v-model="contest.title" :placeholder="$t('m.ContestTitle')" />
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item :label="$t('m.ContestDescription')" prop="description">
-              <Simditor v-model="contest.description"></Simditor>
+              <Simditor v-model="contest.description" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -19,8 +19,8 @@
               <el-date-picker
                 v-model="contest.startTime"
                 type="datetime"
-                :placeholder="$t('m.Contest_Start_Time')">
-              </el-date-picker>
+                :placeholder="$t('m.Contest_Start_Time')"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -28,23 +28,24 @@
               <el-date-picker
                 v-model="contest.endTime"
                 type="datetime"
-                :placeholder="$t('m.Contest_End_Time')">
-              </el-date-picker>
+                :placeholder="$t('m.Contest_End_Time')"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="$t('m.Contest_Password')" :required="contest.signUpRule === CONTEST_QUERY_VALUE.KEY">
-              <el-input 
-                v-model="contest.password" 
-                :placeholder="$t('m.Contest_Password')" 
-                :disabled="contest.signUpRule !== CONTEST_QUERY_VALUE.KEY"></el-input>
+              <el-input
+                v-model="contest.password"
+                :placeholder="$t('m.Contest_Password')"
+                :disabled="contest.signUpRule !== CONTEST_QUERY_VALUE.KEY"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="'Rank Rule'">
-              <el-radio class="radio" v-model="contest.rankModel" :label="CONTEST_QUERY_VALUE.ACM_ICPC" :disabled="disableRuleType">ACM/ICPC</el-radio>
-              <el-radio class="radio" v-model="contest.rankModel" :label="CONTEST_QUERY_VALUE.WARM_UP" :disabled="disableRuleType">Exercise</el-radio>
-              <el-radio class="radio" v-model="contest.rankModel" :label="CONTEST_QUERY_VALUE.INTEGRAL" :disabled="disableRuleType">Rating</el-radio>
+              <el-radio v-model="contest.rankModel" class="radio" :label="CONTEST_QUERY_VALUE.ACM_ICPC" :disabled="disableRuleType">ACM/ICPC</el-radio>
+              <el-radio v-model="contest.rankModel" class="radio" :label="CONTEST_QUERY_VALUE.WARM_UP" :disabled="disableRuleType">Exercise</el-radio>
+              <el-radio v-model="contest.rankModel" class="radio" :label="CONTEST_QUERY_VALUE.INTEGRAL" :disabled="disableRuleType">Rating</el-radio>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -54,8 +55,8 @@
                   v-for="item in signUpRuleTable"
                   :key="item.value"
                   :label="item.label"
-                  :value="item.value">
-                </el-option>
+                  :value="item.value"
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -64,8 +65,8 @@
               <el-switch
                 v-model="contest.realtimeRank"
                 active-color="#13ce66"
-                inactive-color="#ff4949">
-              </el-switch>
+                inactive-color="#ff4949"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="4">
@@ -73,13 +74,13 @@
               <el-switch
                 v-model="contest.status"
                 active-text=""
-                inactive-text="">
-              </el-switch>
+                inactive-text=""
+              />
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
-      <save @click.native="saveContest('contest')"></save>
+      <save @click.native="saveContest('contest')" />
       <el-button type="info" class="el-btn" @click="resetContestForm()">重置</el-button>
     </Panel>
   </div>
@@ -122,7 +123,7 @@
           password: '',
           signUpRule: CONTEST_QUERY_VALUE.PUBLIC,
           realtimeRank: true,
-          status: true,
+          status: true
         },
         contentRules: {
           title: [
@@ -152,6 +153,23 @@
         }
       }
     },
+    mounted () {
+      if (this.$route.name === 'EditContest') {
+        this.title = 'Edit Contest'
+        this.disableRuleType = true
+        api.getContest(this.$route.params.contestId).then(res => {
+          const data = res.data.data
+          data.status = !!data.status
+          data.realtimeRank = !!data.realtimeRank
+          this.contest = data
+          this.utilSpin = false
+        }).catch(() => {
+          this.utilSpin = false
+        })
+      } else {
+        this.utilSpin = false
+      }
+    },
     methods: {
       resetContestForm () {
         this.contest = {
@@ -169,45 +187,28 @@
       saveContest (contestValidateName) {
         if (this.contest.signUpRule === CONTEST_QUERY_VALUE.KEY && (!this.contest.password || !this.contest.password.trim())) {
           this.$error('Password can not be empty')
-          return 
+          return
         }
         if (new Date(this.contest.endTime).getTime() < new Date(this.contest.startTime).getTime()) {
           this.$error('There is a problem with the relationship before and after time')
           return
         }
-        let data = Object.assign({}, this.contest)
+        const data = Object.assign({}, this.contest)
         this.$refs[contestValidateName].validate((valid) => {
           if (valid) {
-            let funcName = this.$route.name === 'EditContest' ? 'editContest' : 'createContest'
+            const funcName = this.$route.name === 'EditContest' ? 'editContest' : 'createContest'
             data.id = data.id || null
             data.realtimeRank = data.realtimeRank ? 1 : 0
             data.status = data.status ? 1 : -1
             data.endTime = utils.formatDate(new Date(data.endTime))
             data.startTime = utils.formatDate(new Date(data.startTime))
             api[funcName](data).then(res => {
-              this.$router.push({name: 'ContestList', query: {refresh: 'true'}})
+              this.$router.push({ name: 'ContestList', query: { refresh: 'true' }})
             }).catch(() => {})
           } else {
             return false
           }
         })
-      }
-    },
-    mounted () {
-      if (this.$route.name === 'EditContest') {
-        this.title = 'Edit Contest'
-        this.disableRuleType = true
-        api.getContest(this.$route.params.contestId).then(res => {
-          let data = res.data.data
-          data.status = data.status ? true : false
-          data.realtimeRank = data.realtimeRank ? true : false
-          this.contest = data
-          this.utilSpin = false
-        }).catch(() => {
-          this.utilSpin = false
-        })
-      } else {
-        this.utilSpin = false
       }
     }
   }
@@ -215,8 +216,8 @@
 
 <style scoped>
   .el-btn {
-    margin-left: 19px; 
-    margin-top: 60px; 
+    margin-left: 19px;
+    margin-top: 60px;
     margin-bottom: 15px;
-  } 
+  }
 </style>

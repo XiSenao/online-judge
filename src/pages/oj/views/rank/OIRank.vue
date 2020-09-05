@@ -2,15 +2,19 @@
   <Row type="flex" justify="space-around">
     <Col :span="22">
     <Panel :padding="10">
-      <div slot="title">{{$t('m.OI_Ranklist')}}</div>
+      <div slot="title">{{ $t('m.OI_Ranklist') }}</div>
       <div class="echarts">
-        <ECharts :options="options" ref="chart" auto-resize></ECharts>
+        <ECharts ref="chart" :options="options" auto-resize />
       </div>
     </Panel>
-    <Table :data="dataRank" :columns="columns" size="large"></Table>
-    <Pagination :total="total" :page-size.sync="limit" :current.sync="page"
-                @on-change="getRankData"
-                show-sizer @on-page-size-change="getRankData(1)"></Pagination>
+    <Table :data="dataRank" :columns="columns" size="large" />
+    <Pagination
+      :total="total"
+      :page-size.sync="limit"
+      :current.sync="page"
+      show-sizer
+      @on-change="getRankData"
+      @on-page-size-change="getRankData(1)"></Pagination>
     </Col>
   </Row>
 </template>
@@ -22,7 +26,7 @@
   import { RULE_TYPE } from '@/utils/constants'
 
   export default {
-    name: 'acm-rank',
+    name: 'AcmRank',
     components: {
       Pagination
     },
@@ -54,7 +58,7 @@
                     this.$router.push(
                       {
                         name: 'user-home',
-                        query: {id: params.row.id}
+                        query: { id: params.row.id }
                       })
                   }
                 }
@@ -105,9 +109,9 @@
           toolbox: {
             show: true,
             feature: {
-              dataView: {show: true, readOnly: true},
-              magicType: {show: true, type: ['line', 'bar']},
-              saveAsImage: {show: true}
+              dataView: { show: true, readOnly: true },
+              magicType: { show: true, type: ['line', 'bar'] },
+              saveAsImage: { show: true }
             },
             right: '10%'
           },
@@ -144,7 +148,7 @@
               barMaxWidth: '80',
               markPoint: {
                 data: [
-                  {type: 'max', name: 'max'}
+                  { type: 'max', name: 'max' }
                 ]
               }
             }
@@ -157,9 +161,9 @@
     },
     methods: {
       getRankData (page) {
-        let offset = page
-        let bar = this.$refs.chart
-        bar.showLoading({maskColor: 'rgba(250, 250, 250, 0.8)'})
+        const offset = page
+        const bar = this.$refs.chart
+        bar.showLoading({ maskColor: 'rgba(250, 250, 250, 0.8)' })
         api.getUserRank(offset, this.limit, RULE_TYPE.OI).then(res => {
           if (page === 1) {
             this.changeCharts(res.data.data.records.slice(0, 10))
@@ -170,7 +174,7 @@
         })
       },
       changeCharts (rankData) {
-        let [usernames, scores] = [[], []]
+        const [usernames, scores] = [[], []]
         rankData.forEach(ele => {
           usernames.push(ele.username)
           scores.push(ele.ratingScore)
@@ -184,7 +188,7 @@
 
 <style scoped lang="less">
   /deep/.ivu-card {
-    background: var(--table-card-canvas-top); 
+    background: var(--table-card-canvas-top);
     color: var(--font-color-white);
   }
   /deep/.ivu-table th {

@@ -2,23 +2,27 @@
   <div>
     <Panel>
       <div slot="title">{{$t('m.Problems_List')}}</div>
-      <Table v-if="contestRuleType == 'ACM/ICPC' || OIContestRealTimePermission"
+      <Table
+        v-if="contestRuleType == 'ACM/ICPC' || OIContestRealTimePermission"
         :columns="ACMTableColumns"
         :data="problems"
+        :no-data-text="$t('m.No_Problems')"
         @on-row-click="goContestProblem"
-        :no-data-text="$t('m.No_Problems')"></Table>
-      <Table v-else
+      />
+      <Table
+        v-else
         :data="problems"
         :columns="OITableColumns"
+        :no-data-text="$t('m.No_Problems')"
         @on-row-click="goContestProblem"
-        :no-data-text="$t('m.No_Problems')"></Table>
+      />
     </Panel>
   </div>
 </template>
 
 <script>
-  import {mapState, mapGetters} from 'vuex'
-  import {ProblemMixin} from '@oj/components/mixins'
+  import { mapState, mapGetters } from 'vuex'
+  import { ProblemMixin } from '@oj/components/mixins'
 
   export default {
     name: 'ContestProblemList',

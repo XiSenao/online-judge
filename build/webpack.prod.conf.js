@@ -1,5 +1,4 @@
 'use strict'
-const os = require('os');
 const path = require('path')
 const utils = require('./utils')
 const webpack = require('webpack')
@@ -11,6 +10,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+
+function resolve (dir) {
+  return path.join(__dirname, '..', dir)
+}
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -24,6 +27,17 @@ const webpackConfig = merge(baseWebpackConfig, {
     path: config.build.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+  },
+  externals: {
+    vue: 'Vue',
+    'vue-router': 'VueRouter',
+    vuex: 'Vuex',
+    axios: 'axios',
+    'element-ui': 'ElementUI',
+    iview: 'iview',
+    katex: 'katex',
+    codemirror: 'codemirror',
+    jszip: 'jszip'
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
@@ -115,7 +129,19 @@ const webpackConfig = merge(baseWebpackConfig, {
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
       ga: 'UA-170628607-1'
-    })
+    }),
+    // new HappyPack({
+    //   id: 'worker',
+    //   loaders: [{
+    //     loader: 'worker-loader',
+    //     options: { 
+    //       inline: true, 
+    //       name: 'workerName.[hash].js' 
+    //     }
+    //   }],
+    //   threadPool: happyThreadPool,
+    //   verbose: true
+    // })
   ]
 })
 

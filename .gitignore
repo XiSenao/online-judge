@@ -37,6 +37,10 @@ deploy/
 node_modules/
 jspm_packages/
 
+# Useless file
+src/pages/admin/views/problem/cProblemList.vue
+src/pages/admin/views/problem/cProblem.vue
+
 # Typescript v1 declaration files
 typings/
 

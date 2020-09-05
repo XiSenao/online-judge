@@ -1,82 +1,82 @@
 <template>
   <div id="header">
-    <Menu theme="light" mode="horizontal" @on-select="handleRoute" :active-name="activeMenu" class="oj-menu">
+    <Menu class="oj-menu" theme="light" mode="horizontal" :active-name="activeMenu" @on-select="handleRoute">
       <div class="logo"><span>Online Judge</span></div>
       <Menu-item name="/">
-        <Icon type="home"></Icon>
-        {{$t('m.Home')}}
+        <Icon type="home" />
+        {{ $t('m.Home') }}
       </Menu-item>
       <Menu-item name="/problem">
-        <Icon type="ios-keypad"></Icon>
-        {{$t('m.NavProblems')}}
+        <Icon type="ios-keypad" />
+        {{ $t('m.NavProblems') }}
       </Menu-item>
       <Menu-item name="/contest">
-        <Icon type="trophy"></Icon>
-        {{$t('m.Contests')}}
+        <Icon type="trophy" />
+        {{ $t('m.Contests') }}
       </Menu-item>
       <Menu-item name="/status">
-        <Icon type="ios-pulse-strong"></Icon>
-        {{$t('m.NavStatus')}}
+        <Icon type="ios-pulse-strong" />
+        {{ $t('m.NavStatus') }}
       </Menu-item>
       <Submenu name="rank">
         <template slot="title">
-          <Icon type="podium"></Icon>
-          {{$t('m.Rank')}}
+          <Icon type="podium" />
+          {{ $t('m.Rank') }}
         </template>
         <Menu-item name="/acm-rank">
-          {{$t('m.ACM_Rank')}}
+          {{ $t('m.ACM_Rank') }}
         </Menu-item>
         <Menu-item name="/oi-rank">
-          {{$t('m.Rating_Rank')}}
+          {{ $t('m.Rating_Rank') }}
         </Menu-item>
       </Submenu>
       <Submenu name="about">
         <template slot="title">
-          <Icon type="information-circled"></Icon>
-          {{$t('m.About')}}
+          <Icon type="information-circled" />
+          {{ $t('m.About') }}
         </template>
         <Menu-item name="/about">
-          {{$t('m.Judger')}}
+          {{ $t('m.Judger') }}
         </Menu-item>
         <Menu-item name="/FAQ">
-          {{$t('m.FAQ')}}
+          {{ $t('m.FAQ') }}
         </Menu-item>
       </Submenu>
       <template v-if="!isAuthenticated">
         <div class="btn-menu">
-          <Button type="ghost"
-                  ref="loginBtn"
+          <Button ref="loginBtn"
+                  type="ghost"
                   shape="circle"
-                  @click="handleBtnClick('login')">{{$t('m.Login')}}
+                  @click="handleBtnClick('login')">{{ $t('m.Login') }}
           </Button>
           <Button type="ghost"
                   shape="circle"
-                  @click="handleBtnClick('register')"
-                  style="margin-left: 5px;">{{$t('m.Register')}}
+                  style="margin-left: 5px;"
+                  @click="handleBtnClick('register')">{{ $t('m.Register') }}
           </Button>
         </div>
       </template>
       <template v-else>
-        <Dropdown class="drop-menu" @on-click="handleRoute" placement="bottom" trigger="click">
+        <Dropdown class="drop-menu" placement="bottom" trigger="click" @on-click="handleRoute">
           <Button type="text" class="drop-menu-title">{{ profile.username }}
-            <Icon type="arrow-down-b"></Icon>
+            <Icon type="arrow-down-b" />
           </Button>
           <Dropdown-menu slot="list" class="drop-menu-list">
-            <Dropdown-item name="/user-home">{{$t('m.MyHome')}}</Dropdown-item>
-            <Dropdown-item name="/user/message">{{$t('m.Message')}}</Dropdown-item>
-            <Dropdown-item :name="'/status?creatorKey=' + profile.username || null">{{$t('m.MySubmissions')}}</Dropdown-item>
-            <Dropdown-item name="/setting/profile">{{$t('m.Settings')}}</Dropdown-item>
+            <Dropdown-item name="/user-home">{{ $t('m.MyHome') }}</Dropdown-item>
+            <Dropdown-item name="/user/message">{{ $t('m.Message') }}</Dropdown-item>
+            <Dropdown-item :name="'/status?creatorKey=' + profile.username || null">{{ $t('m.MySubmissions') }}</Dropdown-item>
+            <Dropdown-item name="/setting/profile">{{ $t('m.Settings') }}</Dropdown-item>
             <Dropdown-item name="/changeTheme" style="display: flex; justify-content: center;">
-              <span>{{$t('m.Dark_Model')}}</span>
-              <i-switch size="small" @on-change="isDark = !isDark" v-model="isDark" style="margin-left: 12px;"/>
+              <span>{{ $t('m.Dark_Model') }}</span>
+              <i-switch v-model="isDark" style="margin-left: 12px;" size="small" @on-change="isDark = !isDark" />
             </Dropdown-item>
-            <Dropdown-item divided name="/logout">{{$t('m.Logout')}}</Dropdown-item>
+            <Dropdown-item divided name="/logout">{{ $t('m.Logout') }}</Dropdown-item>
           </Dropdown-menu>
         </Dropdown>
       </template>
     </Menu>
     <Modal v-model="modalVisible" :width="400">
-      <div slot="header" class="modal-title">{{$t('m.Welcome_to')}}</div>
+      <div slot="header" class="modal-title">{{ $t('m.Welcome_to') }}</div>
       <component :is="modalStatus.mode" v-if="modalVisible"></component>
       <div slot="footer" style="display: none"></div>
     </Modal>
@@ -84,12 +84,12 @@
 </template>
 
 <script>
-  import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
+  import { mapState, mapGetters, mapActions } from 'vuex'
   import login from '@oj/views/user/Login'
   import register from '@oj/views/user/Register'
-  import { THEME_KEY, THEMES } from '@/utils/constants'
+  import { THEMES } from '@/utils/constants'
   import utils from '@/utils/utils'
-  
+
   export default {
     components: {
       login,
@@ -100,33 +100,14 @@
         runDarkModel: null
       }
     },
-    methods: {
-      ...mapActions({
-        changeModalStatus: 'changeModalStatus',
-        changeMyTheme: 'user/setTheme'
-      }),
-      handleRoute (route) {
-        if (route === '/changeTheme') {
-          this.isDark = !this.isDark
-          return 
-        }
-        this.$router.push(route)
-      },
-      handleBtnClick (mode) {
-        this.changeModalStatus({
-          visible: true,
-          mode: mode
-        })
-      }
-    },
     computed: {
       ...mapState({
         myTheme: state => state.user.theme
       }),
       ...mapGetters({
-        website: 'website', 
-        modalStatus: 'modalStatus', 
-        profile: 'user/profile', 
+        website: 'website',
+        modalStatus: 'modalStatus',
+        profile: 'user/profile',
         isAuthenticated: 'user/isAuthenticated',
         theme: 'user/theme'
       }),
@@ -139,7 +120,7 @@
           return this.modalStatus.visible
         },
         set (value) {
-          this.changeModalStatus({visible: value})
+          this.changeModalStatus({ visible: value })
         }
       },
       isDark: {
@@ -151,8 +132,8 @@
         },
         set (value) {
           this.runDarkModel = value
-          let themeKey = value ? THEMES.dark : THEMES.white
-          utils.changeTheme(themeKey)  
+          const themeKey = value ? THEMES.dark : THEMES.white
+          utils.changeTheme(themeKey)
           this.changeMyTheme(themeKey)
         }
       }
@@ -160,6 +141,25 @@
     watch: {
       'myTheme' (newValue) {
         this.isDark = newValue ? newValue === THEMES.dark : false
+      }
+    },
+    methods: {
+      ...mapActions({
+        changeModalStatus: 'changeModalStatus',
+        changeMyTheme: 'user/setTheme'
+      }),
+      handleRoute (route) {
+        if (route === '/changeTheme') {
+          this.isDark = !this.isDark
+          return
+        }
+        this.$router.push(route)
+      },
+      handleBtnClick (mode) {
+        this.changeModalStatus({
+          visible: true,
+          mode: mode
+        })
       }
     }
   }
@@ -192,11 +192,11 @@
       line-height: 60px;
     }
     .ivu-menu-horizontal .ivu-menu-submenu .ivu-select-dropdown .ivu-menu-item:hover {
-      background: var(--font-color-dropdown); 
+      background: var(--font-color-dropdown);
     }
     .drop-menu {
       /deep/ .ivu-select-dropdown {
-        background: var(--body-bgcolor); 
+        background: var(--body-bgcolor);
       };
       /deep/ .ivu-dropdown-item {
         color: var(--font-color-white);
@@ -212,9 +212,9 @@
     .ivu-menu-submenu {
       color: var(--font-color-white);
       /deep/.ivu-select-dropdown {
-        background: var(--body-bgcolor); 
+        background: var(--body-bgcolor);
       }
-    }; 
+    };
     .ivu-menu-submenu {
       .ivu-select-dropdown {
         background: var(--body-bgcolor);

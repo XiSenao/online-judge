@@ -15,13 +15,8 @@
   <meta name="renderer" content="webkit"/>
   <link rel="shortcut icon" href="/static/image/favicon.ico">
   <link href="/static/css/loader.css" rel="stylesheet">
-  <script>
-    // IE 10 and earlier
-    if (window.navigator.userAgent.indexOf('MSIE ') > 0 &&
-      window.confirm('Your browser is not supported, click \'OK\' to update')) {
-      window.location = 'http://outdatedbrowser.com'
-    }
-  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui@2.4.1/lib/theme-chalk/index.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/iview@2.14.3/dist/styles/iview.css">
 </head>
 <body>
 <div id="app-loader">
@@ -37,6 +32,33 @@
 </div>
 
 <div id="app"></div>
-
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.runtime.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue-router@3.0.6/dist/vue-router.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vuex@3.1.1/dist/vuex.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/axios@0.19.0/dist/axios.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/element-ui@2.4.1/lib/element-ui.common.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/iview@2.14.3/dist/iview.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jszip@3.5.0/dist/jszip.min.js"></script>
+  <script>
+    // IE 10 and earlier
+    if (window.navigator.userAgent.indexOf('MSIE ') > 0 &&
+      window.confirm('Your browser is not supported, click \'OK\' to update')) {
+      window.location = 'http://outdatedbrowser.com'
+    }
+    // Check that service workers are supported
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker
+          .register('/service-wroker.js')
+          .then(registration => {
+            console.log('SW registered: ', registration);
+          })
+          .catch(registrationError => {
+            console.log('SW registration failed: ', registrationError);
+          });
+      });
+    }
+  </script>
 </body>
 </html>

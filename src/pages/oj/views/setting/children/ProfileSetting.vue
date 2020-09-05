@@ -1,14 +1,15 @@
 <template>
   <div class="setting-main">
-    <div class="section-title">{{$t('m.Avatar_Setting')}}</div>
+    <div class="section-title">{{ $t('m.Avatar_Setting') }}</div>
     <template v-if="!avatarOption.imgSrc">
-      <Upload type="drag"
-              class="mini-container"
-              accept=".jpg,.jpeg,.png,.bmp,.gif"
-              action=""
-              :before-upload="handleSelectFile">
+      <Upload
+        type="drag"
+        class="mini-container"
+        accept=".jpg,.jpeg,.png,.bmp,.gif"
+        action=""
+        :before-upload="handleSelectFile">
         <div style="padding: 30px 0">
-          <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+          <Icon type="ios-cloud-upload" size="52" style="color: #3399ff" />
           <p>Drop here, or click to select manually</p>
         </div>
       </Upload>
@@ -19,29 +20,29 @@
         <div class="cropper-main inline">
           <vueCropper
             ref="cropper"
-            autoCrop
+            auto-crop
             fixed
-            :autoCropWidth="200"
-            :autoCropHeight="200"
+            :auto-crop-width="200"
+            :auto-crop-height="200"
             :img="avatarOption.imgSrc"
-            :outputSize="avatarOption.size"
-            :outputType="avatarOption.outputType"
+            :output-size="avatarOption.size"
+            :output-type="avatarOption.outputType"
             :info="true"
-            @realTime="realTime">
-          </vueCropper>
+            @realTime="realTime"
+          />
         </div>
         <ButtonGroup vertical class="cropper-btn">
           <Button @click="rotate('left')">
-            <Icon type="arrow-return-left" size="20"></Icon>
+            <Icon type="arrow-return-left" size="20" />
           </Button>
           <Button @click="rotate('right')">
-            <Icon type="arrow-return-right" size="20"></Icon>
+            <Icon type="arrow-return-right" size="20" />
           </Button>
           <Button @click="reselect">
-            <Icon type="refresh" size="20"></Icon>
+            <Icon type="refresh" size="20" />
           </Button>
           <Button @click="finishCrop">
-            <Icon type="checkmark-round" size="20"></Icon>
+            <Icon type="checkmark-round" size="20" />
           </Button>
         </ButtonGroup>
         <div class="cropper-preview" :style="previewStyle">
@@ -51,40 +52,41 @@
         </div>
       </div>
     </template>
-    <Modal v-model="uploadModalVisible"
-           title="Upload the avatar">
+    <Modal
+      v-model="uploadModalVisible"
+      title="Upload the avatar">
       <div class="upload-modal">
         <p class="notice">Your avatar will be set to:</p>
-        <img :src="uploadImgSrc"/>
+        <img :src="uploadImgSrc">
       </div>
       <div slot="footer">
-        <Button @click="uploadAvatar" :loading="loadingUploadBtn">upload</Button>
+        <Button :loading="loadingUploadBtn" @click="uploadAvatar">upload</Button>
       </div>
     </Modal>
 
-    <div class="section-title">{{$t('m.Profile_Setting')}}</div>
+    <div class="section-title">{{ $t('m.Profile_Setting') }}</div>
     <Form ref="formProfile" :model="formProfile" :rules="formValidate">
       <Row type="flex" :gutter="30" justify="space-around">
         <Col :span="11">
-          <FormItem label="Mood" prop="mood">
-            <Input v-model="formProfile.mood"/>
-          </FormItem>
-          <FormItem label="Language">
-            <Select v-model="formProfile.viewLanguage">
-              <Option v-for="lang in languages" :key="lang.value" :value="lang.value">{{lang.label}}</Option>
-            </Select>
-          </FormItem>
-          <Form-item> 
-            <Button type="primary" @click="updateProfile" :loading="loadingSaveBtn">Save All</Button>
-          </Form-item>
+        <FormItem label="Mood" prop="mood">
+          <Input v-model="formProfile.mood" />
+        </FormItem>
+        <FormItem label="Language">
+          <Select v-model="formProfile.viewLanguage">
+            <Option v-for="lang in languages" :key="lang.value" :value="lang.value">{{ lang.label }}</Option>
+          </Select>
+        </FormItem>
+        <Form-item>
+          <Button type="primary" :loading="loadingSaveBtn" @click="updateProfile">Save All</Button>
+        </Form-item>
         </Col>
         <Col :span="11">
-          <Form-item label="Github" prop="github">
-            <Input v-model="formProfile.github"/>
-          </Form-item>
-          <Form-item label="Blog" prop="blog">
-            <Input v-model="formProfile.blog"/>
-          </Form-item>
+        <Form-item label="Github" prop="github">
+          <Input v-model="formProfile.github" />
+        </Form-item>
+        <Form-item label="Blog" prop="blog">
+          <Input v-model="formProfile.blog" />
+        </Form-item>
         </Col>
       </Row>
     </Form>
@@ -93,10 +95,8 @@
 
 <script>
   import api from '@oj/api'
-  import utils from '@/utils/utils'
-  import {VueCropper} from 'vue-cropper'
-  import {types} from '@/store'
-  import {languages} from '@/i18n'
+  import { VueCropper } from 'vue-cropper'
+  import { languages } from '@/i18n'
   import { mapGetters, mapActions } from 'vuex'
   import { URL_REG } from '@/utils/constants'
   export default {
@@ -135,6 +135,29 @@
         }
       }
     },
+    computed: {
+      ...mapGetters({
+        profile: 'user/profile'
+      }),
+      previewStyle () {
+        return {
+          'width': this.preview.w + 'px',
+          'height': this.preview.h + 'px',
+          'overflow': 'hidden'
+        }
+      }
+    },
+    watch: {
+      'profile.id' (newValue) {
+        if (newValue) {
+          Object.keys(this.formProfile).forEach(element => {
+            if (this.profile[element] !== undefined) {
+              this.formProfile[element] = this.profile[element]
+            }
+          })
+        }
+      }
+    },
     mounted () {
       Object.keys(this.formProfile).forEach(element => {
         if (this.profile[element]) {
@@ -158,7 +181,7 @@
       },
       checkMyURL (value, option, cb) {
         value = value ? value.trim() : ''
-        const re = new RegExp(URL_REG, 'i');
+        const re = new RegExp(URL_REG, 'i')
         if (value && !re.test(encodeURI(value))) {
           cb(new Error(this.$t('m.Update_Error_Url')))
         }
@@ -187,11 +210,11 @@
         return true
       },
       handleSelectFile (file) {
-        let isOk = this.checkFileType(file) && this.checkFileSize(file)
+        const isOk = this.checkFileType(file) && this.checkFileSize(file)
         if (!isOk) {
           return false
         }
-        let reader = new window.FileReader()
+        const reader = new window.FileReader()
         reader.onload = (e) => {
           this.avatarOption.imgSrc = e.target.result
         }
@@ -224,8 +247,8 @@
       },
       uploadAvatar () {
         this.$refs.cropper.getCropBlob(blob => {
-          let form = new window.FormData()
-          let file = new window.File([blob], 'avatar.' + this.avatarOption.outputType)
+          const form = new window.FormData()
+          const file = new window.File([blob], 'avatar.' + this.avatarOption.outputType)
           form.append('head', file)
           this.loadingUploadBtn = true
           api.uploadHead(form).then(res => {
@@ -235,7 +258,7 @@
             this.avatarOption.imgSrc = ''
             this.getProfile()
           }).catch(_ => {
-            this.loadingUploadBtn = false 
+            this.loadingUploadBtn = false
           })
         })
       },
@@ -243,7 +266,7 @@
         this.$refs['formProfile'].validate((valid) => {
           if (valid) {
             this.loadingSaveBtn = true
-            let updateData = Object.assign({}, this.formProfile)
+            const updateData = Object.assign({}, this.formProfile)
             api.updateProfile(updateData).then(res => {
               this.$success(this.$t('m.Success'))
               this.getProfile()
@@ -252,32 +275,9 @@
               this.loadingSaveBtn = false
             })
           } else {
-            this.$Message.error(this.$t('m.Update_Error_Info'));
+            this.$Message.error(this.$t('m.Update_Error_Info'))
           }
         })
-      }
-    },
-    watch: {
-      'profile.id' (newValue) {
-        if (newValue) {
-          Object.keys(this.formProfile).forEach(element => {
-            if (this.profile[element] !== undefined) {
-              this.formProfile[element] = this.profile[element]
-            }
-          })
-        }
-      }
-    },
-    computed: {
-      ...mapGetters({
-        profile: 'user/profile'
-      }),
-      previewStyle () {
-        return {
-          'width': this.preview.w + 'px',
-          'height': this.preview.h + 'px',
-          'overflow': 'hidden'
-        }
       }
     }
   }
@@ -309,7 +309,7 @@
   }
   /deep/.ivu-upload-drag,
   /deep/.ivu-modal-content {
-    background: var(--drag-upload-bg-color); 
+    background: var(--drag-upload-bg-color);
     color: var(--font-color-white)
   }
   .copper-img {

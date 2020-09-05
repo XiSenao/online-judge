@@ -10,7 +10,7 @@ export default {
         return this.$t('m.Proof')
       } else if (value === '密码') {
         return this.$t('m.Key')
-      } 
+      }
       return this.$t('m.Registration_Rules')
     },
     ruleTypeName (value) {
@@ -20,7 +20,7 @@ export default {
         return this.$t('m.Integral')
       } else if (value === 'ACM/ICPC') {
         return this.$t('m.ACM')
-      } 
+      }
       return this.$t('m.Rule')
     },
     statusName (value) {
@@ -30,7 +30,7 @@ export default {
         return this.$t('m.Underway')
       } else if (value === '已结束') {
         return this.$t('m.Ended')
-      } 
+      }
       return this.$t('m.Status')
     }
   }

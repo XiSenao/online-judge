@@ -10,8 +10,9 @@
           placeholder="Keywords">
         </el-input>
       </div>
-      <el-table :data="problems"
-                v-loading="loadingProblems" @selection-change="handleSelectionChange">
+      <el-table v-loading="loadingProblems"
+                :data="problems"
+                @selection-change="handleSelectionChange">
         <el-table-column
           type="selection"
           width="60">
@@ -38,21 +39,24 @@
           prop="create_time"
           label="Create Time">
           <template slot-scope="scope">
-            {{scope.row.create_time | localtime }}
+            {{ scope.row.create_time | localtime }}
           </template>
         </el-table-column>
       </el-table>
 
       <div class="panel-options">
-        <el-button type="primary" size="small" v-show="selected_problems.length"
-                   @click="exportProblems" icon="el-icon-fa-arrow-down">Export
+        <el-button v-show="selected_problems.length"
+                   type="primary"
+                   size="small"
+                   icon="el-icon-fa-arrow-down"
+                   @click="exportProblems">Export
         </el-button>
         <el-pagination
           class="page"
           layout="prev, pager, next"
-          @current-change="getProblems"
           :page-size="limit"
-          :total="total">
+          :total="total"
+          @current-change="getProblems">
         </el-pagination>
       </div>
     </panel>
@@ -69,7 +73,7 @@
         :auto-upload="false"
         :on-success="uploadSucceeded"
         :on-error="uploadFailed">
-        <el-button size="small" type="primary" icon="el-icon-fa-upload" slot="trigger">Choose File</el-button>
+        <el-button slot="trigger" size="small" type="primary" icon="el-icon-fa-upload">Choose File</el-button>
         <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('QDU')">Upload</el-button>
       </el-upload>
     </panel>
@@ -87,7 +91,7 @@
         :auto-upload="false"
         :on-success="uploadSucceeded"
         :on-error="uploadFailed">
-        <el-button size="small" type="primary" icon="el-icon-fa-upload" slot="trigger">Choose File</el-button>
+        <el-button slot="trigger" size="small" type="primary" icon="el-icon-fa-upload">Choose File</el-button>
         <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('FPS')">Upload</el-button>
       </el-upload>
     </panel>
@@ -98,7 +102,7 @@
   import utils from '@/utils/utils'
 
   export default {
-    name: 'import_and_export',
+    name: 'ImportAndExport',
     data () {
       return {
         fileList1: [],
@@ -113,6 +117,11 @@
         selected_problems: []
       }
     },
+    watch: {
+      'keyword' () {
+        this.getProblems()
+      }
+    },
     mounted () {
       this.getProblems()
     },
@@ -121,7 +130,7 @@
         this.selected_problems = val
       },
       getProblems (page = 1) {
-        let params = {
+        const params = {
           keyword: this.keyword,
           offset: (page - 1) * this.limit,
           limit: this.limit
@@ -134,11 +143,11 @@
         })
       },
       exportProblems () {
-        let params = []
-        for (let p of this.selected_problems) {
+        const params = []
+        for (const p of this.selected_problems) {
           params.push('problem_id=' + p.id)
         }
-        let url = '/admin/export_problem?' + params.join('&')
+        const url = '/admin/export_problem?' + params.join('&')
         utils.downloadFile(url)
       },
       submitUpload (ref) {
@@ -161,15 +170,7 @@
       uploadFailed () {
         this.$error('Upload failed')
       }
-    },
-    watch: {
-      'keyword' () {
-        this.getProblems()
-      }
     }
   }
 </script>
 
-<style scoped lang="less">
-
-</style>

@@ -1,18 +1,20 @@
 <template>
   <div class="page">
-    <Page :total="total"
-          :page-size="pageSize"
-          @on-change="onChange"
-          @on-page-size-change="onPageSizeChange"
-          :show-sizer="showSizer"
-          :page-size-opts="[10, 30, 50, 100, 200]"
-          :current="current"></Page>
+    <Page
+      :total="total"
+      :page-size="pageSize"
+      :show-sizer="showSizer"
+      :page-size-opts="[10, 30, 50, 100, 200]"
+      :current="current"
+      @on-change="onChange"
+      @on-page-size-change="onPageSizeChange"
+    />
   </div>
 </template>
 
 <script>
   export default {
-    name: 'pagination',
+    name: 'Pagination',
     props: {
       total: {
         required: true,
@@ -20,7 +22,8 @@
       },
       pageSize: {
         required: false,
-        type: Number
+        type: Number,
+        default: 10
       },
       showSizer: {
         required: false,
@@ -29,7 +32,8 @@
       },
       current: {
         required: false,
-        type: Number
+        type: Number,
+        default: 1
       }
     },
     methods: {

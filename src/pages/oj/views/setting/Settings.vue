@@ -3,24 +3,24 @@
     <Card :padding="0">
       <div class="flex-container">
         <div class="menu">
-          <Menu accordion @on-select="goRoute" :activeName="activeName" style="text-align: center;" width="auto">
+          <Menu accordion :active-name="activeName" style="text-align: center;" width="auto" @on-select="goRoute">
             <div class="avatar-editor">
               <div class="avatar-container">
-                <img class="avatar" :src="userIMGBuffer"/>
+                <img class="avatar" :src="userIMGBuffer" />
                 <div class="avatar-mask">
                   <a @click.stop="goRoute({name: 'profile-setting'})">
                     <div class="mask-content">
-                      <Icon type="camera" size="30"></Icon>
+                      <Icon type="camera" size="30" />
                       <p class="text">change avatar</p>
                     </div>
                   </a>
                 </div>
               </div>
             </div>
-            <Menu-item name="/setting/profile">{{$t('m.Profile')}}</Menu-item>
-            <Menu-item name="/setting/account">{{$t('m.Account')}}</Menu-item>
-            <Menu-item name="/setting/security-setting" @click.native="undeveloped">{{$t('m.Security')}}</Menu-item>
-            <Menu-item name="/setting/certification">{{$t('m.Certification')}}</Menu-item>
+            <Menu-item name="/setting/profile">{{ $t('m.Profile') }}</Menu-item>
+            <Menu-item name="/setting/account">{{ $t('m.Account') }}</Menu-item>
+            <Menu-item name="/setting/security-setting" @click.native="undeveloped">{{ $t('m.Security') }}</Menu-item>
+            <Menu-item name="/setting/certification">{{ $t('m.Certification') }}</Menu-item>
           </Menu>
         </div>
         <div class="panel">
@@ -36,15 +36,7 @@
   import { mapGetters } from 'vuex'
   import { DEFAULT_AVATAR } from '@/utils/constants'
   export default {
-    name: 'profile',
-    methods: {
-      goRoute (routePath) {
-        this.$router.push(routePath)
-      },
-      undeveloped () {
-        this.$error('Not yet developed')
-      }
-    },
+    name: 'Profile',
     computed: {
       ...mapGetters({
         profile: 'user/profile'
@@ -55,6 +47,14 @@
       userIMGBuffer () {
         return this.profile.IMGBuffer || DEFAULT_AVATAR
       }
+    },
+    methods: {
+      goRoute (routePath) {
+        this.$router.push(routePath)
+      },
+      undeveloped () {
+        this.$error('Not yet developed')
+      }
     }
   }
 </script>
@@ -64,9 +64,9 @@
   .ivu-card, .ivu-menu-light {
     color: var(--font-color-setting-white);
     background: var(--table-card-top);
-  } 
+  }
   .ivu-menu-vertical .ivu-menu-item:hover, .ivu-menu-vertical .ivu-menu-submenu-title:hover {
-    background: var(--setting-choose-bg-color); 
+    background: var(--setting-choose-bg-color);
   }
   .container {
     width: 90%;

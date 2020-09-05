@@ -1,7 +1,7 @@
 import moment from 'moment'
 import types from '../types'
 import api from '@oj/api'
-import { CONTEST_STATUS, USER_TYPE, CONTEST_TYPE } from '@/utils/constants'
+import { CONTEST_STATUS, CONTEST_TYPE } from '@/utils/constants'
 import utils from '@/utils/utils'
 const state = {
   now: moment(),
@@ -28,9 +28,9 @@ const getters = {
   // 当前contest的状态
   contestStatus: (state, getters) => {
     // if (!getters.contestLoaded) return null
-    let startTime = moment(state.contest.startTime)
-    let endTime = moment(state.contest.endTime)
-    let now = moment(state.currentServerTime)
+    const startTime = moment(state.contest.startTime)
+    const endTime = moment(state.contest.endTime)
+    const now = moment(state.currentServerTime)
 
     if (startTime > now) {
       return CONTEST_STATUS.NOT_START
@@ -72,7 +72,7 @@ const getters = {
     }
     if (rootGetters['user/isAuthenticated']) {
       return !state.contest.permission
-    } 
+    }
     return !rootGetters['user/isAuthenticated']
   },
   // 显示输入密码框(非公开 + 未拿到许可 + 非管理员)
@@ -92,18 +92,18 @@ const getters = {
   },
   // 比赛状态显示
   countdown: (state, getters) => {
-    let now = state.currentServerTime
+    const now = state.currentServerTime
     if (getters.contestStatus === CONTEST_STATUS.NOT_START) {
-      let duration = moment.duration(getters.contestStartTime.diff(now, 'seconds'), 'seconds')
+      const duration = moment.duration(getters.contestStartTime.diff(now, 'seconds'), 'seconds')
       // time is too long
       if (duration.weeks() > 0) {
         return 'Start At ' + duration.humanize()
       }
-      let texts = [Math.floor(duration.asHours()), duration.minutes(), duration.seconds()]
+      const texts = [Math.floor(duration.asHours()), duration.minutes(), duration.seconds()]
       return '-' + texts.join(':')
     } else if (getters.contestStatus === CONTEST_STATUS.UNDERWAY) {
-      let duration = moment.duration(getters.contestEndTime.diff(now, 'seconds'), 'seconds')
-      let texts = [Math.floor(duration.asHours()), duration.minutes(), duration.seconds()]
+      const duration = moment.duration(getters.contestEndTime.diff(now, 'seconds'), 'seconds')
+      const texts = [Math.floor(duration.asHours()), duration.minutes(), duration.seconds()]
       return '-' + texts.join(':')
     } else {
       return 'Ended'
@@ -118,7 +118,7 @@ const mutations = {
   },
   // 更改比赛显示规则
   [types.CHANGE_CONTEST_ITEM_VISIBLE] (state, payload) {
-    state.itemVisible = {...state.itemVisible, ...payload}
+    state.itemVisible = { ...state.itemVisible, ...payload }
   },
   // 更改rank强制更新
   [types.CHANGE_RANK_FORCE_UPDATE] (state, payload) {
@@ -128,7 +128,7 @@ const mutations = {
   [types.CHANGE_CONTEST_PROBLEMS] (state, problemSet) {
     state.contestProblems = problemSet.contestProblems
   },
-  // 
+  //
   [types.CHANGE_CONTEST_RANK_LIMIT] (state, payload) {
     state.rankLimit = payload.rankLimit
   },
@@ -138,7 +138,7 @@ const mutations = {
   },
   // 初始化比赛所有信息
   [types.CLEAR_CONTEST] (state) {
-    state.contest = {created_by: {}}
+    state.contest = { created_by: {}}
     state.contestProblems = []
     state.access = false
     state.itemVisible = {
@@ -150,12 +150,12 @@ const mutations = {
   },
   // 时间 + 1
   [types.NOW_ADD_1S] (state) {
-    let now = state.currentServerTime
+    const now = state.currentServerTime
     state.currentServerTime = moment(now).add(1, 's')
   },
   setServerTime (state, payload) {
     state.currentServerTime = payload
-  },
+  }
 }
 
 const actions = {
@@ -163,12 +163,12 @@ const actions = {
   getContest ({ commit, rootState }) {
     return new Promise((resolve, reject) => {
       api.getContest(rootState.route.params.contestID).then((res) => {
-        resolve(res)  
-        let contest = res.data.data
+        resolve(res)
+        const contest = res.data.data
         commit('setServerTime', utils.formatDate(new Date(res.headers.date)))
-        commit(types.CHANGE_CONTEST, {contest: contest})
+        commit(types.CHANGE_CONTEST, { contest: contest })
         if (contest.signUpRule !== '公开') {
-          commit(types.CONTEST_ACCESS, {access: res.data.data.permission})
+          commit(types.CONTEST_ACCESS, { access: res.data.data.permission })
         }
       }, err => {
         reject(err)
@@ -176,7 +176,7 @@ const actions = {
     })
   },
   // 获取当前比赛的问题集
-  getContestProblems ({commit, rootState}) {
+  getContestProblems ({ commit, rootState }) {
     return new Promise((resolve, reject) => {
       api.getContestProblemList(rootState.route.params.contestID).then(res => {
         res.data.data.sort((a, b) => {
@@ -187,10 +187,10 @@ const actions = {
           }
           return -1
         })
-        commit(types.CHANGE_CONTEST_PROBLEMS, {contestProblems: res.data.data})
+        commit(types.CHANGE_CONTEST_PROBLEMS, { contestProblems: res.data.data })
         resolve(res)
       }, () => {
-        commit(types.CHANGE_CONTEST_PROBLEMS, {contestProblems: []})
+        commit(types.CHANGE_CONTEST_PROBLEMS, { contestProblems: [] })
       })
     })
   }

@@ -115,13 +115,6 @@ export const constantRoutes = [
         hidden: true
       },
       {
-        path: 'authenticatedUser/:contestId',
-        component: Announcement,
-        name: 'ContestAuthenticatedUser',
-        meta: { title: 'Contest Authenticated User' },
-        hidden: true
-      },
-      {
         path: ':contestData/problems',
         component: ProblemList,
         name: 'ContestProblemList',

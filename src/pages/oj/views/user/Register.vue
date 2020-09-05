@@ -2,35 +2,30 @@
   <div>
     <Form ref="formRegister" :model="formRegister" :rules="ruleRegister">
       <FormItem prop="username">
-        <Input type="text" v-model="formRegister.username" :placeholder="$t('m.RegisterUsername')" size="large" @on-enter="handleRegister">
-        <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </Input>
+        <Input v-model="formRegister.username" type="text" :placeholder="$t('m.RegisterUsername')" size="large" @on-enter="handleRegister" />
+        <Icon slot="prepend" type="ios-person-outline" />
       </FormItem>
       <FormItem prop="email">
-        <Input v-model="formRegister.email" :placeholder="$t('m.Email_Address')" size="large" @on-enter="handleRegister">
-        <Icon type="ios-email-outline" slot="prepend"></Icon>
-        </Input>
+        <Input v-model="formRegister.email" :placeholder="$t('m.Email_Address')" size="large" @on-enter="handleRegister" />
+        <Icon slot="prepend" type="ios-email-outline" />
       </FormItem>
       <FormItem prop="password">
-        <Input type="password" v-model="formRegister.password" :placeholder="$t('m.RegisterPassword')" size="large" @on-enter="handleRegister">
-        <Icon type="ios-locked-outline" slot="prepend"></Icon>
-        </Input>
+        <Input v-model="formRegister.password" type="password" :placeholder="$t('m.RegisterPassword')" size="large" @on-enter="handleRegister" />
+        <Icon slot="prepend" type="ios-locked-outline" />
       </FormItem>
       <FormItem prop="passwordAgain">
-        <Input type="password" v-model="formRegister.passwordAgain" :placeholder="$t('m.Password_Again')" size="large" @on-enter="handleRegister">
-        <Icon type="ios-locked-outline" slot="prepend"></Icon>
-        </Input>
+        <Input v-model="formRegister.passwordAgain" type="password" :placeholder="$t('m.Password_Again')" size="large" @on-enter="handleRegister" />
+        <Icon slot="prepend" type="ios-locked-outline" />
       </FormItem>
       <FormItem prop="captcha" style="margin-bottom:10px">
         <div class="oj-captcha">
           <div class="oj-captcha-code">
-            <Input v-model="formRegister.captcha" :placeholder="$t('m.Captcha')" size="large" @on-enter="handleRegister">
-            <Icon type="ios-lightbulb-outline" slot="prepend"></Icon>
-            </Input>
+            <Input v-model="formRegister.captcha" :placeholder="$t('m.Captcha')" size="large" @on-enter="handleRegister" />
+            <Icon slot="prepend" type="ios-lightbulb-outline" />
           </div>
           <div class="oj-captcha-img">
             <Tooltip content="Click to refresh" placement="top">
-              <Identity :identifyCode="identifyCode" @click.native="refreshCode"></Identity>
+              <Identity :identify-code="identifyCode" @click.native="refreshCode" />
             </Tooltip>
           </div>
         </div>
@@ -39,16 +34,18 @@
     <div class="footer">
       <Button
         type="primary"
-        @click="handleRegister"
-        class="btn" long
-        :loading="btnRegisterLoading">
-        {{$t('m.UserRegister')}}
+        class="btn"
+        long
+        :loading="btnRegisterLoading"
+        @click="handleRegister">
+        {{ $t('m.UserRegister') }}
       </Button>
       <Button
+        class="btn"
         type="ghost"
-        @click="switchMode('login')"
-        class="btn" long>
-        {{$t('m.Already_Registed')}}
+        long
+        @click="switchMode('login')">
+        {{ $t('m.Already_Registed') }}
       </Button>
     </div>
   </div>
@@ -60,14 +57,10 @@
   import { FormMixin } from '@oj/components/mixins'
   import Identity from './../../components/Identify'
   export default {
-    mixins: [FormMixin],
     components: {
       Identity
     },
-    mounted () {
-      this.identifyCode = ""
-      this.makeCode(this.identifyCodes, 4)
-    },
+    mixins: [FormMixin],
     data () {
       const CheckPassword = (rule, value, callback) => {
         if (!this.formRegister.password || this.formRegister.password.length < 6) {
@@ -92,8 +85,8 @@
 
       return {
         btnRegisterLoading: false,
-        identifyCodes: "1234567890",
-        identifyCode: "",
+        identifyCodes: '1234567890',
+        identifyCode: '',
         formRegister: {
           username: '',
           password: '',
@@ -103,39 +96,43 @@
         },
         ruleRegister: {
           username: [
-            {required: true, trigger: 'blur'}
+            { required: true, trigger: 'blur' }
           ],
           email: [
-            {required: true, type: 'email', trigger: 'blur'}
+            { required: true, type: 'email', trigger: 'blur' }
           ],
           password: [
-            {required: true, trigger: 'blur', min: 6, max: 20},
-            {validator: CheckPassword, trigger: 'blur'}
+            { required: true, trigger: 'blur', min: 6, max: 20 },
+            { validator: CheckPassword, trigger: 'blur' }
           ],
           passwordAgain: [
-            {required: true, validator: CheckAgainPassword, trigger: 'change'}
+            { required: true, validator: CheckAgainPassword, trigger: 'change' }
           ],
           captcha: [
-            {required: true, trigger: 'blur', min: 4, max: 10},
-            {validator: CheckCaptcha, trigger: 'blue'}
+            { required: true, trigger: 'blur', min: 4, max: 10 },
+            { validator: CheckCaptcha, trigger: 'blue' }
           ]
         }
       }
     },
+    mounted () {
+      this.identifyCode = ''
+      this.makeCode(this.identifyCodes, 4)
+    },
     methods: {
       ...mapActions(['changeModalStatus']),
       randomNum(min, max) {
-        return Math.floor(Math.random() * (max - min) + min);
+        return Math.floor(Math.random() * (max - min) + min)
       },
       refreshCode () {
-        this.identifyCode = "";
-        this.makeCode(this.identifyCodes, 4);
+        this.identifyCode = ''
+        this.makeCode(this.identifyCodes, 4)
       },
       makeCode(o, l) {
         for (let i = 0; i < l; i++) {
           this.identifyCode += this.identifyCodes[
             this.randomNum(0, this.identifyCodes.length)
-          ];
+          ]
         }
       },
       switchMode (mode) {
@@ -146,7 +143,7 @@
       },
       handleRegister () {
         this.validateForm('formRegister').then(valid => {
-          let formData = Object.assign({}, this.formRegister)
+          const formData = Object.assign({}, this.formRegister)
           delete formData['passwordAgain']
           this.btnRegisterLoading = true
           api.register(formData).then(res => {

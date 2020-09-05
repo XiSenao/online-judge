@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie'
-let storage = null, available = true
+let storage = null
+let available = true
 if (window.localStorage) {
   storage = window.localStorage
 } else {
@@ -54,11 +55,11 @@ export default {
       storage.clear()
     }
   },
-  
+
   clearCache (name) {
     if (available) {
-      for (let param in storage) {
-        if (storage.hasOwnProperty(param) && !param.indexOf(`${ name }$_`)) {
+      for (const param in storage) {
+        if (storage.hasOwnProperty(param) && !param.indexOf(`${name}$_`)) {
           storage.removeItem(param)
         }
       }
@@ -66,9 +67,9 @@ export default {
   },
 
   getDuplicate (name) {
-    let duplicateArr = []
-    for (let param in storage) {
-      if (storage.hasOwnProperty(param) && !param.indexOf(`${ name }$_`)) {
+    const duplicateArr = []
+    for (const param in storage) {
+      if (storage.hasOwnProperty(param) && !param.indexOf(`${name}$_`)) {
         duplicateArr.push({
           key: param.slice(name.length + 2),
           value: storage.getItem(param)

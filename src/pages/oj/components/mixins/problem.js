@@ -15,11 +15,11 @@ export default {
       if (this.statusColumn) return
       // 只在有做题记录时才添加column
       // 在前面添加做题标记
-      let sumMap = this.problemMap.ac.concat(this.problemMap.error)
+      const sumMap = this.problemMap.ac.concat(this.problemMap.error)
       if (!sumMap.length) {
         return
       }
-      let needAdd = dataProblems.some(item => sumMap.includes(item.id))
+      const needAdd = dataProblems.some(item => sumMap.includes(item.id))
       if (!needAdd) {
         return
       }
@@ -27,9 +27,10 @@ export default {
         width: 60,
         title: ' ',
         render: (h, params) => {
-          let id = params.row.id, status = null
+          const id = params.row.id
+          let status = null
           if (!sumMap.includes(id)) {
-            return 
+            return
           }
           status = this.problemMap.ac.includes(id)
           return h('Icon', {

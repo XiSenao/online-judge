@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import types from './types'
 
 Vue.use(Vuex)
-const debug = process.env.NODE_ENV !== 'production'
+// const debug = process.env.NODE_ENV !== 'production'
 
 const rootState = {
   website: {},
@@ -28,7 +28,7 @@ const rootMutations = {
   [types.UPDATE_WEBSITE_CONF] (state, payload) {
     state.website = payload.websiteConfig
   },
-  [types.CHANGE_MODAL_STATUS] (state, {mode, visible}) {
+  [types.CHANGE_MODAL_STATUS] (state, { mode, visible }) {
     if (mode !== undefined) {
       state.modalStatus.mode = mode
     }
@@ -42,21 +42,21 @@ const rootMutations = {
 }
 
 const rootActions = {
-  getWebsiteConfig ({commit}) {
+  getWebsiteConfig ({ commit }) {
     // api.getWebsiteConf().then(res => {
     //   commit(types.UPDATE_WEBSITE_CONF, {
     //     websiteConfig: res.data.data
     //   })
     // })
   },
-  changeModalStatus ({commit}, payload) {
+  changeModalStatus ({ commit }, payload) {
     commit(types.CHANGE_MODAL_STATUS, payload)
   },
-  changeDomTitle ({commit, state}, payload) {
+  changeDomTitle ({ commit, state }, payload) {
     if (payload && payload.title) {
-      window.document.title = `${ payload.title } - Online Judge`
+      window.document.title = `${payload.title} - Online Judge`
     } else {
-      window.document.title = `${ state.route.meta.title } - Online Judge`
+      window.document.title = `${state.route.meta.title} - Online Judge`
     }
   }
 }
@@ -81,7 +81,7 @@ export default new Vuex.Store({
   state: rootState,
   getters: rootGetters,
   mutations: rootMutations,
-  actions: rootActions,
+  actions: rootActions
   // 严格模式, 是否能在mutation外修改state值, true为不能修改，false则为可以修改
   // strict: debug
 })

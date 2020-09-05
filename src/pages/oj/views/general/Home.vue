@@ -1,25 +1,25 @@
 <template>
   <Row type="flex" justify="space-around">
     <Col :span="22">
-    <panel shadow v-if="contests.length" class="contest">
+    <panel v-if="contests.length" shadow class="contest">
       <div slot="title">
-        <Button type="text"  class="contest-title" @click="goContest">{{contests[index].title}}</Button>
+        <Button type="text" class="contest-title" @click="goContest">{{ contests[index].title }}</Button>
       </div>
       <Carousel v-model="index" trigger="hover" autoplay :autoplay-speed="6000" class="contest">
-        <CarouselItem v-for="(contest, index) of contests" :key="index">
+        <CarouselItem v-for="contest of contests" :key="contest">
           <div class="contest-content">
             <div class="contest-content-tags">
               <Button type="info" shape="circle" size="small" icon="calendar">
-                {{contest.startTime}}
+                {{ contest.startTime }}
               </Button>
               <Button type="success" shape="circle" size="small" icon="android-time">
-                {{getDuration(contest.startTime, contest.endTime)}}
+                {{ getDuration(contest.startTime, contest.endTime) }}
               </Button>
               <Button type="error" shape="circle" size="small" icon="ribbon-a">
-                {{contest.signUpRule}}
+                {{ contest.signUpRule }}
               </Button>
               <Button type="warning" shape="circle" size="small" icon="trophy">
-                {{contest.rankModel}}
+                {{ contest.rankModel }}
               </Button>
             </div>
             <div class="contest-content-description">
@@ -29,7 +29,7 @@
         </CarouselItem>
       </Carousel>
     </panel>
-    <Announcements class="announcement"></Announcements>
+    <Announcements class="announcement" />
     </Col>
   </Row>
 </template>
@@ -38,10 +38,9 @@
   import Announcements from './Announcements.vue'
   import api from '@oj/api'
   import time from '@/utils/time'
-  import { CONTEST_STATUS } from '@/utils/constants'
 
   export default {
-    name: 'home',
+    name: 'Home',
     components: {
       Announcements
     },
@@ -52,7 +51,6 @@
       }
     },
     mounted () {
-      let params = {status: CONTEST_STATUS.NOT_START}
       api.getContestList(this.buildQuery()).then(res => {
         this.contests = res.data.data.records
       })
@@ -60,7 +58,7 @@
     methods: {
       buildQuery () {
         return {
-          contestRunningStatus: "未开始",
+          contestRunningStatus: '未开始',
           pageModel: {
             limit: 5,
             offset: 1,
@@ -77,7 +75,7 @@
       goContest () {
         this.$router.push({
           name: 'contest-details',
-          params: {contestID: this.contests[this.index].id}
+          params: { contestID: this.contests[this.index].id }
         })
       }
     }

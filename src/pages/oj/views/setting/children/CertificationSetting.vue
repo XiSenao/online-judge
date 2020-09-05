@@ -1,61 +1,62 @@
 <template>
   <div class="setting-main">
     <template v-if="!formCertification.id || opChangeCertification">
-      <div class="section-title">{{$t('m.Certification_Setting')}}</div>
+      <div class="section-title">{{ $t('m.Certification_Setting') }}</div>
       <Form ref="formCertification" :model="formCertification" :rules="ruleCertification">
         <Row type="flex" :gutter="30" justify="space-around">
           <Col :span="11">
-            <FormItem :label="$t('m.Quick_Select')">
-              <el-cascader
-                :placeholder="$t('m.Quick_Select_Info')"
-                class="el-icascader"
-                :options="options"
-                v-model="cValue"
-                clearable
-                filterable></el-cascader> 
-            </FormItem>
-            <FormItem :label="$t('m.School')" prop="school">
-              <Input v-model="formCertification.school"/>
-            </FormItem>
-            <FormItem :label="$t('m.Faculty')" prop="faculty">
-              <Input v-model="formCertification.faculty"/>
-            </FormItem>
-            <Form-item :label="$t('m.Major')" prop="major">
-              <Input v-model="formCertification.major"/>
-            </Form-item>
-            <Form-item :label="$t('m.Class')">
-              <Input v-model="formCertification.class0"/>
-            </Form-item>
-            <Form-item>
-              <Button type="primary" @click="opChangeCertification ? updateCertification() : applyCertification()" :loading="loadingApplyBtn">
-                {{opChangeCertification ? $t('m.Update') : $t('m.Submit')}}
-              </Button>
-            </Form-item>
+          <FormItem :label="$t('m.Quick_Select')">
+            <el-cascader
+              v-model="cValue"
+              :placeholder="$t('m.Quick_Select_Info')"
+              class="el-icascader"
+              :options="options"
+              clearable
+              filterable
+            />
+          </FormItem>
+          <FormItem :label="$t('m.School')" prop="school">
+            <Input v-model="formCertification.school" />
+          </FormItem>
+          <FormItem :label="$t('m.Faculty')" prop="faculty">
+            <Input v-model="formCertification.faculty" />
+          </FormItem>
+          <Form-item :label="$t('m.Major')" prop="major">
+            <Input v-model="formCertification.major" />
+          </Form-item>
+          <Form-item :label="$t('m.Class')">
+            <Input v-model="formCertification.class0" />
+          </Form-item>
+          <Form-item>
+            <Button type="primary" :loading="loadingApplyBtn" @click="opChangeCertification ? updateCertification() : applyCertification()">
+              {{ opChangeCertification ? $t('m.Update') : $t('m.Submit') }}
+            </Button>
+          </Form-item>
           </Col>
           <Col :span="11">
-            <FormItem :label="$t('m.CertifyStyle')" style="margin-top: 2px; margin-bottom: 28px;" prop="certificationId" required>
-              <Select v-model="formCertification.certificationId">
-                <Option v-for="style in certificationLists" :key="style.id" :value="style.id">{{style.name}}</Option>
-              </Select>
-            </FormItem>
-            <Form-item :label="$t('m.StuId')" prop="stuId">
-              <Input v-model="formCertification.stuId"/>
-            </Form-item>
-            <FormItem :label="$t('m.RealName')" prop="realName">
-              <Input v-model="formCertification.realName"/>
-            </FormItem>
-            <FormItem :label="$t('m.Gender')" style="margin: 50px 0 30px 0;">
-              <RadioGroup v-model="formCertification.sex">
-                <Radio label="male">{{$t('m.Male')}}</Radio>
-                <Radio label="female">{{$t('m.Female')}}</Radio>
-              </RadioGroup>
-            </FormItem>
-            <FormItem :label="$t('m.Phone')" prop="phone">
-              <Input v-model="formCertification.phone"/>
-            </FormItem> 
-            <FormItem :label="$t('m.Graduation_Time')" prop="graduationTime">
-              <Date-picker type="date" placeholder="选择日期" style="display: block;" v-model="formCertification.graduationTime"></Date-picker>
-            </FormItem>
+          <FormItem :label="$t('m.CertifyStyle')" style="margin-top: 2px; margin-bottom: 28px;" prop="certificationId" required>
+            <Select v-model="formCertification.certificationId">
+              <Option v-for="style in certificationLists" :key="style.id" :value="style.id">{{ style.name }}</Option>
+            </Select>
+          </FormItem>
+          <Form-item :label="$t('m.StuId')" prop="stuId">
+            <Input v-model="formCertification.stuId" />
+          </Form-item>
+          <FormItem :label="$t('m.RealName')" prop="realName">
+            <Input v-model="formCertification.realName" />
+          </FormItem>
+          <FormItem :label="$t('m.Gender')" style="margin: 50px 0 30px 0;">
+            <RadioGroup v-model="formCertification.sex">
+              <Radio label="male">{{ $t('m.Male') }}</Radio>
+              <Radio label="female">{{ $t('m.Female') }}</Radio>
+            </RadioGroup>
+          </FormItem>
+          <FormItem :label="$t('m.Phone')" prop="phone">
+            <Input v-model="formCertification.phone" />
+          </FormItem>
+          <FormItem :label="$t('m.Graduation_Time')" prop="graduationTime">
+            <Date-picker v-model="formCertification.graduationTime" type="date" placeholder="选择日期" style="display: block;" />
+          </FormItem>
           </Col>
         </Row>
       </Form>
@@ -64,31 +65,31 @@
       <Row class="i-row-position">
         <i-col span="11">
           <Card>
-            <div class="i-title"> 
+            <div class="i-title">
               <el-row type="flex" :gutter="20" align="middle" justify="center">
-                <el-col> 
+                <el-col>
                   <img :src="showStatus(false)" class="i-certTypeImage" width="50px" height="50px">
-                  <span>{{showStatus(true)}}</span>
+                  <span>{{ showStatus(true) }}</span>
                 </el-col>
               </el-row>
-              <Icon type="ios-gear" class="op-change" @click="asyncCheck"></Icon>
+              <Icon type="ios-gear" class="op-change" @click="asyncCheck" />
             </div>
             <ul class="i-info">
               <div class="flex-container">
                 <div class="left">
-                  <li v-for="(info, index) in newiCertTypeInfo" class="i-info-body" v-if="index < 7">
-                    <span class="i-name">{{info.name}}:</span>
+                  <li v-for="info in getNewiCertTypeInfo('up')" :key="info.value" class="i-info-body">
+                    <span class="i-name">{{ info.name }}:</span>
                     <span class="i-value">
-                        {{info.value}}
+                      {{ info.value }}
                     </span>
                   </li>
                 </div>
-                <div class="middle separator"></div>
+                <div class="middle separator" />
                 <div class="right">
-                  <li v-for="(info, index) in newiCertTypeInfo" class="i-info-body"  v-if="index >= 7">
-                    <span class="i-name">{{info.name}}:</span>
+                  <li v-for="(info, index) in getNewiCertTypeInfo('down')" :key="info.value" class="i-info-body">
+                    <span class="i-name">{{ info.name }}:</span>
                     <span :class="['i-value', index >= 7 ? 'add-block' : '']">
-                        {{info.value}}
+                      {{ info.value }}
                     </span>
                   </li>
                 </div>
@@ -97,33 +98,21 @@
           </Card>
         </i-col>
       </Row>
-      <div class="i-hidden"></div>
+      <div class="i-hidden" />
     </template>
   </div>
 </template>
 
 <script>
   import api from '@oj/api'
-  import utils from '@/utils/utils'
-  import {VueCropper} from 'vue-cropper'
-  import {types} from '@/store'
-  import {multiSchool} from '@/i18n'
+  import { multiSchool } from '@/i18n'
   import { FormMixin } from '@oj/components/mixins'
   export default {
     mixins: [FormMixin],
-    watch: {
-      'cValue': {
-        handler: function (newVal, oldVal) {
-          this.formCertification.school = newVal[0] || this.formCertification.school
-          this.formCertification.faculty = newVal[1] || this.formCertification.faculty
-          this.formCertification.major = newVal[2] || this.formCertification.major
-        },   
-      }
-    },
     data () {
       const CheckPhoneIsLegal = (rule, value, callback) => {
-        var re = /^1\d{10}$/ 
-        var rep = /^(?:0[0-9]{2,3}[-\\s]{1}|\\(0[0-9]{2,4}\\))[0-9]{6,8}$|^[1-9]{1}[0-9]{5,7}$|^[1-9]{1}[0-9]{10}$/ 
+        var re = /^1\d{10}$/
+        var rep = /^(?:0[0-9]{2,3}[-\\s]{1}|\\(0[0-9]{2,4}\\))[0-9]{6,8}$|^[1-9]{1}[0-9]{5,7}$|^[1-9]{1}[0-9]{10}$/
         var resp = /^0\d{2,3}-?\d{7,8}$/
         if (!(re.test(value) || rep.test(value) || resp.test(value))) {
           callback(new Error(this.$i18n.t('m.The_username_already_exists')))
@@ -133,7 +122,7 @@
       }
       const CheckTimeIsLegal = (rule, value, callback) => {
         var date = new Date(value)
-        var date_value = date.getFullYear() + '-' + this.lackCharacter((date.getMonth() + 1)) + '-' + this.lackCharacter(date.getDate()); 
+        var date_value = date.getFullYear() + '-' + this.lackCharacter((date.getMonth() + 1)) + '-' + this.lackCharacter(date.getDate())
         var re = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/
         if (!re.test(date_value)) {
           callback(new Error(this.$i18n.t('m.The_username_already_exists')))
@@ -159,51 +148,68 @@
           realName: '',
           school: '',
           sex: 'male',
-          stuId: '',
+          stuId: ''
         },
         ruleCertification: {
           certifyStyle: [
-            {required: true, type: 'number', trigger: 'blur'}
+            { required: true, type: 'number', trigger: 'blur' }
           ],
           school: [
-            {required: true, trigger: 'blur'}
+            { required: true, trigger: 'blur' }
           ],
           faculty: [
-            {required: true, trigger: 'blur'}
+            { required: true, trigger: 'blur' }
           ],
           major: [
-            {required: true, trigger: 'blur'}
+            { required: true, trigger: 'blur' }
           ],
           realName: [
-            {required: true, trigger: 'blur'}
+            { required: true, trigger: 'blur' }
           ],
           phone: [
-            {required: true, trigger: 'blur'},
-            {validator: CheckPhoneIsLegal, trigger: 'blur'}
+            { required: true, trigger: 'blur' },
+            { validator: CheckPhoneIsLegal, trigger: 'blur' }
           ],
           stuId: [
-            {required: true, trigger: 'blur', min: 8, max: 13}
+            { required: true, trigger: 'blur', min: 8, max: 13 }
           ],
           graduationTime: [
-            {validator: CheckTimeIsLegal, trigger: 'blur'}
+            { validator: CheckTimeIsLegal, trigger: 'blur' }
           ]
         }
       }
     },
+    watch: {
+      'cValue': {
+        handler: function (newVal, oldVal) {
+          this.formCertification.school = newVal[0] || this.formCertification.school
+          this.formCertification.faculty = newVal[1] || this.formCertification.faculty
+          this.formCertification.major = newVal[2] || this.formCertification.major
+        }
+      }
+    },
+
     mounted () {
       this.getCertTypeList()
       this.getOwnCertType()
     },
     methods: {
       // method: true => text else => IMG
-      showStatus (method) {      
-        let status = this.formCertification.status
+      showStatus (method) {
+        const status = this.formCertification.status
         if (status === 0) {
           return method ? this.$t('m.Identity_Under_Review') : '/static/image/audit.png'
         } else if (status === 1) {
           return method ? this.$t('m.Identity_Verification_Passed') : '/static/image/Identity_Verification_Passed.png'
         } else {
           return method ? this.$t('m.Identity_Verification_Failure') : '/static/image/Identity_Verification_Failure.png'
+        }
+      },
+      getNewiCertTypeInfo (type) {
+        if (type === 'up') {
+          return this.newiCertTypeInfo.filter((value, index) => index < 7)
+        } else {
+          return this.newiCertTypeInfo.filter((value, index) => index >= 7)
         }
       },
       lackCharacter (s) {
@@ -218,69 +224,69 @@
             setTimeout(() => {
               this.opChangeCertification = true
               this.$Modal.remove()
-            }, 2000);
+            }, 2000)
           }
-        });
+        })
       },
       beShowInfo (certTypeInfo) {
-        var newCertTypeInfo = [] 
+        var newCertTypeInfo = []
         Object.keys(certTypeInfo).forEach(obj => {
-          if (obj === "id") {
+          if (obj === 'id') {
             newCertTypeInfo.push({
               name: this.$t('m.ID'),
               value: certTypeInfo[obj]
             })
-          } else if (obj === "class0") {
+          } else if (obj === 'class0') {
             newCertTypeInfo.push({
               name: this.$t('m.Class'),
               value: certTypeInfo[obj]
             })
-          } else if (obj === "crtTs") {
+          } else if (obj === 'crtTs') {
             newCertTypeInfo.push({
               name: this.$t('m.First_Submission_Time'),
               value: certTypeInfo[obj]
             })
-          } else if (obj === "faculty") {
+          } else if (obj === 'faculty') {
             newCertTypeInfo.push({
               name: this.$t('m.Faculty'),
               value: certTypeInfo[obj]
             })
-          } else if (obj === "graduationTime") {
+          } else if (obj === 'graduationTime') {
             newCertTypeInfo.push({
               name: this.$t('m.Graduation_Time'),
               value: certTypeInfo[obj]
             })
-          } else if (obj === "lmTs") {
+          } else if (obj === 'lmTs') {
             newCertTypeInfo.push({
               name: this.$t('m.Recent_Submission_Time'),
               value: certTypeInfo[obj]
             })
-          } else if (obj === "major") {
+          } else if (obj === 'major') {
             newCertTypeInfo.push({
               name: this.$t('m.Major'),
               value: certTypeInfo[obj]
             })
-          } else if (obj === "phone") {
+          } else if (obj === 'phone') {
             newCertTypeInfo.push({
               name: this.$t('m.Phone'),
               value: certTypeInfo[obj]
             })
-          } else if (obj === "realName") {
+          } else if (obj === 'realName') {
             newCertTypeInfo.push({
               name: this.$t('m.RealName'),
               value: certTypeInfo[obj]
             })
-          } else if (obj === "school") {
+          } else if (obj === 'school') {
             newCertTypeInfo.push({
               name: this.$t('m.School'),
               value: certTypeInfo[obj]
             })
-          } else if (obj === "sex") {
+          } else if (obj === 'sex') {
             newCertTypeInfo.push({
               name: this.$t('m.Gender'),
-              value: this.$t(`m.${ certTypeInfo[obj].charAt(0).toUpperCase() + certTypeInfo[obj].slice(1) }`)
+              value: this.$t(`m.${certTypeInfo[obj].charAt(0).toUpperCase() + certTypeInfo[obj].slice(1)}`)
             })
-          } 
+          }
         })
         this.newiCertTypeInfo = newCertTypeInfo
       },
@@ -375,7 +381,6 @@
     top: 60px;
   }
 
-
   .i-value {
     width: 100px;
     display: inline-block;
@@ -423,9 +428,9 @@
   .i-title {
     width: 100%;
     height: 80px;
-    border-bottom: 1px solid #ddd;  
+    border-bottom: 1px solid #ddd;
     line-height: 80px;
-  } 
+  }
 
   .i-title span {
     font-size: 18px;
@@ -436,7 +441,7 @@
   .i-name {
     display: inline-block;
     vertical-align: top;
-    color: var(--font-certify-color); 
+    color: var(--font-certify-color);
     font-weight: bold;
     margin-right: 4px;
     text-align: center;
@@ -455,10 +460,10 @@
 
   .separator {
     left: 45%;
-  } 
+  }
 
   .i-value {
-    color: var(--font-certify-r-color); 
+    color: var(--font-certify-r-color);
     font-size: 14px;
     font-weight: bold;
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
@@ -480,7 +485,7 @@
     top: 32px;
     height: 32px;
   }
-  
+
   /deep/.el-icascader .el-input__inner {
     height: 32px !important;
   }

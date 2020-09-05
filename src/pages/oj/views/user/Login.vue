@@ -2,33 +2,31 @@
   <div>
     <Form ref="formLogin" :model="formLogin" :rules="ruleLogin">
       <FormItem prop="username">
-        <Input type="text" v-model="formLogin.username" :placeholder="$t('m.LoginUsername')" size="large" @on-enter="handleLogin">
-        <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </Input>
+        <Input v-model="formLogin.username" type="text" :placeholder="$t('m.LoginUsername')" size="large" @on-enter="handleLogin" />
+        <Icon slot="prepend" type="ios-person-outline" />
       </FormItem>
       <FormItem prop="password">
-        <Input type="password" v-model="formLogin.password" :placeholder="$t('m.LoginPassword')" size="large" @on-enter="handleLogin">
-        <Icon type="ios-locked-outline" slot="prepend"></Icon>
-        </Input>
+        <Input v-model="formLogin.password" type="password" :placeholder="$t('m.LoginPassword')" size="large" @on-enter="handleLogin" />
+        <Icon slot="prepend" type="ios-locked-outline" />
       </FormItem>
     </Form>
     <div class="footer">
       <Button
         type="primary"
-        @click="handleLogin"
-        class="btn" long
-        :loading="btnLoginLoading">
-        {{$t('m.UserLogin')}}
+        class="btn"
+        long
+        :loading="btnLoginLoading"
+        @click="handleLogin">
+        {{ $t('m.UserLogin') }}
       </Button>
-      <a @click.stop="handleBtnClick('register')">{{$t('m.No_Account')}}</a>
-      <a @click.stop="goResetPassword" style="float: right">{{$t('m.Forget_Password')}}</a>
+      <a @click.stop="handleBtnClick('register')">{{ $t('m.No_Account') }}</a>
+      <a style="float: right" @click.stop="goResetPassword">{{ $t('m.Forget_Password') }}</a>
     </div>
   </div>
 </template>
 
 <script>
   import { mapGetters, mapActions } from 'vuex'
-  import api from '@oj/api'
   import { FormMixin } from '@oj/components/mixins'
 
   export default {
@@ -42,11 +40,22 @@
         },
         ruleLogin: {
           username: [
-            {required: true, trigger: 'blur', min: 1, max: 15}
+            { required: true, trigger: 'blur', min: 1, max: 15 }
           ],
           password: [
-            {required: true, trigger: 'change', min: 1, max: 20}
+            { required: true, trigger: 'change', min: 1, max: 20 }
           ]
+        }
+      }
+    },
+    computed: {
+      ...mapGetters(['modalStatus']),
+      visible: {
+        get () {
+          return this.modalStatus.visible
+        },
+        set (value) {
+          this.changeModalStatus({ visible: value })
         }
       }
     },
@@ -63,11 +72,11 @@
       handleLogin () {
         this.validateForm('formLogin').then(valid => {
           this.btnLoginLoading = true
-          let formData = Object.assign({}, this.formLogin)
+          const formData = Object.assign({}, this.formLogin)
           this.$store.dispatch('user/login', formData)
             .then(res => {
               this.btnLoginLoading = false
-              this.changeModalStatus({visible: false})
+              this.changeModalStatus({ visible: false })
               this.$success(this.$i18n.t('m.Welcome_back'))
             })
             .catch(res => {
@@ -82,19 +91,8 @@
         })
       },
       goResetPassword () {
-        this.changeModalStatus({visible: false})
-        this.$router.push({name: 'apply-reset-password'})
-      }
-    },
-    computed: {
-      ...mapGetters(['modalStatus']),
-      visible: {
-        get () {
-          return this.modalStatus.visible
-        },
-        set (value) {
-          this.changeModalStatus({visible: value})
-        }
+        this.changeModalStatus({ visible: false })
+        this.$router.push({ name: 'apply-reset-password' })
       }
     }
   }

@@ -5,8 +5,8 @@
         <i :class="['info-card-icon', icon]" :style="{'font-size': iconSize}"></i>
       </el-col>
       <el-col :span="16" class="info-card-text">
-        <p :style="textStyle">{{value}}</p>
-        <p style="font-weight: 300;">{{message}}</p>
+        <p :style="textStyle">{{ value }}</p>
+        <p style="font-weight: 300;">{{ message }}</p>
       </el-col>
     </el-row>
   </el-card>
@@ -14,7 +14,7 @@
 
 <script>
   export default {
-    name: 'inforCard',
+    name: 'InforCard',
     props: {
       value: [String, Number],
       color: String,

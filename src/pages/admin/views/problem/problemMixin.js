@@ -29,14 +29,16 @@ export default {
   },
   methods: {
     querySearch (queryString, cb, cp) {
-      let doTagList = curTagList => {
-        let tagList = [], flag = false, backupTagList = []
-        for (let tag of curTagList) {
+      const doTagList = curTagList => {
+        let tagList = []
+        let flag = false
+        const backupTagList = []
+        for (const tag of curTagList) {
           if ((queryString && !queryString.replace(/(^\s*)|(\s*$)/g, '')) || tag.name.indexOf(queryString) !== -1) {
             flag = true
-            tagList.push({id: tag.id, value: tag.name, status: tag.status})
+            tagList.push({ id: tag.id, value: tag.name, status: tag.status })
           }
-          backupTagList.push({id: tag.id, value: tag.name, status: tag.status})
+          backupTagList.push({ id: tag.id, value: tag.name, status: tag.status })
         }
         if (!flag) {
           tagList = backupTagList
@@ -45,15 +47,15 @@ export default {
         cp && cp(tagList)
         return tagList
       }
-      let { items: { value, time }, cacheTime } = this.cacheTagList
+      const { items: { value, time }, cacheTime } = this.cacheTagList
       if (time) {
-        let current = new Date().getTime()
+        const current = new Date().getTime()
         if (current - time <= cacheTime) {
           return doTagList(value)
         }
       }
       api.getProblemTagList().then(res => {
-        let curTagList = res.data.data
+        const curTagList = res.data.data
         this.cacheTagList.items = { value: curTagList, time: new Date().getTime() }
         doTagList(curTagList)
       }).catch((_) => {
@@ -62,10 +64,13 @@ export default {
       })
     },
     queryjudgeType (queryString, cb, cp) {
-      let funcName = this.spiderFlag ? 'getSpiderServer' : 'getJudgeUniqueStyleLists'
-      let cacheName = this.cacheJudgeType.funcMap[funcName], { value, time } = this.cacheJudgeType[cacheName], finalResult = null
+      const funcName = this.spiderFlag ? 'getSpiderServer' : 'getJudgeUniqueStyleLists'
+      const cacheName = this.cacheJudgeType.funcMap[funcName]
+      const { value, time } = this.cacheJudgeType[cacheName]
+      let finalResult = null
       if (time) {
-        let current = new Date().getTime(), limitTime = this.cacheJudgeType['cacheTime']
+        const current = new Date().getTime()
+        const limitTime = this.cacheJudgeType['cacheTime']
         if (current - time <= limitTime) {
           cp && cp(value)
           finalResult = queryString ? value.filter(res => res.value.indexOf(queryString) > -1) : value
@@ -74,9 +79,10 @@ export default {
         }
       }
       api[funcName]().then(res => {
-        let judgeStyleLists = res.data.data, judgeAvailableStyleLists = []
+        const judgeStyleLists = res.data.data
+        const judgeAvailableStyleLists = []
         Object.keys(judgeStyleLists).forEach(item => {
-          let now = judgeStyleLists[item]
+          const now = judgeStyleLists[item]
           if (now.status) {
             judgeAvailableStyleLists.push({
               id: now.id,
@@ -99,7 +105,7 @@ export default {
     addTag (tagValue, obj) {
       tagValue = tagValue && tagValue.replace(/\s+/g, '')
       if (!tagValue) { return }
-      let exitValue = !!obj.tags.find(res => res.value === tagValue)
+      const exitValue = !!obj.tags.find(res => res.value === tagValue)
       if (exitValue) {
         this.$Message.error('题目标签中已经存在')
         return
@@ -109,13 +115,13 @@ export default {
       this.tagInput = ''
     },
     handleJudgeTypeSelect (obj) {
-      let judgeTypeValue = obj.judgeType
+      const judgeTypeValue = obj.judgeType
       if (!judgeTypeValue || !judgeTypeValue.replace(/\s+/g, '')) {
         return
       }
       this.queryjudgeType(null, null, judgeAvailableStyleLists => {
-        let nowValue = judgeAvailableStyleLists
-        let now = nowValue.find(res => res.value === judgeTypeValue)
+        const nowValue = judgeAvailableStyleLists
+        const now = nowValue.find(res => res.value === judgeTypeValue)
         if (!now) {
           obj.judgeType = ''
           this.$Message.error('所填写的评测机不存在')

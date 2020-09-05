@@ -5,34 +5,31 @@
         <el-input
           v-model="keyword"
           prefix-icon="el-icon-search"
-          placeholder="Keywords">
-        </el-input>
+          placeholder="Keywords" />
       </div>
       <el-table
+        ref="table"
         v-loading="loading"
         element-loading-text="loading"
-        ref="table"
         :data="contestList"
         style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
-            <p>Creator: {{props.row.creator}}</p>
+            <p>Creator: {{ props.row.creator }}</p>
           </template>
         </el-table-column>
         <el-table-column
           prop="id"
           width="80"
-          label="ID">
-        </el-table-column>
+          label="ID" />
         <el-table-column
           prop="title"
-          label="Title">
-        </el-table-column>
+          label="Title" />
         <el-table-column
           label="Rank Rule"
           width="130">
           <template slot-scope="scope">
-            <el-tag type="gray">{{scope.row.rankModel}}</el-tag>
+            <el-tag type="gray">{{ scope.row.rankModel }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -40,7 +37,7 @@
           width="180">
           <template slot-scope="scope">
             <el-tag :type="scope.row.signUpRule === CONTEST_QUERY_VALUE.PUBLIC ? 'success' : 'primary'">
-              {{scope.row.signUpRule}}
+              {{ scope.row.signUpRule }}
             </el-tag>
           </template>
         </el-table-column>
@@ -50,7 +47,7 @@
           <template slot-scope="scope">
             <el-tag
               :type="scope.row.status === -1 ? 'danger' : scope.row.status === 1 ? 'success' : 'primary'">
-              {{scope.row.status | contestStatus}}
+              {{ scope.row.status | contestStatus }}
             </el-tag>
           </template>
         </el-table-column>
@@ -58,11 +55,11 @@
           width="100"
           label="Ended">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.status === 0 ? true : false"
-                       active-text=""
-                       inactive-text=""
-                       @change="handleEndedSwitch(scope.row)">
-            </el-switch>
+            <el-switch
+              v-model="scope.row.status === 0 ? true : false"
+              active-text=""
+              inactive-text=""
+              @change="handleEndedSwitch(scope.row)" />
           </template>
         </el-table-column>
         <el-table-column
@@ -70,12 +67,10 @@
           width="280"
           label="Operation">
           <div slot-scope="scope">
-            <icon-btn name="Edit" icon="edit" @click.native="goEdit(scope.row.id)"></icon-btn>
-            <icon-btn name="Problem" icon="list-ol" @click.native="goContestProblemList(scope.row)"></icon-btn>
-            <icon-btn name="Announcement" icon="info-circle"
-                      @click.native="goContestAnnouncement(scope.row.id)"></icon-btn>
-            <icon-btn name="Authenticated user" icon="users"
-                      @click.native="goContestAuthenticatedUser(scope.row.id)"></icon-btn>
+            <icon-btn name="Edit" icon="edit" @click.native="goEdit(scope.row.id)" />
+            <icon-btn name="Problem" icon="list-ol" @click.native="goContestProblemList(scope.row)" />
+            <icon-btn name="Announcement" icon="info-circle" @click.native="goContestAnnouncement(scope.row.id)" />
+            <icon-btn name="Authenticated user" icon="users" @click.native="goContestAuthenticatedUser(scope.row.id)" />
           </div>
         </el-table-column>
       </el-table>
@@ -83,10 +78,9 @@
         <el-pagination
           class="page"
           layout="prev, pager, next"
-          @current-change="currentChange"
           :page-size="pageSize"
-          :total="total">
-        </el-pagination>
+          :total="total"
+          @current-change="currentChange" />
       </div>
     </Panel>
   </div>
@@ -94,11 +88,15 @@
 
 <script>
   import api from '../../api.js'
-  import utils from '@/utils/utils'
   import { CONTEST_STATUS_REVERSE, CONTEST_QUERY_VALUE } from '@/utils/constants'
 
   export default {
     name: 'ContestList',
+    filters: {
+      contestStatus (value) {
+        return CONTEST_STATUS_REVERSE[value].name
+      }
+    },
     data () {
       return {
         pageSize: 10,
@@ -113,13 +111,13 @@
         CONTEST_QUERY_VALUE
       }
     },
+    watch: {
+      'keyword' () {
+        this.currentChange(1)
+      }
+    },
     mounted () {
       this.getContestList(this.currentPage)
-    },
-    filters: {
-      contestStatus (value) {
-        return CONTEST_STATUS_REVERSE[value].name
-      }
     },
     methods: {
       // 切换页码回调
@@ -138,22 +136,22 @@
         })
       },
       goEdit (contestId) {
-        this.$router.push({name: 'EditContest', params: {contestId}})
+        this.$router.push({ name: 'EditContest', params: { contestId }})
       },
       goContestAuthenticatedUser (contestId) {
-        this.$router.push({name: 'ContestAuthenticatedUser', params: {contestId}})
+        this.$router.push({ name: 'ContestAuthenticatedUser', params: { contestId }})
       },
       goContestAnnouncement (contestId) {
-        this.$router.push({name: 'ContestAnnouncement', params: {contestId}})
+        this.$router.push({ name: 'ContestAnnouncement', params: { contestId }})
       },
       goContestProblemList (scope) {
         let contestData = {
           contestId: scope.id,
-          title: scope.title 
+          title: scope.title
         }
-        let Base64 = require('js-base64').Base64
+        const Base64 = require('js-base64').Base64
         contestData = Base64.encode(JSON.stringify(contestData))
-        this.$router.push({name: 'ContestProblemList', params: {contestData}})
+        this.$router.push({ name: 'ContestProblemList', params: { contestData }})
       },
       handleEndedSwitch (row) {
         if (row.status !== 1) {
@@ -162,12 +160,7 @@
         }
         api.changeContestStatus(row.id).then(res => {
           this.getContestList(this.currentPage)
-        }) 
-      }
-    },
-    watch: {
-      'keyword' () {
-        this.currentChange(1)
+        })
       }
     }
   }

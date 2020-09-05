@@ -1,9 +1,4 @@
-<template>
-</template>
-
 <script>
-  import api from '../../api.js'
-
   export default {
     mounted () {
       this.$store.dispatch('user/logout')
@@ -14,6 +9,9 @@
         })
         .catch(res => {
         })
+    },
+    render: function (h) {
+      return h() // avoid warning message
     }
   }
 </script>

@@ -1,41 +1,42 @@
 <template>
   <Row type="flex" :gutter="18">
-    <Col :span=19>
+    <Col :span="19">
     <Panel shadow>
-      <div slot="title">{{$t('m.Problem_List')}}</div>
+      <div slot="title">{{ $t('m.Problem_List') }}</div>
       <div slot="extra">
         <ul class="filter">
           <li>
             <Dropdown @on-click="filterByDifficulty">
-              <span>{{!query.difficulty ? this.$i18n.t('m.Difficulty') : this.$i18n.t('m.' + query.difficulty.charAt(0).toUpperCase() + query.difficulty.slice(1))}}
-                <Icon type="arrow-down-b"></Icon>
+              <span>{{ !query.difficulty ? this.$i18n.t('m.Difficulty') : this.$i18n.t('m.' + query.difficulty.charAt(0).toUpperCase() + query.difficulty.slice(1)) }}
+                <Icon type="arrow-down-b" />
               </span>
               <Dropdown-menu slot="list">
-                <Dropdown-item name="">{{$t('m.All')}}</Dropdown-item>
-                <Dropdown-item name="easy">{{$t('m.Easy')}}</Dropdown-item>
-                <Dropdown-item name="medium" >{{$t('m.Medium')}}</Dropdown-item>
-                <Dropdown-item name="hard">{{$t('m.Hard')}}</Dropdown-item>
+                <Dropdown-item name="">{{ $t('m.All') }}</Dropdown-item>
+                <Dropdown-item name="easy">{{ $t('m.Easy') }}</Dropdown-item>
+                <Dropdown-item name="medium">{{ $t('m.Medium') }}</Dropdown-item>
+                <Dropdown-item name="hard">{{ $t('m.Hard') }}</Dropdown-item>
               </Dropdown-menu>
             </Dropdown>
           </li>
-          <!-- 后端未提供合适API 
-          <li> 
+          <!-- 后端未提供合适API
+          <li>
             <i-switch size="large" @on-change="handleTagsVisible">
               <span slot="open">{{$t('m.Tags')}}</span>
               <span slot="close">{{$t('m.Tags')}}</span>
             </i-switch>
           </li> -->
           <li>
-            <Input v-model="query.keyword"
-              @on-enter="filterByKeyword"
-              @on-click="filterByKeyword"
+            <Input
+              v-model="query.keyword"
               placeholder="keyword"
-              icon="ios-search-strong"/>
+              icon="ios-search-strong"
+              @on-enter="filterByKeyword"
+              @on-click="filterByKeyword" />
           </li>
           <li>
             <Button type="info" @click="onReset">
-              <Icon type="refresh"></Icon>
-              {{$t('m.Reset')}}
+              <Icon type="refresh" />
+              {{ $t('m.Reset') }}
             </Button>
           </li>
         </ul>
@@ -46,28 +47,27 @@
              :loading="loadings.table"
              disabled-hover></Table>
     </Panel>
-    <Pagination :total="total" :page-size="limit" @on-change="pushRouter" :current.sync="query.page"></Pagination>
-
+    <Pagination :total="total" :page-size="limit" :current.sync="query.page" @on-change="pushRouter" />
     </Col>
 
     <Col :span="5">
     <Panel :padding="10">
-      <div slot="title" class="taglist-title">{{$t('m.Tags')}}</div>
+      <div slot="title" class="taglist-title">{{ $t('m.Tags') }}</div>
       <Button v-for="tag in tagList"
               :key="tag.name"
-              @click="filterByTag(tag.id)"
               type="ghost"
               :disabled="query.tag === tag.id"
               shape="circle"
-              class="tag-btn">{{tag.name}}
+              class="tag-btn"
+              @click="filterByTag(tag.id)">{{ tag.name }}
       </Button>
 
-      <Button long id="pick-one" @click="pickone">
-        <Icon type="shuffle"></Icon>
-        {{$t('m.Pick_One')}}
+      <Button id="pick-one" long @click="pickone">
+        <Icon type="shuffle" />
+        {{ $t('m.Pick_One') }}
       </Button>
     </Panel>
-    <Spin v-if="loadings.tag" fix size="large"></Spin>
+    <Spin v-if="loadings.tag" fix size="large" />
     </Col>
   </Row>
 </template>
@@ -75,15 +75,14 @@
 <script>
   import { mapGetters, mapActions } from 'vuex'
   import api from '@oj/api'
-  import utils from '@/utils/utils'
   import { ProblemMixin } from '@oj/components/mixins'
   import Pagination from '@oj/components/Pagination'
   export default {
     name: 'ProblemList',
-    mixins: [ProblemMixin],
     components: {
       Pagination
     },
+    mixins: [ProblemMixin],
     data () {
       return {
         tagList: [],
@@ -102,7 +101,7 @@
                 },
                 on: {
                   click: () => {
-                    this.$router.push({name: 'problem-details', params: {problemID: params.row.id}})
+                    this.$router.push({ name: 'problem-details', params: { problemID: params.row.id }})
                   }
                 },
                 style: {
@@ -122,7 +121,7 @@
                 },
                 on: {
                   click: () => {
-                    this.$router.push({name: 'problem-details', params: {problemID: params.row.id}})
+                    this.$router.push({ name: 'problem-details', params: { problemID: params.row.id }})
                   }
                 },
                 style: {
@@ -137,7 +136,7 @@
           {
             title: this.$i18n.t('m.Level'),
             render: (h, params) => {
-              let t = params.row.level
+              const t = params.row.level
               let color = 'blue'
               if (t === 'easy') color = 'green'
               else if (t === 'hard') color = 'yellow'
@@ -173,8 +172,25 @@
         }
       }
     },
+    computed: {
+      ...mapGetters({
+        isAuthenticated: 'user/isAuthenticated',
+        profile: 'user/profile'
+      })
+    },
+    watch: {
+      '$route' (newVal, oldVal) {
+        if (newVal !== oldVal) {
+          this.init(true)
+        }
+      },
+      'isAuthenticated' (newVal) {
+        if (newVal === true) {
+          this.init()
+        }
+      }
+    },
     mounted () {
-      // problemMap
       this.init()
     },
     methods: {
@@ -183,10 +199,10 @@
       }),
       init (simulate = false) {
         this.routeName = this.$route.name
-        let query = this.$route.query
+        const query = this.$route.query
         this.query.difficulty = query.difficulty || null
         this.query.keyword = query.keyword || null
-        this.query.tag = query.tag 
+        this.query.tag = query.tag
         this.query.page = parseInt(query.page) || 1
         if (!simulate) {
           this.getTagList()
@@ -195,9 +211,9 @@
           this.getProblemMaps({ userId: this.profile.id }).then(res => {
             this.problemMap = res
             this.getProblemList()
-          }) 
+          })
           return
-        } 
+        }
         this.getProblemList()
       },
       pushRouter () {
@@ -207,9 +223,9 @@
         })
       },
       getProblemList () {
-        let offset = this.query.page
+        const offset = this.query.page
         this.loadings.table = true
-        let query = {
+        const query = {
           level: this.query.difficulty,
           pageModel: {
             limit: this.limit,
@@ -217,7 +233,7 @@
             paramData: null
           },
           tagId: this.query.tag,
-	        titleKey: this.query.keyword
+          titleKey: this.query.keyword
         }
         api.getProblemList(query).then(res => {
           this.loadings.table = false
@@ -259,7 +275,7 @@
               title: this.$i18n.t('m.Tags'),
               align: 'center',
               render: (h, params) => {
-                let tags = []
+                const tags = []
                 params.row.tags.forEach(tag => {
                   tags.push(h('Tag', {}, tag))
                 })
@@ -275,14 +291,15 @@
         }
       },
       onReset () {
-        this.$router.push({name: 'problem-list'})
+        this.$router.push({ name: 'problem-list' })
       },
       pickone () {
-        let total = this.total
-        let randomNum = Math.floor(Math.random() * total) + 1
-        let consult = Math.floor(randomNum / this.limit)
-        let remainder = randomNum % this.limit
-        let page = consult, limit = remainder
+        const total = this.total
+        const randomNum = Math.floor(Math.random() * total) + 1
+        const consult = Math.floor(randomNum / this.limit)
+        const remainder = randomNum % this.limit
+        let page = consult
+        let limit = remainder
         if (!consult) {
           page = 1
         }
@@ -290,7 +307,7 @@
           page -= 1
           limit = this.limit
         }
-        let query = {
+        const query = {
           level: null,
           pageModel: {
             limit: this.limit,
@@ -298,31 +315,13 @@
             paramData: null
           },
           tagId: null,
-	        titleKey: null
+          titleKey: null
         }
         api.getProblemList(query).then(res => {
           this.$success('Good Luck')
-          let current = res.data.data.records[limit - 1]
-          this.$router.push({name: 'problem-details', params: {problemID: current.id}})
+          const current = res.data.data.records[limit - 1]
+          this.$router.push({ name: 'problem-details', params: { problemID: current.id }})
         })
-      }
-    },
-    computed: {
-      ...mapGetters({
-        isAuthenticated: 'user/isAuthenticated',
-        profile: 'user/profile'
-      })
-    },
-    watch: {
-      '$route' (newVal, oldVal) {
-        if (newVal !== oldVal) {
-          this.init(true)
-        }
-      },
-      'isAuthenticated' (newVal) {
-        if (newVal === true) {
-          this.init()
-        }
       }
     }
   }
@@ -356,7 +355,7 @@
   }
   /deep/.ivu-btn-text {
     color: var(--font-color-origin);
-  } 
+  }
   /deep/.ivu-input {
     background: var(--search-bg-color);
     color: var(--header-input-placeholder-color);

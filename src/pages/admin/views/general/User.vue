@@ -1,58 +1,64 @@
 <template>
   <div class="view">
-    <icon-btn name="User" icon="user" :disabled="showUser" @click.native="exchangeIdentity('User')"></icon-btn>
-    <icon-btn name="Admin" icon="user-circle" :disabled.native="!showUser" @click.native="exchangeIdentity('Admin')"></icon-btn>
-    <icon-btn name="Add New Account" icon="plus" @click.native="showUserDialog = !showUserDialog"></icon-btn>
+    <icon-btn name="User" icon="user" :disabled="showUser" @click.native="exchangeIdentity('User')" />
+    <icon-btn name="Admin" icon="user-circle" :disabled="!showUser" @click.native="exchangeIdentity('Admin')" />
+    <icon-btn name="Add New Account" icon="plus" @click.native="showUserDialog = !showUserDialog" />
     <Panel :title="showUser ? $t('m.User_User') : 'Admin'">
-      <div slot="header"> 
-        <el-row  :gutter="15" type="flex" justify="start" align="middle">
-          <el-col :span="10" v-show="selectedAll.length">
-            <icon-btn type="warning" icon="ban" name="Ban All Account"
-                      @click.native="toggleSelection('ban')"
-                      @dblclick.native="exchangeSelectedAccount">
-            </icon-btn>
-            <icon-btn type="warning" icon="refresh" name="Refresh All Account"
-                      @click.native="defineBatch='reflesh'"
-                      @dblclick.native="refreshSelectedAccount">
-            </icon-btn>
-            <icon-btn type="warning" icon="check-square-o" name="Renew All Account"
-                      @click.native="toggleSelection('renew')"
-                      @dblclick.native="exchangeSelectedAccount">
-            </icon-btn>
+      <div slot="header">
+        <el-row :gutter="15" type="flex" justify="start" align="middle">
+          <el-col v-show="selectedAll.length" :span="10">
+            <icon-btn
+              type="warning"
+              icon="ban"
+              name="Ban All Account"
+              @click.native="toggleSelection('ban')"
+              @dblclick.native="exchangeSelectedAccount" />
+            <icon-btn
+              type="warning"
+              icon="refresh"
+              name="Refresh All Account"
+              @click.native="defineBatch='reflesh'"
+              @dblclick.native="refreshSelectedAccount" />
+            <icon-btn
+              type="warning"
+              icon="check-square-o"
+              name="Renew All Account"
+              @click.native="toggleSelection('renew')"
+              @dblclick.native="exchangeSelectedAccount" />
           </el-col>
           <el-col :span="selectedAll.length ? 14 : 24">
-            <el-input v-model="keyword" prefix-icon="el-icon-search" placeholder="Keywords"></el-input>
+            <el-input v-model="keyword" prefix-icon="el-icon-search" placeholder="Keywords" />
           </el-col>
         </el-row>
       </div>
       <el-table
+        ref="table"
         v-loading="loadingTable"
         element-loading-text="loading"
-        @selection-change="selectedAll = arguments[0]"
-        ref="table"
         :data="showUser ? userList : adminList"
-        style="width: 100%">
-        <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="id" label="ID"></el-table-column>
-        <el-table-column prop="username" label="Username"></el-table-column>
+        style="width: 100%"
+        @selection-change="selectedAll = arguments[0]">
+        <el-table-column type="selection" width="55" />
+        <el-table-column prop="id" label="ID" />
+        <el-table-column prop="username" label="Username" />
         <el-table-column prop="crtTs" label="Create Time" width="180">
           <template slot-scope="scope">
-            {{scope.row.crtTs}}
+            {{ scope.row.crtTs }}
           </template>
         </el-table-column>
         <el-table-column prop="lmTs" label="Last Modify" width="180">
           <template slot-scope="scope">
-            {{scope.row.lmTs}}
+            {{ scope.row.lmTs }}
           </template>
         </el-table-column>
-        <el-table-column prop="description" label="Description" width="150" v-if="!showUser"></el-table-column>
-        <el-table-column prop="email" label="Email" width="180" v-if="showUser"></el-table-column>
-        <el-table-column prop="rank" label="Rank" width="80" v-if="showUser"></el-table-column>
-        <el-table-column prop="acNum" label="AC" width="80" v-if="showUser"></el-table-column>
+        <el-table-column v-if="!showUser" prop="description" label="Description" width="150" />
+        <el-table-column v-if="showUser" prop="email" label="Email" width="180" />
+        <el-table-column v-if="showUser" prop="rank" label="Rank" width="80" />
+        <el-table-column v-if="showUser" prop="acNum" label="AC" width="80" />
         <el-table-column fixed="right" label="Option" width="200">
           <template slot-scope="{row}">
-            <icon-btn name="Reset" icon="refresh" @click.native="resetPassword(row.username)"></icon-btn>
-            <icon-btn :name="row.status ? 'Forbid' : 'Enable'" :icon="row.status ? 'ban' : 'check-square-o'" @click.native="exchangeAccountStatus(row.username, row.status)"></icon-btn>
+            <icon-btn name="Reset" icon="refresh" @click.native="resetPassword(row.username)" />
+            <icon-btn :name="row.status ? 'Forbid' : 'Enable'" :icon="row.status ? 'ban' : 'check-square-o'" @click.native="exchangeAccountStatus(row.username, row.status)" />
           </template>
         </el-table-column>
       </el-table>
@@ -60,56 +66,57 @@
         <el-pagination
           class="page"
           layout="prev, pager, next"
-          @current-change="currentChange"
           :page-size="pageSize"
-          :total="total">
-        </el-pagination>
+          :total="total"
+          @current-change="currentChange"
+        />
       </div>
     </Panel>
-    <Panel :title="$t('m.Generate_User')" v-show="showUser">
-      <el-form :model="formGenerateUser" ref="formGenerateUser">
+    <Panel v-show="showUser" :title="$t('m.Generate_User')">
+      <el-form ref="formGenerateUser" :model="formGenerateUser">
         <el-row type="flex" justify="space-between">
           <el-col :span="4">
             <el-form-item label="Prefix" prop="prefix">
-              <el-input v-model="formGenerateUser.prefix" placeholder="Prefix"></el-input>
+              <el-input v-model="formGenerateUser.prefix" placeholder="Prefix" />
             </el-form-item>
           </el-col>
           <el-col :span="4">
             <el-form-item label="Suffix" prop="suffix">
-              <el-input v-model="formGenerateUser.suffix" placeholder="Suffix"></el-input>
+              <el-input v-model="formGenerateUser.suffix" placeholder="Suffix" />
             </el-form-item>
           </el-col>
           <el-col :span="4">
             <el-form-item label="Start Number" prop="number_from" required>
-              <el-input-number v-model="formGenerateUser.number_from" style="width: 100%"></el-input-number>
+              <el-input-number v-model="formGenerateUser.number_from" style="width: 100%" />
             </el-form-item>
           </el-col>
           <el-col :span="4">
             <el-form-item label="End Number" prop="number_to" required>
-              <el-input-number v-model="formGenerateUser.number_to" style="width: 100%"></el-input-number>
+              <el-input-number v-model="formGenerateUser.number_to" style="width: 100%" />
             </el-form-item>
           </el-col>
           <el-col :span="4">
             <el-form-item label="Password Length" prop="password_length" required>
-              <el-input v-model="formGenerateUser.password_length"
-                        placeholder="Password Length"></el-input>
+              <el-input v-model="formGenerateUser.password_length" placeholder="Password Length" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-form-item>
-          <a href="" id="downloadGenerateUsers"></a>
+          <a id="downloadGenerateUsers" href="" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="generateUser" icon="el-icon-fa-users" :loading="loadingGenerate">Generate & Export
+          <el-button type="primary" icon="el-icon-fa-users" :loading="loadingGenerate" @click="generateUser">Generate & Export
           </el-button>
-          <span class="userPreview" v-if="formGenerateUser.number_from && formGenerateUser.number_to &&
-                                          formGenerateUser.number_from <= formGenerateUser.number_to">
-            The usernames will be {{formGenerateUser.prefix + formGenerateUser.number_from + formGenerateUser.suffix}},
+          <span
+            v-if="formGenerateUser.number_from && formGenerateUser.number_to &&
+              formGenerateUser.number_from <= formGenerateUser.number_to"
+            class="userPreview">
+            The usernames will be {{ formGenerateUser.prefix + formGenerateUser.number_from + formGenerateUser.suffix }},
             <span v-if="formGenerateUser.number_from + 1 < formGenerateUser.number_to">
-              {{formGenerateUser.prefix + (formGenerateUser.number_from + 1) + formGenerateUser.suffix + '...'}}
+              {{ formGenerateUser.prefix + (formGenerateUser.number_from + 1) + formGenerateUser.suffix + '...' }}
             </span>
             <span v-if="formGenerateUser.number_from + 1 <= formGenerateUser.number_to">
-              {{formGenerateUser.prefix + formGenerateUser.number_to + formGenerateUser.suffix}}
+              {{ formGenerateUser.prefix + formGenerateUser.number_to + formGenerateUser.suffix }}
             </span>
           </span>
         </el-form-item>
@@ -117,16 +124,16 @@
     </Panel>
     <!-- 创建新用户 -->
     <el-dialog title="Create New Account" :visible.sync="showUserDialog" :close-on-click-modal="false">
-      <el-form :model="user" ref="user" label-width="120px" label-position="left">
+      <el-form ref="user" :model="user" label-width="120px" label-position="left">
         <el-row :gutter="20">
           <el-col :span="user.admin_type==='Regular User' ? 12 : 13">
             <el-form-item :label="$t('m.User_Username')" prop="username" required>
-              <el-input v-model="user.username"></el-input>
+              <el-input v-model="user.username" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item :label="$t('m.User_Email')" v-show="user.admin_type==='Regular User'">
-              <el-input v-model="user.email"></el-input>
+            <el-form-item v-show="user.admin_type==='Regular User'" :label="$t('m.User_Email')">
+              <el-input v-model="user.email" />
             </el-form-item>
           </el-col>
           <el-col :span="user.admin_type==='Regular User' ? 12 : 13">
@@ -138,43 +145,41 @@
                   <span style="font-weight: 600; color: #dbd766; padding: 0 6px;">Middle</span>
                   <span style="font-weight: 600; color: #d97e7e">Week</span>
                 </div>
-                <input 
-                  type="password" 
-                  v-model="user.password" 
+                <input
+                  v-model="user.password"
+                  type="password"
                   class="el-input__inner"
                   :style="`border-color: ${passwordStrength.COLOR}`"
                   :placeholder="$t('m.password')"
-                  @input="checkPasswordStrength"/>
+                  @input="checkPasswordStrength">
               </Poptip>
-              </el-form-item>
+            </el-form-item>
           </el-col>
           <el-col :span="user.admin_type==='Regular User' ? 12 : 13">
             <el-form-item :label="$t('m.User_Type')">
               <el-select v-model="user.admin_type">
-                <el-option label="Regular User" value="Regular User"></el-option>
-                <el-option label="Admin" value="Admin"></el-option>
+                <el-option label="Regular User" value="Regular User" />
+                <el-option label="Admin" value="Admin" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item :label="'Description'" v-show="user.admin_type!=='Regular User'">
-              <el-input v-model="user.description"></el-input>
+            <el-form-item v-show="user.admin_type!=='Regular User'" :label="'Description'">
+              <el-input v-model="user.description" />
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <cancel @click.native="showUserDialog = false">Cancel</cancel>
-        <save @click.native="saveAccountInfo()"></save>
+        <save @click.native="saveAccountInfo()" />
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-  import papa from 'papaparse'
   import api from '../../api.js'
-  import utils from '@/utils/utils'
   import { PAWSTRENGTH } from '@/utils/constants'
   export default {
     name: 'User',
@@ -219,16 +224,46 @@
         showUser: true
       }
     },
+    computed: {
+      selectedExchangeAccountStatus () {
+        const ids = []
+        for (const user of this.selectedAll) {
+          ids.push({
+            username: user.username,
+            status: user.status ? 0 : 1
+          })
+        }
+        return ids
+      },
+      selectedResetPasswordUserIDs () {
+        const ids = []
+        for (const user of this.selectedAll) {
+          ids.push({
+            username: user.username
+          })
+        }
+        return ids
+      }
+    },
+    watch: {
+      'keyword' (newVal, oldVal) {
+        this.currentChange(1)
+      },
+      'uploadUsersCurrentPage' (page) {
+        this.uploadUsersPage = this.uploadUsers.slice((page - 1) * this.uploadUsersPageSize, page * this.uploadUsersPageSize)
+      }
+    },
     mounted () {
       this.getUserList(1)
     },
     methods: {
       checkPasswordStrength () {
-        let password = this.user.password
-        let regs = PAWSTRENGTH, length = regs.length
+        const password = this.user.password
+        const regs = PAWSTRENGTH
+        const length = regs.length
         for (let i = length - 1; i >= 0; --i) {
-          let nowReg = regs[i]
-          let reg = new RegExp(nowReg.REG)
+          const nowReg = regs[i]
+          const reg = new RegExp(nowReg.REG)
           if (reg.test(password)) {
             this.passwordStrength = nowReg
             return
@@ -236,7 +271,7 @@
         }
         this.passwordStrength = {
           COLOR: '#DCDFE6'
-        } 
+        }
       },
       exchangeIdentity (identity) {
         if (identity === 'User') {
@@ -257,7 +292,7 @@
           this.$error('Please fill in the required information')
           return
         }
-        let nowRole = this.user.admin_type
+        const nowRole = this.user.admin_type
         delete this.user.admin_type
         if (nowRole === 'Admin') {
           delete this.user.email
@@ -270,7 +305,7 @@
             this.user = {
               admin_type: 'Regular User'
             }
-            this.showUser = nowRole === 'Admin' ? false : true
+            this.showUser = nowRole !== 'Admin'
             this.currentChange(this.currentPage)
           })
         })
@@ -310,8 +345,9 @@
       },
       // 改变账户状态
       exchangeSelectedAccount () {
-        let role = this.showUser ? 'User(s)' : 'Admin(s)'
-        let nowValue = this.selectedExchangeAccountStatus, hint = []
+        const role = this.showUser ? 'User(s)' : 'Admin(s)'
+        const nowValue = this.selectedExchangeAccountStatus
+        var hint = []
         for (let i = 0; i < nowValue.length; ++i) {
           hint.push(nowValue[i].username)
         }
@@ -322,22 +358,23 @@
             ${hint}
             The associated resources created by Admin(s) will be deleted as well, like problem, contest, announcement, etc.`,
          'confirm', {
-          type: 'warning'
-        }).then(() => {
-          let promiseQueue = []
-          Object.keys(nowValue).forEach(res => {
-            let value = nowValue[res]
-            promiseQueue.push(api.exchangeAccountStatus(value.username, value.status, this.showUser))
-          })
-          Promise.all(promiseQueue).then(res => {
-            this.currentChange(this.currentPage)
-          })
-        }, () => {})
+           type: 'warning'
+         }).then(() => {
+           const promiseQueue = []
+           Object.keys(nowValue).forEach(res => {
+             const value = nowValue[res]
+             promiseQueue.push(api.exchangeAccountStatus(value.username, value.status, this.showUser))
+           })
+           Promise.all(promiseQueue).then(res => {
+             this.currentChange(this.currentPage)
+           })
+         }, () => {})
       },
       // 重置账户密码
       refreshSelectedAccount () {
-        let role = this.showUser ? 'User(s)' : 'Admin(s)'
-        let nowValue = this.selectedResetPasswordUserIDs, hint = []
+        const role = this.showUser ? 'User(s)' : 'Admin(s)'
+        const nowValue = this.selectedResetPasswordUserIDs
+        var hint = []
         for (let i = 0; i < nowValue.length; ++i) {
           hint.push(nowValue[i].username)
         }
@@ -348,17 +385,17 @@
             ${hint}
             the password will be converted to the initial value.`,
          'confirm', {
-          type: 'warning'
-        }).then(() => {
-          let promiseQueue = []
-          Object.keys(nowValue).forEach(res => {
-            let value = nowValue[res]
-            promiseQueue.push(api.resetPassword(value.username, this.showUser))
-          })
-          Promise.all(promiseQueue).then(res => {
-            this.currentChange(this.currentPage)
-          })
-        })
+           type: 'warning'
+         }).then(() => {
+           const promiseQueue = []
+           Object.keys(nowValue).forEach(res => {
+             const value = nowValue[res]
+             promiseQueue.push(api.resetPassword(value.username, this.showUser))
+           })
+           Promise.all(promiseQueue).then(res => {
+             this.currentChange(this.currentPage)
+           })
+         })
       },
       handleSelectionChange (val) {
         this.selectedAll = val
@@ -370,7 +407,7 @@
             return
           }
           this.loadingGenerate = true
-          let formUsers = {
+          const formUsers = {
             endNumber: this.formGenerateUser.number_to,
             passwordLength: this.formGenerateUser.password_length,
             prefix: this.formGenerateUser.prefix,
@@ -378,73 +415,46 @@
             suffix: this.formGenerateUser.suffix
           }
           api.generateUser(formUsers).then(res => {
-            let blob = new Blob([res.data], {type: "application/vnd.ms-excel"}), reg = /;\w+=/;
-            let str = res.headers['content-disposition']
-            let targetStr = str.match(reg)[0].length + str.match(reg).index
-            let target = str.substring(targetStr, )
-            let targetName = target.substring(1, target.match(/.xlsx/).index)
-            let fileName = targetName + '.xls';
-            const linkNode = document.createElement('a');
-            linkNode.download = fileName; // a标签的download属性规定下载文件的名称
-            linkNode.style.display = 'none';
-            linkNode.href = window.URL.createObjectURL(blob); // 生成一个Blob URL
-            document.body.appendChild(linkNode);
-            linkNode.click();  // 模拟在按钮上的一次鼠标单击
-            URL.revokeObjectURL(linkNode.href); // 释放URL对象
-            document.body.removeChild(linkNode);
+            const blob = new Blob([res.data], { type: 'application/vnd.ms-excel' })
+            const reg = /;\w+=/
+            const str = res.headers['content-disposition']
+            const targetStr = str.match(reg)[0].length + str.match(reg).index
+            const target = str.substring(targetStr)
+            const targetName = target.substring(1, target.match(/.xlsx/).index)
+            const fileName = targetName + '.xls'
+            const linkNode = document.createElement('a')
+            linkNode.download = fileName // a标签的download属性规定下载文件的名称
+            linkNode.style.display = 'none'
+            linkNode.href = window.URL.createObjectURL(blob) // 生成一个Blob URL
+            document.body.appendChild(linkNode)
+            linkNode.click() // 模拟在按钮上的一次鼠标单击
+            URL.revokeObjectURL(linkNode.href) // 释放URL对象
+            document.body.removeChild(linkNode)
             this.getUserList(this.currentPage)
             this.loadingGenerate = false
-          }).catch(err => {
+          }).catch(_ => {
             this.loadingGenerate = false
           })
         })
       },
       // 切换选择
       toggleSelection (defineBatch) {
-        let rows = this.selectedAll, table = []
+        const rows = this.selectedAll
+        const table = []
         this.defineBatch = defineBatch
         if (rows.length) {
           for (let i = 0; i < rows.length; ++i) {
-            let nowValue = rows[i]
+            const nowValue = rows[i]
             table.push(nowValue)
             if (this.defineBatch === 'ban' && !!nowValue.status || this.defineBatch === 'renew' && !nowValue.status) {
               table.pop()
               continue
-            } 
-            this.$refs.table.toggleRowSelection(table.pop());
+            }
+            this.$refs.table.toggleRowSelection(table.pop())
           }
         } else {
-          this.$refs.table.clearSelection();
+          this.$refs.table.clearSelection()
         }
-      }
-    },
-    computed: {
-      selectedExchangeAccountStatus () {
-        let ids = []
-        for (let user of this.selectedAll) {
-          ids.push({
-            username: user.username,
-            status: user.status ? 0 : 1  
-          })
-        }
-        return ids
-      },
-      selectedResetPasswordUserIDs () {
-        let ids = []
-        for (let user of this.selectedAll) {
-          ids.push({
-            username: user.username
-          })
-        }
-        return ids
-      }
-    },
-    watch: {
-      'keyword' (newVal, oldVal) {
-        this.currentChange(1)
-      },
-      'uploadUsersCurrentPage' (page) {
-        this.uploadUsersPage = this.uploadUsers.slice((page - 1) * this.uploadUsersPageSize, page * this.uploadUsersPageSize)
       }
     }
   }
@@ -459,7 +469,7 @@
   .el-select,
   /deep/.ivu-poptip-rel {
     width: 100%;
-  } 
+  }
   .userPreview {
     padding-left: 10px;
   }

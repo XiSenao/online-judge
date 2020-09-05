@@ -1,6 +1,6 @@
 <template>
   <div>
-    <component :is="currentView"></component>
+    <component :is="currentView" />
   </div>
 </template>
 
@@ -15,7 +15,7 @@
     template: '<div></div>'
   }
   export default {
-    name: 'contest-rank',
+    name: 'ContestRank',
     components: {
       ACMContestRank,
       OIContestRank,
@@ -35,7 +35,7 @@
       }
     },
     beforeRouteLeave (to, from, next) {
-      this.$store.commit(`contest/${types.CHANGE_CONTEST_ITEM_VISIBLE}`, {menu: true})
+      this.$store.commit(`contest/${types.CHANGE_CONTEST_ITEM_VISIBLE}`, { menu: true })
       next()
     }
   }

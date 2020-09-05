@@ -1,45 +1,47 @@
 <template>
   <Panel :padding="30" class="container">
-    <div slot="title" class="center">{{$t('m.Reset_Password')}}</div>
+    <div slot="title" class="center">{{ $t('m.Reset_Password') }}</div>
     <template v-if="!successApply">
-      <Form :rules="ruleResetPassword" :model=formResetPassword ref="formResetPassword">
+      <Form ref="formResetPassword" :rules="ruleResetPassword" :model="formResetPassword">
         <Form-item prop="email">
-          <Input v-model="formResetPassword.email" :placeholder="$t('m.ApplyEmail')" size="large">
-          <Icon type="ios-email-outline" slot="prepend"></Icon>
-          </Input>
+          <Input v-model="formResetPassword.email" :placeholder="$t('m.ApplyEmail')" size="large"/>
+          <Icon slot="prepend" type="ios-email-outline" />
         </Form-item>
         <Form-item prop="captcha" style="margin-bottom:10px">
           <div class="oj-captcha">
             <div class="oj-captcha-code">
-              <Input v-model="formResetPassword.captcha" :placeholder="$t('m.RCaptcha')" size="large">
-              <Icon type="ios-lightbulb-outline" slot="prepend"></Icon>
-              </Input>
+              <Input v-model="formResetPassword.captcha" :placeholder="$t('m.RCaptcha')" size="large"/>
+              <Icon slot="prepend" type="ios-lightbulb-outline" />
             </div>
             <div class="oj-captcha-img">
               <Tooltip content="Click to refresh" placement="top">
-                <img :src="captchaSrc" @click="getCaptchaSrc"/>
+                <img :src="captchaSrc" @click="getCaptchaSrc">
               </Tooltip>
             </div>
           </div>
         </Form-item>
       </Form>
-      <Button type="primary"
-              @click="sendEmail"
-              class="btn" long
-              :loading="btnLoading">{{$t('m.Send_Password_Reset_Email')}}
+      <Button
+        type="primary"
+        class="btn"
+        long
+        :loading="btnLoading"
+        @click="sendEmail"
+      >
+        {{ $t('m.Send_Password_Reset_Email') }}
       </Button>
     </template>
     <template v-else>
       <Alert type="success" show-icon>
-        {{$t('Success')}}
-        <span slot="desc"> {{$t('Password_reset_mail_sent')}}</span>
+        {{ $t('Success') }}
+        <span slot="desc"> {{ $t('Password_reset_mail_sent') }}</span>
       </Alert>
     </template>
   </Panel>
 </template>
 <script>
   import api from '@oj/api'
-  import {FormMixin} from '@oj/components/mixins'
+  import { FormMixin } from '@oj/components/mixins'
 
   export default {
     mixins: [FormMixin],
@@ -67,11 +69,11 @@
         },
         ruleResetPassword: {
           email: [
-            {required: true, type: 'email', trigger: 'blur'},
-            {validator: CheckEmailExist, trigger: 'blur'}
+            { required: true, type: 'email', trigger: 'blur' },
+            { validator: CheckEmailExist, trigger: 'blur' }
           ],
           captcha: [
-            {required: true, trigger: 'blur', min: 1, max: 10}
+            { required: true, trigger: 'blur', min: 1, max: 10 }
           ]
         }
       }

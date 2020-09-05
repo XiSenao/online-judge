@@ -1,60 +1,68 @@
 <template>
   <div class="setting-main">
-    <p class="section-title">{{$t('m.Sessions')}}</p>
+    <p class="section-title">{{ $t('m.Sessions') }}</p>
     <div class="flex-container setting-content">
       <template v-for="session in sessions">
-        <Card :padding="20" class="flex-child">
-          <span slot="title" style="line-height: 20px">{{session.ip}}</span>
+        <Card :key="session.ip" class="flex-child" :padding="20">
+          <span slot="title" style="line-height: 20px">{{ session.ip }}</span>
           <div slot="extra">
             <Tag v-if="session.current_session" color="green">Current</Tag>
-            <Button v-else
-                    type="warning"
-                    size="small"
-                    @click="deleteSession(session.session_key)">Revoke
+            <Button
+              v-else
+              type="warning"
+              size="small"
+              @click="deleteSession(session.session_key)"
+            >Revoke
             </Button>
           </div>
           <Form :label-width="100">
             <FormItem label="OS :" class="item">
-              {{session.user_agent | platform}}
+              {{ session.user_agent | platform }}
             </FormItem>
             <FormItem label="Browser :" class="item">
-              {{session.user_agent | browser}}
+              {{ session.user_agent | browser }}
             </FormItem>
             <FormItem label="Last Activity :" class="item">
-              {{session.last_activity | localtime }}
+              {{ session.last_activity | localtime }}
             </FormItem>
           </Form>
         </Card>
       </template>
     </div>
 
-    <p class="section-title">{{$t('m.Two_Factor_Authentication')}}</p>
+    <p class="section-title">{{ $t('m.Two_Factor_Authentication') }}</p>
     <div class="mini-container setting-content">
       <Form>
-        <Alert v-if="TFAOpened"
-               type="success"
-               class="notice"
-               showIcon>You have enabled two-factor authentication.
+        <Alert
+          v-if="TFAOpened"
+          type="success"
+          class="notice"
+          show-icon
+        >You have enabled two-factor authentication.
         </Alert>
         <FormItem v-if="!TFAOpened">
           <div class="oj-relative">
-            <img :src="qrcodeSrc" id="qr-img">
-            <Spin size="large" fix v-if="loadingQRcode"></Spin>
+            <img id="qr-img" :src="qrcodeSrc">
+            <Spin v-if="loadingQRcode" size="large" fix />
           </div>
         </FormItem>
         <template v-if="!loadingQRcode">
           <FormItem style="width: 250px">
             <Input v-model="formTwoFactor.code" placeholder="Enter the code from your application"/>
           </FormItem>
-          <Button type="primary"
-                  :loading="loadingBtn"
-                  @click="updateTFA(false)"
-                  v-if="!TFAOpened">Open TFA
+          <Button
+            v-if="!TFAOpened"
+            type="primary"
+            :loading="loadingBtn"
+            @click="updateTFA(false)"
+          >Open TFA
           </Button>
-          <Button type="error"
-                  :loading="loadingBtn"
-                  @click="closeTFA"
-                  v-else>Close TFA
+          <Button
+            v-else
+            type="error"
+            :loading="loadingBtn"
+            @click="closeTFA"
+          >Close TFA
           </Button>
         </template>
       </Form>
@@ -64,7 +72,7 @@
 
 <script>
   import api from '@oj/api'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
   import browserDetector from 'browser-detect'
 
   const browsers = {}
@@ -80,6 +88,20 @@
   }
 
   export default {
+    filters: {
+      browser (value) {
+        const b = loadBrowser(value)
+        if (b.name && b.version) {
+          return b.name + ' ' + b.version
+        } else {
+          return 'Unknown'
+        }
+      },
+      platform (value) {
+        const b = loadBrowser(value)
+        return b.os ? b.os : 'Unknown'
+      }
+    },
     data () {
       return {
         qrcodeSrc: '',
@@ -89,6 +111,14 @@
           code: ''
         },
         sessions: []
+      }
+    },
+    computed: {
+      ...mapGetters({
+        profile: 'user/profile'
+      }),
+      TFAOpened () {
+        return this.profile && this.profile.two_factor_auth
       }
     },
     mounted () {
@@ -110,9 +140,9 @@
       },
       getSessions () {
         api.getSessions().then(res => {
-          let data = res.data.data
+          const data = res.data.data
           // 将当前session放到第一个
-          let sessions = data.filter(session => {
+          const sessions = data.filter(session => {
             return session.current_session
           })
           data.forEach(session => {
@@ -145,7 +175,7 @@
         })
       },
       updateTFA (close) {
-        let method = close === false ? 'post' : 'put'
+        const method = close === false ? 'post' : 'put'
         this.loadingBtn = true
         api.twoFactorAuth(method, this.formTwoFactor).then(res => {
           this.loadingBtn = false
@@ -163,28 +193,6 @@
             this.getAuthImg()
           }
         })
-      }
-    },
-    computed: {
-      ...mapGetters({
-        profile: 'user/profile'
-      }),
-      TFAOpened () {
-        return this.profile && this.profile.two_factor_auth
-      }
-    },
-    filters: {
-      browser (value) {
-        let b = loadBrowser(value)
-        if (b.name && b.version) {
-          return b.name + ' ' + b.version
-        } else {
-          return 'Unknown'
-        }
-      },
-      platform (value) {
-        let b = loadBrowser(value)
-        return b.os ? b.os : 'Unknown'
       }
     }
   }

@@ -1,4 +1,5 @@
 'use strict'
+const os = require('os');
 const path = require('path')
 const glob = require('glob')
 const webpack = require('webpack')
@@ -6,7 +7,9 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
-// const BundleAnalyZerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const WorkboxPlugin = require('workbox-webpack-plugin')
+const HappyPack = require('happypack')
+const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -84,6 +87,26 @@ module.exports = {
         exclude: /node_modules/,
         include: [resolve('src'), resolve('test')]
       },
+      // {
+      //   test: /\.vue$/,
+      //   loader: 'happypack/loader?id=vue'
+      // },
+      // {
+      //   test: /\.js$/,
+      //   loader: 'happypack/loader?id=js',
+      //   exclude: /node_modules/,
+      //   include: [resolve('src'), resolve('test')]
+      // },
+      {
+        test: /\.worker\.js$/, 
+        use: {
+          loader: 'worker-loader' ,
+          options: { 
+            inline: true, 
+            name: 'workerName.[hash].js' 
+          }
+        }
+      },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
@@ -107,16 +130,6 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
-      },
-      {
-        test: /\.worker\.js$/, 
-        use: {
-          loader: 'worker-loader' ,
-          options: { 
-            inline: true, 
-            name: 'workerName.[hash].js' 
-          }
-        }
       }
     ]
   },
@@ -130,6 +143,21 @@ module.exports = {
       files: ['index.html', 'admin/index.html'],
       append: false
     }),
-    // new BundleAnalyZerPlugin()
+    // new HappyPack({
+    //   id: 'vue',
+    //   loaders: [{
+    //     loader: 'vue-loader',
+    //     cacheDirectory: true,
+    //     options: vueLoaderConfig 
+    //   }],
+    //   threadPool: happyThreadPool,
+    // }),
+    // new HappyPack({
+    //   id: 'js',
+    //   loaders: ['babel-loader?cacheDirectory=true'],
+    //   threadPool: happyThreadPool,
+    //   verbose: true
+    // }),
+    new WorkboxPlugin.GenerateSW()
   ]
 }

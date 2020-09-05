@@ -1,47 +1,49 @@
 <template>
   <Panel shadow>
-    <div slot="title">{{contest.title}}</div>
+    <div slot="title">{{ contest.title }}</div>
     <div slot="extra">
-      <screen-full :height="18" :width="18" class="screen-full"></screen-full>
+      <screen-full :height="18" :width="18" class="screen-full" />
       <Poptip trigger="hover" placement="left-start">
-        <Icon type="android-settings" size="20"></Icon>
-        <div slot="content" id="switches">
+        <Icon type="android-settings" size="20" />
+        <div id="switches" slot="content">
           <p>
-            <span>{{$t('m.Menu')}}</span>
-            <i-switch v-model="showMenu"></i-switch>
-            <span>{{$t('m.Chart')}}</span>
-            <i-switch v-model="showChart"></i-switch>
+            <span>{{ $t('m.Menu') }}</span>
+            <i-switch v-model="showMenu" />
+            <span>{{ $t('m.Chart') }}</span>
+            <i-switch v-model="showChart" />
           </p>
           <p>
-            <span>{{$t('m.Auto_Refresh')}}(10s)</span>
-            <i-switch :disabled="refreshDisabled" @on-change="handleAutoRefresh"></i-switch>
+            <span>{{ $t('m.Auto_Refresh') }}(10s)</span>
+            <i-switch :disabled="refreshDisabled" @on-change="handleAutoRefresh" />
           </p>
           <template v-if="isContestAdmin">
             <p>
-              <span>{{$t('m.RealName')}}</span>
-              <i-switch v-model="showRealName"></i-switch>
+              <span>{{ $t('m.RealName') }}</span>
+              <i-switch v-model="showRealName" />
             </p>
             <p>
-              <span>{{$t('m.Force_Update')}}</span>
-              <i-switch :disabled="refreshDisabled" v-model="forceUpdate"></i-switch>
+              <span>{{ $t('m.Force_Update') }}</span>
+              <i-switch v-model="forceUpdate" :disabled="refreshDisabled" />
             </p>
           </template>
           <template>
-            <Button type="primary" size="small" @click="downloadRankCSV" disabled>{{$t('m.download_csv')}}</Button>
+            <Button type="primary" size="small" disabled @click="downloadRankCSV">{{ $t('m.download_csv') }}</Button>
           </template>
         </div>
       </Poptip>
     </div>
     <div v-show="showChart" class="echarts">
-      <ECharts :options="options" ref="chart" auto-resize></ECharts>
+      <ECharts ref="chart" :options="options" auto-resize />
     </div>
-    <Table ref="tableRank" :columns="columns" :data="dataRank" disabled-hover width="1600" height="600"></Table>
-    <Pagination :total="total"
+    <Table ref="tableRank" :columns="columns" :data="dataRank" disabled-hover width="1600" height="600" />
+    <Pagination
+      :total="total"
       :page-size.sync="limit"
       :current.sync="page"
+      show-sizer
       @on-change="getContestRankData"
       @on-page-size-change="getContestRankData(1)"
-      show-sizer></Pagination>
+    />
   </Panel>
 </template>
 <script>
@@ -54,7 +56,7 @@
   import utils from '@/utils/utils'
 
   export default {
-    name: 'acm-contest-rank',
+    name: 'AcmContestRank',
     components: {
       Pagination
     },
@@ -89,7 +91,7 @@
                     this.$router.push(
                       {
                         name: 'user-home',
-                        query: {id: params.row.userId}
+                        query: { id: params.row.userId }
                       })
                   }
                 }
@@ -109,12 +111,12 @@
                       this.$router.push({
                         name: 'contest-submission-list',
                         // todo: 查询比赛用户个人提交记录
-                        query: {username: params.row.username}
+                        query: { username: params.row.username }
                       })
                     }
                   }
                 }, params.row.submitCount)
-              ])  
+              ])
             }
           },
           {
@@ -144,7 +146,7 @@
           toolbox: {
             show: true,
             feature: {
-              saveAsImage: {show: true, title: this.$i18n.t('m.save_as_image')}
+              saveAsImage: { show: true, title: this.$i18n.t('m.save_as_image') }
             },
             right: '5%'
           },
@@ -213,19 +215,19 @@
         getContestProblems: 'contest/getContestProblems'
       }),
       addChartCategory (contestProblems) {
-        let category = []
+        const category = []
         for (let i = 0; i <= contestProblems.length; ++i) {
           category.push(i)
         }
         this.options.yAxis[0].data = category
       },
       applyToChart (rankData) {
-        let [users, seriesData] = [[], []]
+        const [users, seriesData] = [[], []]
         rankData.forEach(rank => {
           users.push(rank.username)
-          let info = rank.submitMap
+          const info = rank.submitMap
           // 提取已AC题目的时间
-          let timeData = []
+          const timeData = []
           Object.keys(info || []).forEach(problemID => {
             if (info[problemID].accept) {
               timeData.push(info[problemID].acceptTime)
@@ -234,19 +236,19 @@
           timeData.sort((a, b) => {
             return a - b
           })
-          let data = []
+          const data = []
           data.push([this.contest.startTime, 0])
           // index here can be regarded as stacked accepted number count.
           let index = 0
-          for (let value of timeData) {
+          for (const value of timeData) {
             // 将后端不标准时间(0:6:52, date对象无法识别)转化成秒s
-            let currentTime = value.split(':'),
-                hour = currentTime[0],
-                min = currentTime[1],
-                sec = currentTime[2],
-                s = Number(hour * 3600) + Number(min * 60) + Number(sec)
+            const currentTime = value.split(':')
+            const hour = currentTime[0]
+            const min = currentTime[1]
+            const sec = currentTime[2]
+            const s = Number(hour * 3600) + Number(min * 60) + Number(sec)
 
-            let realTime = moment(this.contest.startTime).add(s, 'seconds').format()
+            const realTime = moment(this.contest.startTime).add(s, 'seconds').format()
             data.push([realTime, index++ + 1])
           }
           seriesData.push({
@@ -261,16 +263,16 @@
       applyToTable (data) {
         // deepcopy
         // let dataRank = JSON.parse(JSON.stringify(data))
-        let dataRank = data
+        const dataRank = data
         // 从submission_info中取出相应的problem_id 放入到父object中,这么做主要是为了适应iview table的data格式
         // 见https://www.iviewui.com/components/table
         dataRank.forEach((rank, i) => {
-          let info = rank.submitMap
-          let cellClass = {}
+          const info = rank.submitMap
+          const cellClass = {}
           Object.keys(info).forEach(problemID => {
             dataRank[i][problemID] = info[problemID]
             dataRank[i][problemID].acceptTime = time.secondFormat(dataRank[i][problemID].acceptTime)
-            let status = info[problemID]
+            const status = info[problemID]
             if (status.firstBlood) {
               cellClass[problemID] = 'first-ac'
             } else if (status.accept) {
@@ -311,7 +313,7 @@
             },
             render: (h, params) => {
               if (params.row[problem.id]) {
-                let status = params.row[problem.id]
+                const status = params.row[problem.id]
                 let acTime, errorNumber
                 if (status.accept) {
                   acTime = h('span', status.acceptTime)
@@ -326,7 +328,7 @@
         })
       },
       parseTotalTime (totalTime) {
-        let m = moment.duration(totalTime, 's')
+        var m = moment.duration(totalTime, 's')
         return [Math.floor(m.asHours()), m.minutes(), m.seconds()].join(':')
       },
       downloadRankCSV () {

@@ -2,7 +2,7 @@
   <el-button plain type="primary">{{$t('m.Cancel')}}</el-button>
 </template>
 <script>
-  export default{
+  export default {
     name: 'Cancel'
   }
 </script>

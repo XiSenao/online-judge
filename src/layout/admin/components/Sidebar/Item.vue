@@ -33,7 +33,7 @@ export default {
       iTitle = iTitle.replace(/\s+/g, '_')
       vnodes.push(h('span', {
         slot: 'title'
-      }, context.parent.$i18n.t(`m.${ iTitle }`)))
+      }, context.parent.$i18n.t(`m.${iTitle}`)))
     }
     return vnodes
   }

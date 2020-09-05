@@ -1,10 +1,10 @@
 <template>
   <div class="s-canvas">
-    <canvas id="s-canvas" :width="contentWidth" :height="contentHeight"></canvas>
+    <canvas id="s-canvas" :width="contentWidth" :height="contentHeight" />
   </div>
 </template>
 <script>
-  export default{
+  export default {
     name: 'SIdentify',
     props: {
       identifyCode: {
@@ -60,6 +60,14 @@
         default: 38
       }
     },
+    watch: {
+      identifyCode () {
+        this.drawPic()
+      }
+    },
+    mounted () {
+      this.drawPic()
+    },
     methods: {
       // 生成一个随机数
       randomNum (min, max) {
@@ -67,14 +75,14 @@
       },
       // 生成一个随机的颜色
       randomColor (min, max) {
-        let r = this.randomNum(min, max)
-        let g = this.randomNum(min, max)
-        let b = this.randomNum(min, max)
+        const r = this.randomNum(min, max)
+        const g = this.randomNum(min, max)
+        const b = this.randomNum(min, max)
         return 'rgb(' + r + ',' + g + ',' + b + ')'
       },
       drawPic () {
-        let canvas = document.getElementById('s-canvas')
-        let ctx = canvas.getContext('2d')
+        const canvas = document.getElementById('s-canvas')
+        const ctx = canvas.getContext('2d')
         ctx.textBaseline = 'bottom'
         // 绘制背景
         ctx.fillStyle = this.randomColor(this.backgroundColorMin, this.backgroundColorMax)
@@ -89,8 +97,8 @@
       drawText (ctx, txt, i) {
         ctx.fillStyle = this.randomColor(this.colorMin, this.colorMax)
         ctx.font = this.randomNum(this.fontSizeMin, this.fontSizeMax) + 'px SimHei'
-        let x = (i + 1) * (this.contentWidth / (this.identifyCode.length + 1))
-        let y = this.randomNum(this.fontSizeMax, this.contentHeight - 5)
+        const x = (i + 1) * (this.contentWidth / (this.identifyCode.length + 1))
+        const y = this.randomNum(this.fontSizeMax, this.contentHeight - 5)
         var deg = this.randomNum(-45, 45)
         // 修改坐标原点和旋转角度
         ctx.translate(x, y)
@@ -119,14 +127,6 @@
           ctx.fill()
         }
       }
-    },
-    watch: {
-      identifyCode () {
-        this.drawPic()
-      }
-    },
-    mounted () {
-      this.drawPic()
     }
   }
 </script>

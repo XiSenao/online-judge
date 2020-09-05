@@ -54,9 +54,9 @@ const mutations = {
   SET_ROUTES: (state, routes) => {
     state.addRoutes = routes
     state.routes = constantRoutes.concat(routes)
-    let routesName = new Set()
+    const routesName = new Set()
     utils.serializationDFS(state.routes, routesName, 'name')
-    state.availableRoutesName = [ ...routesName ]
+    state.availableRoutesName = [...routesName]
   },
   SET_SUM_ROUTES_PATH: (state, payload) => {
     state.sumRoutesPath = payload
@@ -73,7 +73,7 @@ const actions = {
         accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
       }
       // 首次重加载所有路由名
-      let routesPath = []
+      const routesPath = []
       utils.serializationAdminDFS(constantRoutes.concat(asyncRoutes), [], routesPath)
       commit('SET_SUM_ROUTES_PATH', routesPath)
       commit('SET_ROUTES', accessedRoutes)

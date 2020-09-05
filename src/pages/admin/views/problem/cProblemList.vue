@@ -118,7 +118,7 @@
   import AddProblemComponent from './AddPublicProblem.vue'
 
   export default {
-    name: 'ProblemList',
+    name: 'wProblemList',
     components: {
       AddProblemComponent
     },

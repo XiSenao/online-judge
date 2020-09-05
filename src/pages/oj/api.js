@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import store from '@/store'
 import axios from 'axios'
-import { getToken as getUserToken } from '@/utils/uauth' 
-import { getToken as getAdminToken} from '@/utils/auth'
+import { getToken as getUserToken } from '@/utils/uauth'
+import { getToken as getAdminToken } from '@/utils/auth'
 Vue.prototype.$http = axios
 axios.defaults.baseURL = '/api'
 // axios.defaults.xsrfHeaderName = 'X-CSRFToken'
@@ -23,12 +23,12 @@ export default {
     })
   },
   getAnnouncementList (offset, limit, check) {
-    let data = {
+    const data = {
       limit,
       offset,
       paramData: null
     }
-    let funcURL = check ? 'user/messages' : 'anc/ancInfoList'
+    const funcURL = check ? 'user/messages' : 'anc/ancInfoList'
     return ajax(funcURL, 'post', {
       data
     })
@@ -182,7 +182,7 @@ export default {
     })
   },
   getProblem (ID) {
-    let {problemID} = ID
+    const { problemID } = ID
     return ajax(`problem/problemInfo/${problemID}`, 'get')
   },
   getContestList (data) {
@@ -211,7 +211,7 @@ export default {
   },
   checkContestPassword (contestID, password) {
     return ajax(`contest/contestInfo/${contestID}/signUp`, 'post', {
-      params: { 
+      params: {
         password
       }
     })
@@ -226,7 +226,7 @@ export default {
     return ajax(`contest/contestInfo/${contestId}/problemList`, 'get')
   },
   submitContestCode (data) {
-    let contestId = data.contestId
+    const contestId = data.contestId
     delete data.contestId
     return ajax(`contest/contestInfo/${contestId}/submit`, 'post', {
       data
@@ -243,7 +243,7 @@ export default {
     })
   },
   getContestSubmissionList (data) {
-    let contestId = data.contestId
+    const contestId = data.contestId
     delete data.contestId
     return ajax(`contest/contestInfo/${contestId}/statusList`, 'post', {
       data
@@ -277,18 +277,18 @@ export default {
     })
   },
   getUserRank (offset, limit, type, paramData = null) {
-    let data = {
+    const data = {
       offset,
       limit,
       paramData
     }
-    let funName = type === 'ACM' ? 'ac' : 'rating'
+    const funName = type === 'ACM' ? 'ac' : 'rating'
     return ajax(`rank/${funName}`, 'post', {
       data
     })
   },
   getContestRank (data) {
-    let { contestId } = data
+    const { contestId } = data
     delete data.contestId
     return ajax(`contest/contestInfo/${contestId}/rank`, 'post', {
       data
@@ -317,17 +317,18 @@ export default {
  */
 function ajax (url, method, options) {
   if (options !== undefined) {
-    var {params = {}, data = {}, headers = {}, responseType = {}} = options
+    var { params = {}, data = {}, headers = {}, responseType = {}} = options
   } else {
     params = data = headers = responseType = {}
   }
   // todo: 由于角色是由前端生成并控制的, 因此若想解决耦合, 必须使后端实现权限控制
-  if (options && options.checkAdmin) {
-    if (!!getAdminToken()) {
+  const checkIdentity = options && options.checkAdmin
+  if (checkIdentity) {
+    if (getAdminToken()) {
       headers.token = getAdminToken()
     }
   } else {
-    if (!!getUserToken()) {
+    if (getUserToken()) {
       headers.token = getUserToken()
     }
   }
@@ -342,22 +343,21 @@ function ajax (url, method, options) {
     }).then(res => {
       // API正常返回(status=20x), 是否错误通过有无error判断
       if (res.data.status > 200) {
-        if (res.request.responseURL.indexOf('user/userInfo') !== -1) {
-        } else if (res.data.status === 1001) {
+        if (res.data.status === 1001) {
           res.data.message ? Vue.prototype.$error(res.data.message) : Vue.prototype.$error('Execution error')
         } else if (res.data.status === 2001) {
           res.data.message ? Vue.prototype.$error(res.data.message) : Vue.prototype.$error('Question does not exist')
-        } else if (res.data.status === 2003 || res.status === 2101) {
+        } else if ((res.data.status === 2003 || res.status === 2101) && !checkIdentity) {
           res.data.message ? Vue.prototype.$error(res.data.message) : Vue.prototype.$error('You do not have permission to access')
         } else if (res.data.status === 2004) {
           res.data.message ? Vue.prototype.$error(res.data.message) : Vue.prototype.$error('please login again')
           store.dispatch('user/clearStatus')
-          store.dispatch('changeModalStatus', {'mode': 'login', 'visible': true})
+          store.dispatch('changeModalStatus', { 'mode': 'login', 'visible': true })
         } else if (res.data.status === 2200) {
           res.data.message ? Vue.prototype.$error(res.data.message) : Vue.prototype.$error('The problem is abnormal')
         } else if (res.data.status === 2202) {
           res.data.message ? Vue.prototype.$error(res.data.message) : Vue.prototype.$error('Question status is wrong')
-        } else if (res.data.status !== 3002) { // 用户端登录新增超时机制, 因此将显示信息释放
+        } else if (res.data.status !== 3002 && !checkIdentity) { // 用户端登录新增超时机制, 因此将显示信息释放
           res.data.message ? Vue.prototype.$error(res.data.message) : Vue.prototype.$error('Error')
         }
         reject(res)

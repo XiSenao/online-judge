@@ -6,29 +6,31 @@
         <router-view></router-view>
       </transition>
       <!--children end-->
-      <div class="flex-container" v-if="route_name === 'contest-details'">
+      <div v-if="route_name === 'contest-details'" class="flex-container">
         <template>
           <div id="contest-desc">
             <Panel :padding="20" shadow>
               <div slot="title">
-                {{contest.title}}
+                {{ contest.title }}
               </div>
               <div slot="extra">
-                <Tag type="dot" :color="countdownColor">  
-                  <span id="countdown">{{countdown}}</span>
+                <Tag type="dot" :color="countdownColor">
+                  <span id="countdown">{{ countdown }}</span>
                 </Tag>
               </div>
-              <div v-html="contest.description" class="markdown-body"></div>
+              <div class="markdown-body" v-html="contest.description"></div>
               <div class="contest-password">
-                <Input v-model="contestPassword" type="password"
-                       v-if="passwordFormVisible && !currentStatus"
+                <Input v-if="passwordFormVisible && !currentStatus"
+                       v-model="contestPassword"
+                       class="contest-password-input"
+                       type="password"
                        :disabled="currentStatus"
-                       placeholder="contest password" class="contest-password-input"
-                       @on-enter="checkPassword"/>
-                <Button type="info" @click="checkPassword" :disabled="contest_table[0].permission || currentStatus">{{ enrollmentStatus }}</Button>
+                       placeholder="contest password"
+                       @on-enter="checkPassword" />
+                <Button type="info" :disabled="contest_table[0].permission || currentStatus" @click="checkPassword">{{ enrollmentStatus }}</Button>
               </div>
             </Panel>
-            <Table :columns="columns" :data="contest_table" disabled-hover style="margin-bottom: 40px;"></Table>
+            <Table :columns="columns" :data="contest_table" disabled-hover style="margin-bottom: 40px;" />
           </div>
         </template>
       </div>
@@ -37,34 +39,34 @@
     <div v-show="showMenu" id="contest-menu">
       <VerticalMenu @on-click="handleRoute">
         <VerticalMenu-item :route="{name: 'contest-details', params: {contestID: contestID}}">
-          <Icon type="home"></Icon>
-          {{$t('m.Overview')}}
+          <Icon type="home" />
+          {{ $t('m.Overview') }}
         </VerticalMenu-item>
 
         <VerticalMenu-item :disabled="contestMenuDisabled"
                            :route="{name: 'contest-announcement-list', params: {contestID: contestID}}">
-          <Icon type="chatbubble-working"></Icon>
-          {{$t('m.Announcements')}}
+          <Icon type="chatbubble-working" />
+          {{ $t('m.Announcements') }}
         </VerticalMenu-item>
 
         <VerticalMenu-item :disabled="contestMenuDisabled"
                            :route="{name: 'contest-problem-list', params: {contestID: contestID}}">
-          <Icon type="ios-photos"></Icon>
-          {{$t('m.Problems')}}
+          <Icon type="ios-photos" />
+          {{ $t('m.Problems') }}
         </VerticalMenu-item>
 
         <VerticalMenu-item v-if="OIContestRealTimePermission"
                            :disabled="contestMenuDisabled"
                            :route="{name: 'contest-submission-list'}">
-          <Icon type="navicon-round"></Icon>
-          {{$t('m.Submissions')}}
+          <Icon type="navicon-round" />
+          {{ $t('m.Submissions') }}
         </VerticalMenu-item>
 
         <VerticalMenu-item v-if="OIContestRealTimePermission"
                            :disabled="contestMenuDisabled"
                            :route="{name: 'contest-rank', params: {contestID: contestID}}">
-          <Icon type="stats-bars"></Icon>
-          {{$t('m.Rankings')}}
+          <Icon type="stats-bars" />
+          {{ $t('m.Rankings') }}
         </VerticalMenu-item>
       </VerticalMenu>
     </div>
@@ -77,7 +79,6 @@
   import { mapState, mapGetters, mapActions } from 'vuex'
   import { types } from '@/store'
   import { CONTEST_STATUS_REVERSE, CONTEST_STATUS } from '@/utils/constants'
-  import time from '@/utils/time'
   import { NormalMixin } from '@oj/components/mixins'
 
   export default {
@@ -128,71 +129,6 @@
         currentTime: ''
       }
     },
-    mounted () {
-      this.contestID = this.$route.params.contestID
-      this.route_name = this.$route.name
-      this.timer ? clearInterval(this.timer) : ''
-      this.$store.dispatch('contest/getContest')
-        .then(res => {
-          this.changeDomTitle({title: res.data.data.title})
-          let data = res.data.data
-          let endTime = moment(data.endTime)
-          let now = moment().locale('zh-cn').format('YYYY-MM-DD HH:mm:ss')
-          this.currentTime = res.headers.date
-          if (endTime.isAfter(moment(now))) {
-            this.timer = setInterval(() => {
-              this.$store.commit(`contest/${types.NOW_ADD_1S}`)
-            }, 1000)
-          }
-        })
-        .catch(_ => {
-          this.$router.go(-1)
-        })
-    },
-    methods: {
-      ...mapActions(['changeDomTitle']),
-      handleRoute (route) {
-        this.$router.push(route)
-      },
-      checkPassword () {
-        if (!this.passwordFormVisible) {
-          let requestQueue = [], isPublic = this.contest_table[0].signUpRule === '公开'
-          if (!isPublic) {
-            requestQueue.push(api.getOwnCertType())
-          }
-          Promise.all(requestQueue).then(res => {
-            if (!isPublic) {
-              if (!res[0].data.data) {
-                this.$Message.info("您还未认证, 请前往认证!");
-                this.$router.push({name: 'certification-setting'})
-                return
-              } else if (!res[0].data.data.status) {
-                this.$Message.info("您的认证还未审批通过");
-                return
-              }
-            }
-            api.checkContestPassword(this.contestID, null).then(res => {
-              this.$Message.info("报名成功!");
-              this.currentStatus = true
-            })
-          })
-          return
-        }
-        if (this.contestPassword === '') {
-          this.$error('Password can\'t be empty')
-          return
-        }
-        this.btnLoading = true
-        api.checkContestPassword(this.contestID, this.contestPassword).then((res) => {
-          this.$success('Succeeded')
-          this.currentStatus = true
-          this.$store.commit(types.CONTEST_ACCESS, {access: true})
-          this.btnLoading = false
-        }, (_) => {
-          this.btnLoading = false
-        })
-      }
-    },
     computed: {
       ...mapState({
         showMenu: state => state.contest.itemVisible.menu,
@@ -211,15 +147,15 @@
         passwordFormVisible: 'contest/passwordFormVisible'
       }),
       enrollmentStatus () {
-        let nowContest = this.contest_table[0]
-        let starTime = new Date(nowContest.startTime).getTime()
-        let endTime = new Date(nowContest.endTime).getTime()
-        let now = new Date(this.currentTime).getTime()
+        const nowContest = this.contest_table[0]
+        const starTime = new Date(nowContest.startTime).getTime()
+        const endTime = new Date(nowContest.endTime).getTime()
+        const now = new Date(this.currentTime).getTime()
         if (now > starTime && now < endTime) {
-          this.currentStatus = true
+          this.setStatus(true)
           return this.$t('m.Underway')
         } else if (now > endTime) {
-          this.currentStatus = true
+          this.setStatus(true)
           return this.$t('m.Ended')
         }
         if (nowContest.permission) {
@@ -234,20 +170,21 @@
           } else if (nowContest.signUpRule === '认证') {
             if (this.currentStatus) {
               return this.$t('m.Sign_Up_Pedding')
-            } 
+            }
             return this.$t('m.Contest_Certification')
           } else {
             if (this.currentStatus) {
               return this.$t('m.Sign_Up_Successfully')
-            } 
+            }
             return this.$t('m.Sign_Up')
           }
-        } 
+        }
       },
       countdownColor () {
         if (this.contestStatus) {
           return CONTEST_STATUS_REVERSE[this.contestStatus].color
         }
+        return null
       },
       showAdminHelper () {
         return this.isContestAdmin && this.contestRuleType === 'ACM'
@@ -259,9 +196,78 @@
         this.contestID = newVal.params.contestID
       }
     },
+    mounted () {
+      this.contestID = this.$route.params.contestID
+      this.route_name = this.$route.name
+      this.timer ? clearInterval(this.timer) : ''
+      this.$store.dispatch('contest/getContest')
+        .then(res => {
+          this.changeDomTitle({ title: res.data.data.title })
+          const data = res.data.data
+          const endTime = moment(data.endTime)
+          const now = moment().locale('zh-cn').format('YYYY-MM-DD HH:mm:ss')
+          this.currentTime = res.headers.date
+          if (endTime.isAfter(moment(now))) {
+            this.timer = setInterval(() => {
+              this.$store.commit(`contest/${types.NOW_ADD_1S}`)
+            }, 1000)
+          }
+        })
+        .catch(_ => {
+          this.$router.go(-1)
+        })
+    },
     beforeDestroy () {
       clearInterval(this.timer)
       this.$store.commit(`contest/${types.CLEAR_CONTEST}`)
+    },
+    methods: {
+      ...mapActions(['changeDomTitle']),
+      handleRoute (route) {
+        this.$router.push(route)
+      },
+      setStatus (status) {
+        this.currentStatus = status
+      },
+      checkPassword () {
+        if (!this.passwordFormVisible) {
+          const requestQueue = []
+          const isPublic = this.contest_table[0].signUpRule === '公开'
+          if (!isPublic) {
+            requestQueue.push(api.getOwnCertType())
+          }
+          Promise.all(requestQueue).then(res => {
+            if (!isPublic) {
+              if (!res[0].data.data) {
+                this.$Message.info('您还未认证, 请前往认证!')
+                this.$router.push({ name: 'certification-setting' })
+                return
+              } else if (!res[0].data.data.status) {
+                this.$Message.info('您的认证还未审批通过')
+                return
+              }
+            }
+            api.checkContestPassword(this.contestID, null).then(res => {
+              this.$Message.info('报名成功!')
+              this.currentStatus = true
+            })
+          })
+          return
+        }
+        if (this.contestPassword === '') {
+          this.$error('Password can\'t be empty')
+          return
+        }
+        this.btnLoading = true
+        api.checkContestPassword(this.contestID, this.contestPassword).then((res) => {
+          this.$success('Succeeded')
+          this.currentStatus = true
+          this.$store.commit(types.CONTEST_ACCESS, { access: true })
+          this.btnLoading = false
+        }, (_) => {
+          this.btnLoading = false
+        })
+      }
     }
   }
 </script>

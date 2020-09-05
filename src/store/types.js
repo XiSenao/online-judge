@@ -13,7 +13,7 @@ export default keyMirror({
   'CHANGE_PROFILE': null,
   'CHANGE_MODAL_STATUS': null,
   'UPDATE_WEBSITE_CONF': null,
-  
+
   'types.SET_IMGBUFFER': null,
   'SET_ROLES': null,
 

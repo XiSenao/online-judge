@@ -1,34 +1,33 @@
 <template>
   <div>
     <panel class="container">
-      <div slot="title">{{$t('m.Compiler')}} & {{$t('m.Judger')}}</div>
+      <div slot="title">{{ $t('m.Compiler') }} & {{ $t('m.Judger') }}</div>
       <div class="content markdown-body">
         <ul>
-          <li v-for="lang in languages">{{lang.name}} ( {{lang.description}} )
-            <pre>{{lang.config.compile_command}}</pre>
+          <li v-for="lang in languages" :key="lang.name">{{ lang.name }} ( {{ lang.description }} )
+            <pre>{{ lang.config.compile_command }}</pre>
           </li>
         </ul>
       </div>
     </panel>
 
     <panel :padding="15" class="container">
-      <div slot="title">{{$t('m.Result_Explanation')}}</div>
+      <div slot="title">{{ $t('m.Result_Explanation') }}</div>
       <div class="content">
         <ul>
-          <li><b>{{$t('m.Pending')}} & {{$t('m.Judging')}}</b> : {{$t('m.Pending_Judging_Description')}}</li>
-          <li><b>{{$t('m.Compile_Error')}}</b> :	{{$t('m.Compile_Error_Description')}}
-      </li>
-          <li><b>{{$t('m.Accepted')}}</b> :	{{$t('m.Accepted_Description')}}</li>
-          <li><b>{{$t('m.Wrong_Answer')}}</b> :	{{$t('m.Wrong_Answer_Description')}}</li>
+          <li><b>{{ $t('m.Pending') }} & {{ $t('m.Judging') }}</b> : {{ $t('m.Pending_Judging_Description') }}</li>
+          <li><b>{{ $t('m.Compile_Error') }}</b> :	{{ $t('m.Compile_Error_Description') }}</li>
+          <li><b>{{ $t('m.Accepted') }}</b> :	{{ $t('m.Accepted_Description') }}</li>
+          <li><b>{{ $t('m.Wrong_Answer') }}</b> :	{{ $t('m.Wrong_Answer_Description') }}</li>
           <li>
-            <b>{{$t('m.Runtime_Error')}}</b>
-            :	{{$t('m.Runtime_Error_Description')}}
+            <b>{{ $t('m.Runtime_Error') }}</b>
+            :	{{ $t('m.Runtime_Error_Description') }}
           </li>
-          <li><b>{{$t('m.Time_Limit_Exceeded')}}</b>
-            :	{{$t('m.Time_Limit_Exceeded_Description')}}
+          <li><b>{{ $t('m.Time_Limit_Exceeded') }}</b>
+            :	{{ $t('m.Time_Limit_Exceeded_Description') }}
           </li>
-          <li><b>{{$t('m.Memory_Limit_Exceeded')}}</b> :	{{$t('m.Memory_Limit_Exceeded_Description')}}</li>
-          <li><b>{{$t('m.System_Error')}}</b> :	{{$t('m.System_Error_Description')}}
+          <li><b>{{ $t('m.Memory_Limit_Exceeded') }}</b> :	{{ $t('m.Memory_Limit_Exceeded_Description') }}</li>
+          <li><b>{{ $t('m.System_Error') }}</b> :	{{ $t('m.System_Error_Description') }}
           </li>
         </ul>
       </div>
@@ -38,7 +37,6 @@
 </template>
 
 <script>
-  import utils from '@/utils/utils'
   import { LANGUAGES } from '@/utils/constants'
 
   export default {
@@ -48,7 +46,7 @@
       }
     },
     beforeRouteEnter (to, from, next) {
-      let { languages } = LANGUAGES
+      const { languages } = LANGUAGES
       next(vm => {
         vm.languages = languages
       })
@@ -58,7 +56,7 @@
 
 <style scoped lang="less">
   /deep/.ivu-card {
-    background: var(--table-card-top); 
+    background: var(--table-card-top);
     color: var(--font-color-white);
   }
   /deep/.ivu-table th {

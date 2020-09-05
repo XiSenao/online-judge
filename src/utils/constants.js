@@ -1,5 +1,5 @@
-import variables from "@/styles/themes/variables"
-import variablesWhite from "@/styles/themes/variables-white"
+import variables from '@/styles/themes/variables'
+import variablesWhite from '@/styles/themes/variables-white'
 
 export const JUDGE_STATUS = {
   'CompileError': {
@@ -95,71 +95,71 @@ export const JUDGE_STATUS = {
 export const LANGUAGES = {
   languages: [
     {
-      name: "C",
+      name: 'C',
       config: {
-        template: "//PREPEND BEGIN\n#include <stdio.h>\n//PREPEND END\n\n//TEMPLATE BEGIN\nint add(int a, int b) {\n  // Please fill this blank\n  return ___________;\n}\n//TEMPLATE END\n\n//APPEND BEGIN\nint main() {\n  printf(\"%d\", add(1, 2));\n  return 0;\n}\n//APPEND END",
+        template: '//PREPEND BEGIN\n#include <stdio.h>\n//PREPEND END\n\n//TEMPLATE BEGIN\nint add(int a, int b) {\n  // Please fill this blank\n  return ___________;\n}\n//TEMPLATE END\n\n//APPEND BEGIN\nint main() {\n  printf("%d", add(1, 2));\n  return 0;\n}\n//APPEND END',
         compile_command: `/usr/bin/gcc -DONLINE_JUDGE -O2 -w -fmax-errors=3 -std=c11 {src_path} -lm -o {exe_path}`
       },
-      description: "GCC 5.4",
-      content_type: "text/x-csrc"
+      description: 'GCC 5.4',
+      content_type: 'text/x-csrc'
     },
     {
-      name: "C++",
+      name: 'C++',
       config: {
-        template: "//PREPEND BEGIN\n#include <iostream>\n//PREPEND END\n\n//TEMPLATE BEGIN\nint add(int a, int b) {\n  // Please fill this blank\n  return ___________;\n}\n//TEMPLATE END\n\n//APPEND BEGIN\nint main() {\n  std::cout << add(1, 2);\n  return 0;\n}\n//APPEND END",
+        template: '//PREPEND BEGIN\n#include <iostream>\n//PREPEND END\n\n//TEMPLATE BEGIN\nint add(int a, int b) {\n  // Please fill this blank\n  return ___________;\n}\n//TEMPLATE END\n\n//APPEND BEGIN\nint main() {\n  std::cout << add(1, 2);\n  return 0;\n}\n//APPEND END',
         compile_command: `/usr/bin/g++ -DONLINE_JUDGE -O2 -w -fmax-errors=3 -std=c++14 {src_path} -lm -o {exe_path}`
       },
-      description: "G++ 5.4",
-      content_type: "text/x-c++src"
+      description: 'G++ 5.4',
+      content_type: 'text/x-c++src'
     },
     {
-      name: "Java",
+      name: 'Java',
       config: {
-        template: "//PREPEND BEGIN\n//PREPEND END\n\n//TEMPLATE BEGIN\n//TEMPLATE END\n\n//APPEND BEGIN\n//APPEND END",
+        template: '//PREPEND BEGIN\n//PREPEND END\n\n//TEMPLATE BEGIN\n//TEMPLATE END\n\n//APPEND BEGIN\n//APPEND END',
         compile_command: `/usr/bin/javac {src_path} -d {exe_dir} -encoding UTF8`
       },
-      description: "OpenJDK 1.8",
-      content_type: "text/x-java"
+      description: 'OpenJDK 1.8',
+      content_type: 'text/x-java'
     },
     {
-      name: "Python2",
+      name: 'Python2',
       config: {
-        template: "//PREPEND BEGIN\n//PREPEND END\n\n//TEMPLATE BEGIN\n//TEMPLATE END\n\n//APPEND BEGIN\n//APPEND END",
+        template: '//PREPEND BEGIN\n//PREPEND END\n\n//TEMPLATE BEGIN\n//TEMPLATE END\n\n//APPEND BEGIN\n//APPEND END',
         compile_command: `/usr/bin/python -m py_compile {src_path}`
       },
-      description: "Python 2.7",
-      content_type: "text/x-python"
+      description: 'Python 2.7',
+      content_type: 'text/x-python'
     },
     {
-      name: "Python3",
+      name: 'Python3',
       config: {
-        template: "//PREPEND BEGIN\n//PREPEND END\n\n//TEMPLATE BEGIN\n//TEMPLATE END\n\n//APPEND BEGIN\n//APPEND END",
+        template: '//PREPEND BEGIN\n//PREPEND END\n\n//TEMPLATE BEGIN\n//TEMPLATE END\n\n//APPEND BEGIN\n//APPEND END',
         compile_command: `/usr/bin/python3 -m py_compile {src_path}`
       },
-      description: "Python 3.5",
-      content_type: "text/x-python"
+      description: 'Python 3.5',
+      content_type: 'text/x-python'
     }
   ],
   spj_languages: [
     {
-      name: "C",
+      name: 'C',
       config: {
-        template: "//PREPEND BEGIN\n#include <stdio.h>\n//PREPEND END\n\n//TEMPLATE BEGIN\nint add(int a, int b) {\n  // Please fill this blank\n  return ___________;\n}\n//TEMPLATE END\n\n//APPEND BEGIN\nint main() {\n  printf(\"%d\", add(1, 2));\n  return 0;\n}\n//APPEND END"
+        template: '//PREPEND BEGIN\n#include <stdio.h>\n//PREPEND END\n\n//TEMPLATE BEGIN\nint add(int a, int b) {\n  // Please fill this blank\n  return ___________;\n}\n//TEMPLATE END\n\n//APPEND BEGIN\nint main() {\n  printf("%d", add(1, 2));\n  return 0;\n}\n//APPEND END'
       },
-      description: "GCC 5.4",
-      content_type: "text/x-csrc"
+      description: 'GCC 5.4',
+      content_type: 'text/x-csrc'
     },
     {
-      name: "C++",
+      name: 'C++',
       config: {
-        template: "//PREPEND BEGIN\n#include <iostream>\n//PREPEND END\n\n//TEMPLATE BEGIN\nint add(int a, int b) {\n  // Please fill this blank\n  return ___________;\n}\n//TEMPLATE END\n\n//APPEND BEGIN\nint main() {\n  std::cout << add(1, 2);\n  return 0;\n}\n//APPEND END"
+        template: '//PREPEND BEGIN\n#include <iostream>\n//PREPEND END\n\n//TEMPLATE BEGIN\nint add(int a, int b) {\n  // Please fill this blank\n  return ___________;\n}\n//TEMPLATE END\n\n//APPEND BEGIN\nint main() {\n  std::cout << add(1, 2);\n  return 0;\n}\n//APPEND END'
       },
-      description: "G++ 5.4",
-      content_type: "text/x-c++src"
+      description: 'G++ 5.4',
+      content_type: 'text/x-c++src'
     }
   ]
 }
-export const CONSTANTS_TEMPLATE = [ 
+export const CONSTANTS_TEMPLATE = [
   {
     name: 'Java',
     template: '//PREPEND BEGIN\n//PREPEND END\n\n//TEMPLATE BEGIN\n//TEMPLATE END\n\n//APPEND BEGIN\n//APPEND END',
@@ -188,7 +188,7 @@ export const CONSTANTS_TEMPLATE = [
 ]
 export const CONSTANTS_SPJ_TEMPLATE = {
   name: 'SPJ',
-  template: 
+  template:
 `#include <stdio.h>
 #define AC 0
 #define WA 1
@@ -253,28 +253,28 @@ export const DEFAULT_AVATAR = '/static/image/defaultAvatar.png'
 
 export const TIME_TIME_OUT = 6000
 
-export const THEME_KEY = '__theme__' 
+export const THEME_KEY = '__theme__'
 
 export const THEMES = {
-  white: "white",
-  dark: "dark",
+  white: 'white',
+  dark: 'dark'
 }
 
 export const THEME_MAP = {
-    [THEMES.dark]: {
-      title: "深色",
-      file: variables
-    },
-    [THEMES.white]: {
-      title: "浅色",
-      file: variablesWhite
-    }
+  [THEMES.dark]: {
+    title: '深色',
+    file: variables
+  },
+  [THEMES.white]: {
+    title: '浅色',
+    file: variablesWhite
   }
+}
 
 export const CONTEST_STATUS = {
   'NOT_START': '1',
   'UNDERWAY': '0',
-  'ENDED': '-1',
+  'ENDED': '-1'
 }
 
 export const JUDGE_SERVER = {
@@ -298,7 +298,7 @@ export const CONTEST_QUERY_VALUE = {
 export const CONTEST_STATUS_REVERSE = {
   '未开始': {
     name: 'Not Started',
-    color: 'yellow',
+    color: 'yellow'
   },
   '进行中': {
     name: 'Underway',
@@ -372,7 +372,7 @@ export const USER_NORMAL_INFO = {
 export const PAWSTRENGTH = [
   {
     // 数字, 大写字母, 小写字母, 特殊字符四选三组成的密码强度, 且长度在8到30个数之间
-    KEY: 'High', 
+    KEY: 'High',
     COLOR: '#42b983',
     REG: /^(?![a-zA-Z]+$)(?![A-Z0-9]+$)(?![A-Z\W_!@#$%^&*`~()-+=]+$)(?![a-z0-9]+$)(?![a-z\W_!@#$%^&*`~()-+=]+$)(?![0-9\W_!@#$%^&*`~()-+=]+$)[a-zA-Z0-9\W_!@#$%^&*`~()-+=]{8,20}$/
   }, {
@@ -388,17 +388,17 @@ export const PAWSTRENGTH = [
   }
 ]
 
-export const URL_REG = '^((https|http|ftp)://)?'// (https或http或ftp):// 可有可无
-　　+ '(([\\w_!~*\'()\\.&=+$%-]+: )?[\\w_!~*\'()\\.&=+$%-]+@)?' // ftp的user@ 可有可无
-　　+ '(([0-9]{1,3}\\.){3}[0-9]{1,3}' // IP形式的URL- 3位数字.3位数字.3位数字.3位数字
-　　+ '|' // 允许IP和DOMAIN（域名）
-　　+ '(localhost)|'    //匹配localhost
-　　+ '([\\w_!~*\'()-]+\\.)*' // 域名- 至少一个[英文或数字_!~*\'()-]加上.
-　　+ '\\w+\\.' // 一级域名 -英文或数字 加上.
-　　+ '[a-zA-Z]{1,6})' // 顶级域名- 1-6位英文
-　　+ '(:[0-9]{1,5})?' // 端口- :80 ,1-5位数字
-　　+ '((/?)|' // url无参数结尾 - 斜杆或这没有
-　　+ '(/[\\w_!~*\'()\\.;?:@&=+$,%#-]+)+/?)$' // 请求参数结尾- 英文或数字和[]内的各种字符
+export const URL_REG = '^((https|http|ftp)://)?' +// (https或http或ftp):// 可有可无
+   '(([\\w_!~*\'()\\.&=+$%-]+: )?[\\w_!~*\'()\\.&=+$%-]+@)?' + // ftp的user@ 可有可无
+   '(([0-9]{1,3}\\.){3}[0-9]{1,3}' + // IP形式的URL- 3位数字.3位数字.3位数字.3位数字
+   '|' + // 允许IP和DOMAIN（域名）
+   '(localhost)|' + // 匹配localhost
+   '([\\w_!~*\'()-]+\\.)*' + // 域名- 至少一个[英文或数字_!~*\'()-]加上.
+   '\\w+\\.' + // 一级域名 -英文或数字 加上.
+   '[a-zA-Z]{1,6})' + // 顶级域名- 1-6位英文
+   '(:[0-9]{1,5})?' + // 端口- :80 ,1-5位数字
+   '((/?)|' + // url无参数结尾 - 斜杆或这没有
+   '(/[\\w_!~*\'()\\.;?:@&=+$,%#-]+)+/?)$' // 请求参数结尾- 英文或数字和[]内的各种字符
 
 export const STORAGE_KEY = {
   AUTHED: 'authed',
@@ -406,8 +406,6 @@ export const STORAGE_KEY = {
   languages: 'languages',
   TOKEN: 'token'
 }
-
-
 
 export function buildProblemCodeKey (problemID, contestID = null) {
   if (contestID) {

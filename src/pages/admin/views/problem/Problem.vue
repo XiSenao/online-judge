@@ -1,26 +1,26 @@
 <template>
   <div class="problem spin">
-		<Spin size="large" fix v-if="utilSpin" />
+    <Spin v-if="utilSpin" size="large" fix />
     <Panel :title="title">
       <el-form ref="form" :model="problem" :rules="rules" label-position="top" label-width="70px">
         <el-row :gutter="20">
-         <el-col :span="6" class="spin">
-					 	<Spin size="large" fix v-if="utilProblemSpin" />
+          <el-col :span="6" class="spin">
+            <Spin v-if="utilProblemSpin" size="large" fix />
             <el-form-item label="Judge Server" required>
               <el-autocomplete
-                class="inline-input"
                 v-model="problem.judgeType"
+                class="inline-input"
                 :fetch-suggestions="queryjudgeType"
                 :trigger-on-focus="true"
                 placeholder="请输入内容"
                 @keyup.enter.native="handleJudgeTypeSelect(problem)"
                 @select="handleJudgeTypeSelect(problem)"
-								@blur="handleJudgeTypeSelect(problem)"/>
+                @blur="handleJudgeTypeSelect(problem)" />
             </el-form-item>
-          </el-col>   
+          </el-col>
           <el-col :span="18">
             <el-form-item prop="title" :label="$t('m.Title')" required>
-              <el-input :placeholder="$t('m.Title')" v-model="problem.title"></el-input>
+              <el-input v-model="problem.title" :placeholder="$t('m.Title')"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -46,17 +46,17 @@
         <el-row :gutter="20">
           <el-col :span="8">
             <el-form-item :label="$t('m.Time_Limit') + ' (ms)' " required>
-              <el-input type="Number" :placeholder="$t('m.Time_Limit')" v-model="problem.time_limit"></el-input>
+              <el-input v-model="problem.time_limit" type="Number" :placeholder="$t('m.Time_Limit')"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="$t('m.Memory_limit') + ' (MB)' " required>
-              <el-input type="Number" :placeholder="$t('m.Memory_limit')" v-model="problem.memory_limit"></el-input>
+              <el-input v-model="problem.memory_limit" type="Number" :placeholder="$t('m.Memory_limit')"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="$t('m.Difficulty')">
-              <el-select class="difficulty-select" size="small" :placeholder="$t('m.Difficulty')" v-model="problem.difficulty">
+              <el-select v-model="problem.difficulty" class="difficulty-select" size="small" :placeholder="$t('m.Difficulty')">
                 <el-option :label="$t('m.Low')" value="easy"></el-option>
                 <el-option :label="$t('m.Mid')" value="medium"></el-option>
                 <el-option :label="$t('m.High')" value="hard"></el-option>
@@ -75,36 +75,40 @@
             </el-form-item>
           </el-col>
           <el-col :span="8" class="spin">
-						<Spin size="large" fix v-if="utilProblemSpin" />
+            <Spin v-if="utilProblemSpin" size="large" fix />
             <el-form-item :label="$t('m.Tag')" :error="error.tags" required>
               <span class="tags">
                 <el-tag
                   v-for="tag in problem.tags"
+                  :key="tag.id"
                   :closable="true"
                   :close-transition="false"
-                  :key="tag.id"
                   type="success"
                   @close="closeTag(tag, problem)"
-                >{{tag.value}}</el-tag>
+                >{{ tag.value }}</el-tag>
               </span>
               <el-autocomplete
                 v-if="inputVisible"
+                v-model="tagInput"
                 size="mini"
                 class="input-new-tag"
-                v-model="tagInput"
                 :trigger-on-focus="true"
+                :fetch-suggestions="querySearch"
                 @keyup.enter.native="addTag(tagInput, problem)"
                 @blur="addTag(tagInput, problem)"
-                @select="addTag(tagInput, problem)"
-                :fetch-suggestions="querySearch"/>
-              <el-button class="button-new-tag" v-else size="small" @click="inputVisible = true">+ {{$t('m.New_Tag')}}</el-button>
+                @select="addTag(tagInput, problem)" />
+              <el-button v-else class="button-new-tag" size="small" @click="inputVisible = true">+ {{ $t('m.New_Tag') }}</el-button>
             </el-form-item>
           </el-col>
-					<el-col :span="8">
+          <el-col :span="8">
             <el-form-item :label="$t('m.Languages')" :error="error.languages" required>
               <el-checkbox-group v-model="problem.languages" :min="1">
-                <el-tooltip class="spj-radio" v-for="lang in allLanguage.languages" :key="lang.name" effect="dark"
-                            :content="lang.description" placement="top-start"> 
+                <el-tooltip v-for="lang in allLanguage.languages"
+                            :key="lang.name"
+                            class="spj-radio"
+                            effect="dark"
+                            :content="lang.description"
+                            placement="top-start">
                   <el-checkbox :label="lang.name"></el-checkbox>
                 </el-tooltip>
               </el-checkbox-group>
@@ -114,27 +118,27 @@
         <div>
           <el-form-item v-for="(sample, index) in problem.samples" :key="'sample'+index">
             <Accordion :title="'Sample' + (index + 1)">
-              <el-button v-if="!spiderFlag" type="warning" size="small" icon="el-icon-delete" slot="header" @click="deleteSample(index)">
+              <el-button v-if="!spiderFlag" slot="header" type="warning" size="small" icon="el-icon-delete" @click="deleteSample(index)">
                 Delete
               </el-button>
               <el-row :gutter="20">
                 <el-col :span="12">
                   <el-form-item :label="$t('m.Input_Samples')" required>
                     <el-input
+                      v-model="sample.input"
                       :rows="5"
                       type="textarea"
-                      :placeholder="$t('m.Input_Samples')"
-                      v-model="sample.input">
+                      :placeholder="$t('m.Input_Samples')">
                     </el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
                   <el-form-item :label="$t('m.Output_Samples')" required>
                     <el-input
+                      v-model="sample.output"
                       :rows="5"
                       type="textarea"
-                      :placeholder="$t('m.Output_Samples')"
-                      v-model="sample.output">
+                      :placeholder="$t('m.Output_Samples')">
                     </el-input>
                   </el-form-item>
                 </el-col>
@@ -142,8 +146,8 @@
             </Accordion>
           </el-form-item>
         </div>
-        <div class="add-sample-btn" v-if="!spiderFlag">
-          <button type="button" class="add-samples" @click="addSample()"><i class="el-icon-plus"></i>{{$t('m.Add_Sample')}}
+        <div v-if="!spiderFlag" class="add-sample-btn">
+          <button type="button" class="add-samples" @click="addSample()"><i class="el-icon-plus"></i>{{ $t('m.Add_Sample') }}
           </button>
         </div>
         <el-form-item style="margin-top: 20px" :label="$t('m.Hint')">
@@ -151,7 +155,7 @@
         </el-form-item>
         <el-form-item :label="$t('m.Code_Template')">
           <el-row>
-            <el-col :span="24" v-for="(v, k) in template" :key="'template'+k">
+            <el-col v-for="(v, k) in template" :key="'template'+k" :span="24">
               <el-form-item>
                 <el-checkbox v-model="v.checked">{{ k }}</el-checkbox>
                 <div v-if="v.checked">
@@ -163,22 +167,30 @@
         </el-form-item>
         <el-form-item :label="$t('m.Special_Judge')" :error="error.spj">
           <el-col :span="24">
-            <el-checkbox v-model="problem.spj" @click.native.prevent="switchSpj()">{{$t('m.Use_Special_Judge')}}</el-checkbox>
+            <el-checkbox v-model="problem.spj" @click.native.prevent="switchSpj()">{{ $t('m.Use_Special_Judge') }}</el-checkbox>
           </el-col>
         </el-form-item>
         <el-form-item v-if="problem.spj">
           <Accordion :title="$t('m.Special_Judge_Code')">
             <template slot="header">
-              <span>{{$t('m.SPJ_language')}}</span>
+              <span>{{ $t('m.SPJ_language') }}</span>
               <el-radio-group v-model="problem.spj_language">
-                <el-tooltip class="spj-radio" v-for="lang in allLanguage.spj_languages" :key="lang.name" effect="dark"
-                            :content="lang.description" placement="top-start">
+                <el-tooltip v-for="lang in allLanguage.spj_languages"
+                            :key="lang.name"
+                            class="spj-radio"
+                            effect="dark"
+                            :content="lang.description"
+                            placement="top-start">
                   <el-radio :label="lang.name">{{ lang.name }}</el-radio>
                 </el-tooltip>
               </el-radio-group>
-              <el-button :type="compileSuccess ? 'success' : 'primary'" size="small" :icon="compileSuccess ? 'el-icon-check' : 'el-icon-fa-random'" @click="compileSPJ" :disabled="compileSuccess"
-                         :loading="loadingCompile">
-                {{$t('m.Compile')}}
+              <el-button :type="compileSuccess ? 'success' : 'primary'"
+                         size="small"
+                         :icon="compileSuccess ? 'el-icon-check' : 'el-icon-fa-random'"
+                         :disabled="compileSuccess"
+                         :loading="loadingCompile"
+                         @click="compileSPJ">
+                {{ $t('m.Compile') }}
               </el-button>
             </template>
             <code-mirror v-model="problem.spj_code" :mode="spjMode"></code-mirror>
@@ -187,7 +199,7 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item :label="$t('m.TestCase')">
-							<UploadDemo 
+              <UploadDemo
                 ref="uploadZipDemo"
                 button-name="Upload"
                 file-name="file"
@@ -195,10 +207,10 @@
                 tip-position="top"
                 :show-button="false"
                 :format-suffix="['zip']"
-                :isSpj="!!problem.spj"
-                :limitNumber="1"
+                :is-spj="!!problem.spj"
+                :limit-number="1"
                 :disabled="spiderFlag"
-                :get-zip-file-value-lists="getZIPFileValueLists"/>
+                :get-zip-file-value-lists="getZIPFileValueLists" />
             </el-form-item>
           </el-col>
 
@@ -211,41 +223,43 @@
           </el-col>
 
           <el-col :span="24" class="spin">
-						<Spin size="large" fix v-if="utilProblemSpin" />
-						<el-table
-						:data="zipFileLists"
-						style="width: 100%">
+            <Spin v-if="utilProblemSpin" size="large" fix />
+            <el-table
+              :data="zipFileLists"
+              style="width: 100%">
               <el-table-column type="expand">
                 <template slot-scope="props">
                   <el-form class="demo-table-expand">
                     <el-row :gutter="20" type="flex">
                       <el-col :span="12" style="position: relative;">
-                        <icon-btn icon="clipboard" name="Copy"
-                        class="sample-read" 
-                        :data-clipboard-text="props.row.inputFile.fileValue"
-                        @click.native="copySamples"></icon-btn>
+                        <icon-btn icon="clipboard"
+                                  name="Copy"
+                                  class="sample-read"
+                                  :data-clipboard-text="props.row.inputFile.fileValue"
+                                  @click.native="copySamples"></icon-btn>
                         <el-form-item :label="$t('m.Input_Samples')">
                           <el-input
+                            v-model="props.row.inputFile.fileValue"
                             :rows="7"
                             type="textarea"
                             disabled
-                            :placeholder="$t('m.Input_Samples')"
-                            v-model="props.row.inputFile.fileValue">
+                            :placeholder="$t('m.Input_Samples')">
                           </el-input>
                         </el-form-item>
                       </el-col>
                       <el-col :span="12" style="position: relative;">
-                        <icon-btn icon="clipboard" name="Copy"
-                        class="sample-read" 
-                        :data-clipboard-text="props.row.outputFile.fileValue"
-                        @click.native="copySamples"></icon-btn>
+                        <icon-btn icon="clipboard"
+                                  name="Copy"
+                                  class="sample-read"
+                                  :data-clipboard-text="props.row.outputFile.fileValue"
+                                  @click.native="copySamples"></icon-btn>
                         <el-form-item :label="!problem.spj ? $t('m.Output_Samples') : $t('m.Input_Samples')">
                           <el-input
+                            v-model="props.row.outputFile.fileValue"
                             :rows="7"
                             type="textarea"
                             disabled
-                            :placeholder="$t('m.Output_Samples')"
-                            v-model="props.row.outputFile.fileValue">
+                            :placeholder="$t('m.Output_Samples')">
                           </el-input>
                         </el-form-item>
                       </el-col>
@@ -261,15 +275,15 @@
                 :label="!problem.spj ? $t('m.Output') : $t('m.Input')"
                 prop="outputFile.fileName">
               </el-table-column>
-					  </el-table>
-				  </el-col>
+            </el-table>
+          </el-col>
 
           <el-col>
             <el-form-item :label="$t('m.Source')">
-              <el-input :placeholder="$t('m.Source')" v-model="problem.source" :disabled="!!problem.contest_id"></el-input>
+              <el-input v-model="problem.source" :placeholder="$t('m.Source')" :disabled="!!problem.contest_id"></el-input>
             </el-form-item>
           </el-col>
-				</el-row>
+        </el-row>
         <save @click.native="submit()">Save</save>
       </el-form>
     </Panel>
@@ -279,38 +293,37 @@
 <script>
   import Simditor from '../../components/Simditor'
   import Accordion from '../../components/Accordion'
-	import CodeMirror from '../../components/CodeMirror'
-	import UploadDemo from '../../components/Upload' 
-	import Clipboard from 'clipboard'
+  import CodeMirror from '../../components/CodeMirror'
+  import UploadDemo from '../../components/Upload'
+  import Clipboard from 'clipboard'
   import { CONSTANTS_SPJ_TEMPLATE, LANGUAGES } from '@/utils/constants'
-  import utils from '@/utils/utils'
   import api from '@/pages/admin/api'
   import ProblemMixin from './problemMixin'
-  // webWorker
-  import Worker from './webworker/problem.worker' 
-  import myWorker from './webworker/toData.worker'
+
+  import Worker from './webworker/problem.worker'
+  import DataWorker from './webworker/toData.worker'
 
   const Base64 = require('js-base64').Base64
   export default {
     name: 'Problem',
-    mixins: [ProblemMixin],
     components: {
       Simditor,
       Accordion,
-			CodeMirror,
-			UploadDemo
+      CodeMirror,
+      UploadDemo
     },
+    mixins: [ProblemMixin],
     data () {
       return {
         rules: {
-          _id: {required: true, message: 'Display ID is required', trigger: 'blur'},
-          title: {required: true, message: 'Title is required', trigger: 'blur'},
-          input_description: {required: true, message: 'Input Description is required', trigger: 'blur'},
-          output_description: {required: true, message: 'Output Description is required', trigger: 'blur'}
+          _id: { required: true, message: 'Display ID is required', trigger: 'blur' },
+          title: { required: true, message: 'Title is required', trigger: 'blur' },
+          input_description: { required: true, message: 'Input Description is required', trigger: 'blur' },
+          output_description: { required: true, message: 'Output Description is required', trigger: 'blur' }
         },
-				loadingCompile: false,
-				spinShow: true,
-				utilSpin: true,
+        loadingCompile: false,
+        spinShow: true,
+        utilSpin: true,
         utilProblemSpin: true,
         spiderFlag: false,
         contestData: {
@@ -335,7 +348,7 @@
           tags: [],
           languages: [],
           template: {},
-          samples: [{input: '', output: ''}],
+          samples: [{ input: '', output: '' }],
           spj: false,
           spj_language: 'C',
           spj_code: '',
@@ -349,11 +362,11 @@
           io_mode: 'Standard IO'
         },
         currentSpj: false,
-				inputJudgeTypeVisible: false,
+        inputJudgeTypeVisible: false,
         testCaseUploaded: false,
         compileSuccess: false,
         allLanguage: {
-					languages: []
+          languages: []
         },
         contestTitle: '',
         inputVisible: false,
@@ -361,53 +374,14 @@
         template: {},
         title: '',
         spjMode: 'text/x-csrc',
-				disableRuleType: false,
-				zipFileLists: [],
+        disableRuleType: false,
+        zipFileLists: [],
         routeName: '',
         error: {
           tags: '',
           spj: '',
           languages: '',
           testCase: ''
-        }
-      }
-    },
-    mounted () {
-      this.routeName = this.$route.name
-      if (this.routeName === 'EditProblem' || this.routeName === 'EditContestProblem') {
-        this.mode = 'edit'
-      } else {
-				this.mode = 'add'
-      }
-      this.allLanguage = LANGUAGES
-      if (this.mode === 'edit') {
-        this.title = this.$i18n.t('m.Edit_Problem')
-        // 获取爬虫或评测机题目信息(共享同一个接口)
-        api.getProblem(this.$route.params.problemId).then(problemRes => {
-          let data = problemRes.data.data
-          if (!data.spjCode) { data.spjCode = '' }
-          data.spjLanguage = data.spjLanguage || 'C'
-          this.changeServerToData(data)
-        })
-      } else {
-        this.title = this.$i18n.t('m.Add_Problem')
-        this.contestData = this.$route.params.contestData 
-        try {
-          // 创建比赛题目的时候需要contestID和title分别作为sourceId(contest_id)和sourceName(source)
-          if (this.contestData) {
-            this.contestData = JSON.parse(Base64.decode(this.contestData))
-            this.problem.source = this.contestData.title
-            this.problem.contest_id = this.contestData.contestId
-            this.disableRuleType = true
-          }
-          this.utilProblemSpin = false
-          this.utilSpin = false
-        } catch (_) { 
-          this.$error('Error!')
-          return 
-        }
-        for (let item of this.allLanguage.languages) {
-          this.problem.languages.push(item.name)
         }
       }
     },
@@ -422,18 +396,18 @@
         this.compileSuccess = false
       },
       'problem.languages' (newVal) {
-				if (!newVal) {
-					return
+        if (!newVal) {
+          return
         }
-        let data = {}
+        const data = {}
         // use deep copy to avoid infinite loop
-				let languages = JSON.parse(JSON.stringify(newVal)).sort()
-        for (let item of languages) {
+        const languages = JSON.parse(JSON.stringify(newVal)).sort()
+        for (const item of languages) {
           if (this.template[item] === undefined) {
-            let langConfig = this.allLanguage.languages.find(lang => {
+            const langConfig = this.allLanguage.languages.find(lang => {
               return lang.name === item
-						})
-						data[item] = {checked: false, code: langConfig.config.template, mode: langConfig.content_type}
+            })
+            data[item] = { checked: false, code: langConfig.config.template, mode: langConfig.content_type }
           } else {
             data[item] = this.template[item]
           }
@@ -441,14 +415,53 @@
         this.template = data
       },
       'problem.spj_language' (newVal) {
-				if (!newVal) {
-					return
+        if (!newVal) {
+          return
         }
         this.compileSuccess = false
         this.spjMode = this.allLanguage.spj_languages.find(item => {
           return item.name === this.problem.spj_language
         }).content_type
-			}
+      }
+    },
+    mounted () {
+      this.routeName = this.$route.name
+      if (this.routeName === 'EditProblem' || this.routeName === 'EditContestProblem') {
+        this.mode = 'edit'
+      } else {
+        this.mode = 'add'
+      }
+      this.allLanguage = LANGUAGES
+      if (this.mode === 'edit') {
+        this.title = this.$i18n.t('m.Edit_Problem')
+        // 获取爬虫或评测机题目信息(共享同一个接口)
+        api.getProblem(this.$route.params.problemId).then(problemRes => {
+          const data = problemRes.data.data
+          if (!data.spjCode) { data.spjCode = '' }
+          data.spjLanguage = data.spjLanguage || 'C'
+          this.changeServerToData(data)
+        })
+      } else {
+        this.title = this.$i18n.t('m.Add_Problem')
+        this.contestData = this.$route.params.contestData
+        try {
+          // 创建比赛题目的时候需要contestID和title分别作为sourceId(contest_id)和sourceName(source)
+          if (this.contestData) {
+            this.contestData = JSON.parse(Base64.decode(this.contestData))
+            this.problem.source = this.contestData.title
+            this.problem.contest_id = this.contestData.contestId
+            this.disableRuleType = true
+          }
+          this.utilProblemSpin = false
+          this.utilSpin = false
+        } catch (_) {
+          this.$error('Error!')
+          return
+        }
+        for (const item of this.allLanguage.languages) {
+          this.problem.languages.push(item.name)
+        }
+      }
     },
     methods: {
       compileSPJ () {
@@ -456,7 +469,7 @@
           this.$error('未填写特判代码或未选择评测机')
           return
         }
-        let data = {
+        const data = {
           spjCode: Base64.encode(this.problem.spj_code),
           spjLanguage: this.problem.spj_language,
           judgeServerName: this.problem.judgeType
@@ -476,28 +489,28 @@
           this.loadingCompile = false
         })
       },
-			copySamples () {
-				var clipboard = new Clipboard('.sample-read')  
-				clipboard.on('success', e => {  
-					this.$success('Copy Success')
-					clipboard.destroy()  
-				})  
-				clipboard.on('error', e => {  
-					clipboard.destroy()  
-				})  
-			},
-			getZIPFileValueLists (zipFileLists) {
-        let newZipFileLists = []
+      copySamples () {
+        var clipboard = new Clipboard('.sample-read')
+        clipboard.on('success', e => {
+          this.$success('Copy Success')
+          clipboard.destroy()
+        })
+        clipboard.on('error', e => {
+          clipboard.destroy()
+        })
+      },
+      getZIPFileValueLists (zipFileLists) {
+        const newZipFileLists = []
         this.testCaseUploaded = true
-				for (let i = 0; i < zipFileLists.length; ++i) {
-					newZipFileLists.push({
-						inputFile: zipFileLists[i],
-						outputFile: i + 1 < zipFileLists.length ? zipFileLists[i + 1] : '-'
-					})
-					i++
-				}
-				this.zipFileLists = newZipFileLists
-			},
+        for (let i = 0; i < zipFileLists.length; ++i) {
+          newZipFileLists.push({
+            inputFile: zipFileLists[i],
+            outputFile: i + 1 < zipFileLists.length ? zipFileLists[i + 1] : '-'
+          })
+          i++
+        }
+        this.zipFileLists = newZipFileLists
+      },
       switchSpj () {
         const spjTemplate = CONSTANTS_SPJ_TEMPLATE
         // 编辑问题处理
@@ -507,8 +520,8 @@
             cancelButtonText: 'Cancel',
             type: 'warning'
           }).then(() => {
-						this.problem.spj = !this.problem.spj
-						this.$refs.uploadZipDemo.cleanUploadQueue(1)
+            this.problem.spj = !this.problem.spj
+            this.$refs.uploadZipDemo.cleanUploadQueue(1)
             this.zipFileLists = []
             this.problem.spj_code = spjTemplate.template
             this.problem.spjMode = spjTemplate.content_type
@@ -526,27 +539,30 @@
         } else {
           this.problem.spj_code = ''
         }
-			},
+      },
       addSample () {
         this.problem.samples.push({ input: '', output: '' })
       },
       deleteSample (index) {
         this.problem.samples.splice(index, 1)
       },
-			changeServerToData (data) {
-        let inputSamples = data.inputSamples, outputSamples = data.outputSamples, funcName = '', excutePromiseQueue = []
+      changeServerToData (data) {
+        let inputSamples = data.inputSamples
+        let outputSamples = data.outputSamples
+        const excutePromiseQueue = []
         excutePromiseQueue.push(api.getSpiderServer(), api.getJudgeServer())
         if (this.spiderFlag) { excutePromiseQueue.pop() }
         Promise.all(excutePromiseQueue).then(judgeServer => {
-          let spiderServer = judgeServer[0].data.data, normalJudgeServer = judgeServer[1].data.data
-          let currentStatus = [spiderServer, normalJudgeServer]
-          for (let valueArr of currentStatus) {
+          const spiderServer = judgeServer[0].data.data
+          const normalJudgeServer = judgeServer[1].data.data
+          const currentStatus = [spiderServer, normalJudgeServer]
+          for (const valueArr of currentStatus) {
             if (valueArr.some(res => res.id === data.judgeTypeId)) {
               data.judgeType = valueArr.find(res => res.id === data.judgeTypeId).name
               this.spiderFlag = !currentStatus.indexOf(valueArr)
             }
           }
-          let currentPromiseQueue = []
+          const currentPromiseQueue = []
           currentPromiseQueue.push(api.getProblemTags(data.id))
           if (this.spiderFlag) {
             inputSamples = [inputSamples]
@@ -556,18 +572,19 @@
             outputSamples = JSON.parse(outputSamples)
             currentPromiseQueue.push(api.getZipFile(data.id))
           }
-          let length = Math.min(inputSamples.length, outputSamples.length), Sample = []
+          const length = Math.min(inputSamples.length, outputSamples.length)
+          const Sample = []
           for (let i = 0; i < length; ++i) {
             Sample.push({
               input: inputSamples[i],
               output: outputSamples[i]
             })
-          } 
+          }
           // 启动线程处理事务
-          let myworker = new myWorker()
+          const myworker = new DataWorker()
           myworker.postMessage(JSON.stringify(data))
           myworker.onmessage = event => {
-            let data = JSON.parse(event.data)
+            const data = JSON.parse(event.data)
             data.samples = Sample
             data.inputSamples = Sample
             this.problem = data
@@ -577,14 +594,15 @@
           }
           Promise.all(currentPromiseQueue).then(res => {
             // 启动线程处理事务
-            let myworker = new Worker(), resValue = []
+            const myworker = new Worker()
+            const resValue = []
             resValue.push(res[0].data.data)
             if (!this.spiderFlag) {
               resValue.push(res[1].data)
             }
             myworker.postMessage({ spiderFlag: this.spiderFlag, resValue })
             myworker.onmessage = event => {
-              let message = event.data ? JSON.parse(event.data) : null
+              const message = event.data ? JSON.parse(event.data) : null
               this.problem.tags = message.exTags
               if (message.contentValue) {
                 this.zipFileLists = message.contentValue
@@ -596,84 +614,85 @@
             }
           })
         })
-			},
-			changeDataToServer (data, create) {
-				let template = []
-				Object.keys(this.template).forEach(key => {
-					let nowValue = this.template[key]
-					template.push({
-						key,
-						value: nowValue.code
-					})
-				})
-				template = JSON.stringify(template)
+      },
+      changeDataToServer (data, create) {
+        let template = []
+        Object.keys(this.template).forEach(key => {
+          const nowValue = this.template[key]
+          template.push({
+            key,
+            value: nowValue.code
+          })
+        })
+        template = JSON.stringify(template)
         template = Base64.encode(template)
-        let input = [], output = []
-				Object.keys(data.samples).forEach(res => {
-					let nowValue = data.samples[res]
-					input.push(nowValue.input)
-					output.push(nowValue.output)
-				})
-				if (!this.problem.contest_id && data.source && data.source.search(/@/) !== 0) {
+        const input = []
+        const output = []
+        Object.keys(data.samples).forEach(res => {
+          const nowValue = data.samples[res]
+          input.push(nowValue.input)
+          output.push(nowValue.output)
+        })
+        if (!this.problem.contest_id && data.source && data.source.search(/@/) !== 0) {
           data.source = '@' + data.source
         } else if (this.problem.contest_id) {
           data.source = data.source || 'Empty'
         }
-				this.querySearch(null, null, res => {
-					let executeQueue = []
-					for (let i = 0; i < this.problem.tags.length; ++i) {
-						let nowValue = this.problem.tags[i]
-						let available = res.some(resp => resp.value === nowValue.value)
+        this.querySearch(null, null, res => {
+          const executeQueue = []
+          for (let i = 0; i < this.problem.tags.length; ++i) {
+            const nowValue = this.problem.tags[i]
+            const available = res.some(resp => resp.value === nowValue.value)
 						// 标签不存在的时候自动创建
-						if (!available) {
-							executeQueue.push(api.addNewTag(nowValue.value))
-						}
-					}
-					Promise.all(executeQueue).then(res => {
+            if (!available) {
+              executeQueue.push(api.addNewTag(nowValue.value))
+            }
+          }
+          Promise.all(executeQueue).then(res => {
             // 重新获取标签
-						this.querySearch(null, null, res => {
-							let tagId = []
-							for (let i = 0; i < this.problem.tags.length; ++i) {
-								let nowValue = this.problem.tags[i]
-								let available = res.find(resp => resp.value === nowValue.value)
-								available && tagId.push(available.id)
-							}
-							let exProblem = {
-								codeTemplate: template,
-								description: data.description,
-								hint: data.hint,
-								id: data._id || null,
-								inputDescription: data.input_description,
-								inputSamples: !this.spiderFlag ? JSON.stringify(input) : input[0],
-								ioMode: data.io_mode,
-								judgeTypeId: data.judgeTypeId,
-								language: data.languages.toString(),
-								level: data.difficulty,
-								memoryLimit: data.memory_limit,
-								outputDescription: data.output_description,
-								outputSamples: !this.spiderFlag ? JSON.stringify(output) : output[0],
-								sourceId: data.contest_id || 0,
-								sourceName: data.source,
-								spj: data.spj ? 1 : 0,
-								spjCode: data.spj_code,
-								spjLanguage: data.spj_language,
-								status: data.contest_id ? data.visible ? 0 : -1 : data.visible ? 1 : -1,
-								tagId: tagId,  
-								timeLimit: data.time_limit,
-								title: data.title
+            this.querySearch(null, null, res => {
+              const tagId = []
+              for (let i = 0; i < this.problem.tags.length; ++i) {
+                const nowValue = this.problem.tags[i]
+                const available = res.find(resp => resp.value === nowValue.value)
+                available && tagId.push(available.id)
+              }
+              const exProblem = {
+                codeTemplate: template,
+                description: data.description,
+                hint: data.hint,
+                id: data._id || null,
+                inputDescription: data.input_description,
+                inputSamples: !this.spiderFlag ? JSON.stringify(input) : input[0],
+                ioMode: data.io_mode,
+                judgeTypeId: data.judgeTypeId,
+                language: data.languages.toString(),
+                level: data.difficulty,
+                memoryLimit: data.memory_limit,
+                outputDescription: data.output_description,
+                outputSamples: !this.spiderFlag ? JSON.stringify(output) : output[0],
+                sourceId: data.contest_id || 0,
+                sourceName: data.source,
+                spj: data.spj ? 1 : 0,
+                spjCode: data.spj_code,
+                spjLanguage: data.spj_language,
+                status: data.contest_id ? data.visible ? 0 : -1 : data.visible ? 1 : -1,
+                tagId: tagId,
+                timeLimit: data.time_limit,
+                title: data.title
               }
               // 解决处理数据同步
-							create && create(exProblem)
-						})
-					})
-				})
-			},
-			submit () {
+              create && create(exProblem)
+            })
+          })
+        })
+      },
+      submit () {
         if (!this.problem.samples.length) {
           this.$error('Sample is required')
           return
         }
-        for (let sample of this.problem.samples) {
+        for (const sample of this.problem.samples) {
           if (!sample.input || !sample.output) {
             this.$error('Sample input and output is required')
             return
@@ -688,7 +707,7 @@
           if (!this.problem.spj_code) {
             this.error.spj = 'Spj code is required'
             this.$error(this.error.spj)
-          } 
+          }
           if (this.error.spj) {
             this.$error(this.error.spj)
             return
@@ -700,7 +719,7 @@
           // 第二次清除
           this.problem.spj_code = ''
         }
-        let uploadNumber = this.$refs.uploadZipDemo.currentFilesNumber
+        const uploadNumber = this.$refs.uploadZipDemo.currentFilesNumber
         if (this.problem.spj !== this.currentSpj && uploadNumber !== 1) {
           this.error.testcase = 'Test files is required'
           this.$error(this.error.testcase)
@@ -711,14 +730,14 @@
           this.$error(this.error.languages)
           return
         }
-				if (this.mode !== 'edit' && this.$refs.uploadZipDemo.currentFilesNumber !== 1 || 
+        if (this.mode !== 'edit' && this.$refs.uploadZipDemo.currentFilesNumber !== 1 ||
 				this.mode === 'edit' && this.$refs.uploadZipDemo.currentFilesNumber > 1) {
-					this.error.testCase = 'Test case is wrong'
+          this.error.testCase = 'Test case is wrong'
           this.$error(this.error.testCase)
           return
-				} 
+        }
         if (this.problem.rule_type === 'OI') {
-          for (let item of this.problem.test_case_score) {
+          for (const item of this.problem.test_case_score) {
             try {
               if (parseInt(item.score) <= 0) {
                 this.$error('Invalid test case score')
@@ -731,7 +750,7 @@
           }
         }
         this.problem.languages = this.problem.languages.sort()
-        let funcName = {
+        const funcName = {
           'CreateMachineProblem': 'createProblem',
           'EditProblem': 'editProblem',
           'CreateContestProblem': 'createContestProblem',
@@ -741,36 +760,36 @@
         if (funcName === 'editContestProblem') {
           this.problem.sourceId = this.contest.id
         }
-				this.utilSpin = true
-				this.changeDataToServer(this.problem, problem => {
-					api[funcName]({ ...problem }).then(res => {
+        this.utilSpin = true
+        this.changeDataToServer(this.problem, problem => {
+          api[funcName]({ ...problem }).then(res => {
 						// edit or create
-						let problemId = problem.id || res.data.data, 
-            spj = problem.spj ? true : false
+            const problemId = problem.id || res.data.data
+            const spj = !!problem.spj
             // 上传文件
-            let executeQueue = []
+            const executeQueue = []
             if (!(this.mode === 'edit' && !this.$refs.uploadZipDemo.currentFilesNumber)) {
-              let formData = this.$refs.uploadZipDemo.upload("problemId", problemId, 1, 'test.zip')
+              const formData = this.$refs.uploadZipDemo.upload('problemId', problemId, 1, 'test.zip')
               formData.append('spj', spj)
               executeQueue.push(api.uploadZipFile(formData))
             }
             Promise.all(executeQueue).then(res => {
               this.utilSpin = false
               if (this.routeName === 'CreateContestProblem' || this.routeName === 'EditContestProblem') {
-                let data = {
+                const data = {
                   contestId: problem.sourceId,
                   title: problem.sourceName
                 }
-                let contestData = Base64.encode(JSON.stringify(data))
-                this.$router.push({name: 'ContestProblemList', params: { contestData }})
+                const contestData = Base64.encode(JSON.stringify(data))
+                this.$router.push({ name: 'ContestProblemList', params: { contestData }})
               } else {
-                this.$router.push({name: 'ProblemList'})
+                this.$router.push({ name: 'ProblemList' })
               }
             }).catch(_ => this.$error('上传文件失败'))
-					}).catch(_ => {
+          }).catch(_ => {
             this.$error('题目存在异常')
-					})
-				})
+          })
+        })
       }
     }
   }

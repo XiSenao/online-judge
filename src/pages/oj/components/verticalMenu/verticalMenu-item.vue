@@ -1,5 +1,5 @@
 <template>
-  <li @click.stop="handleClick" :class="{disabled: disabled}">
+  <li :class="{disabled: disabled}" @click.stop="handleClick">
     <slot></slot>
   </li>
 </template>
@@ -8,7 +8,7 @@
   import Emitter from '../mixins/emitter'
 
   export default {
-    name: 'VerticalMenu-item',
+    name: 'VerticalMenuItem',
     mixins: [Emitter],
     props: {
       route: {

@@ -1,7 +1,7 @@
 <template>
-  <div class='has-logo'>
+  <div class="has-logo">
     <el-scrollbar class="scrollbar-wrapper">
-      <el-menu 
+      <el-menu
         :class="{ vertical_menu: true, close_menu: isCollapse }"
         :default-active="currentPath"
         :collapse="isCollapse"
@@ -37,7 +37,6 @@ export default {
     currentPath () {
       const route = this.$route
       const { meta, path } = route
-      console.log(route)
       // if set path, the sidebar will highlight the path you set
       if (meta.activeMenu) {
         return meta.activeMenu

@@ -2,40 +2,42 @@
   <Panel shadow>
     <div slot="title">{{ contest.title }}</div>
     <div slot="extra">
-      <screen-full :height="18" :width="18" class="screen-full"></screen-full>
+      <screen-full :height="18" :width="18" class="screen-full" />
       <Poptip trigger="hover" placement="left-start">
-        <Icon type="android-settings" size="20"></Icon>
-        <div slot="content" id="switches">
+        <Icon type="android-settings" size="20" />
+        <div id="switches" slot="content">
           <p>
-            <span>{{$t('m.Menu')}}</span>
-            <i-switch v-model="showMenu"></i-switch>
-            <span>{{$t('m.Chart')}}</span>
-            <i-switch v-model="showChart"></i-switch>
+            <span>{{ $t('m.Menu') }}</span>
+            <i-switch v-model="showMenu" />
+            <span>{{ $t('m.Chart') }}</span>
+            <i-switch v-model="showChart" />
           </p>
           <p>
-            <span>{{$t('m.Auto_Refresh')}}(10s)</span>
-            <i-switch :disabled="refreshDisabled" @on-change="handleAutoRefresh"></i-switch>
+            <span>{{ $t('m.Auto_Refresh') }}(10s)</span>
+            <i-switch :disabled="refreshDisabled" @on-change="handleAutoRefresh" />
           </p>
           <p v-if="isContestAdmin">
-            <span>{{$t('m.RealName')}}</span>
-            <i-switch v-model="showRealName"></i-switch>
+            <span>{{ $t('m.RealName') }}</span>
+            <i-switch v-model="showRealName" />
           </p>
           <p>
-            <Button type="primary" size="small" @click="downloadRankCSV">{{$t('m.download_csv')}}</Button>
+            <Button type="primary" size="small" @click="downloadRankCSV">{{ $t('m.download_csv') }}</Button>
           </p>
         </div>
       </Poptip>
     </div>
     <div v-show="showChart" class="echarts">
-      <ECharts :options="options" ref="chart" auto-resize></ECharts>
+      <ECharts ref="chart" :options="options" auto-resize />
     </div>
-    <Table ref="tableRank" class="auto-resize" :columns="columns" :data="dataRank" disabled-hover></Table>
-    <Pagination :total="total"
-                :page-size.sync="limit"
-                :current.sync="page"
-                @on-change="getContestRankData"
-                @on-page-size-change="getContestRankData(1)"
-                show-sizer></Pagination>
+    <Table ref="tableRank" class="auto-resize" :columns="columns" :data="dataRank" disabled-hover />
+    <Pagination
+      :total="total"
+      :page-size.sync="limit"
+      :current.sync="page"
+      show-sizer
+      @on-change="getContestRankData"
+      @on-page-size-change="getContestRankData(1)"
+    />
   </Panel>
 </template>
 <script>
@@ -46,7 +48,7 @@
   import utils from '@/utils/utils'
 
   export default {
-    name: 'acm-contest-rank',
+    name: 'AcmContestRank',
     components: {
       Pagination
     },
@@ -78,7 +80,7 @@
                     this.$router.push(
                       {
                         name: 'user-home',
-                        query: {username: params.row.user.username}
+                        query: { username: params.row.user.username }
                       })
                   }
                 }
@@ -94,7 +96,7 @@
                   click: () => {
                     this.$router.push({
                       name: 'contest-submission-list',
-                      query: {username: params.row.user.username}
+                      query: { username: params.row.user.username }
                     })
                   }
                 }
@@ -114,9 +116,9 @@
           toolbox: {
             show: true,
             feature: {
-              dataView: {show: true, readOnly: true},
-              magicType: {show: true, type: ['line', 'bar']},
-              saveAsImage: {show: true}
+              dataView: { show: true, readOnly: true },
+              magicType: { show: true, type: ['line', 'bar'] },
+              saveAsImage: { show: true }
             },
             right: '10%'
           },
@@ -153,7 +155,7 @@
               data: [0],
               markPoint: {
                 data: [
-                  {type: 'max', name: 'max'}
+                  { type: 'max', name: 'max' }
                 ]
               }
             }
@@ -175,7 +177,7 @@
     methods: {
       ...mapActions(['getContestProblems']),
       applyToChart (rankData) {
-        let [usernames, scores] = [[], []]
+        const [usernames, scores] = [[], []]
         rankData.forEach(ele => {
           usernames.push(ele.user.username)
           scores.push(ele.total_score)
@@ -185,11 +187,11 @@
       },
       applyToTable (data) {
         // deepcopy
-        let dataRank = JSON.parse(JSON.stringify(data))
+        const dataRank = JSON.parse(JSON.stringify(data))
         // 从submission_info中取出相应的problem_id 放入到父object中,这么做主要是为了适应iview table的data格式
         // 见https://www.iviewui.com/components/table
         dataRank.forEach((rank, i) => {
-          let info = rank.submission_info
+          const info = rank.submission_info
           Object.keys(info).forEach(problemID => {
             dataRank[i][problemID] = info[problemID]
           })

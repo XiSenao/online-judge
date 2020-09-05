@@ -3,9 +3,9 @@
     <Panel :title="$t('m.General_Announcement')">
       <div class="list">
         <el-table
+          ref="table"
           v-loading="loading"
           element-loading-text="loading"
-          ref="table"
           :data="announcementList"
           style="width: 100%">
           <el-table-column
@@ -28,7 +28,7 @@
             prop="last_update_time"
             label="LastUpdateTime">
             <template slot-scope="scope">
-              {{scope.row.lmTs | localtime }}
+              {{ scope.row.lmTs | localtime }}
             </template>
           </el-table-column>
           <el-table-column
@@ -43,7 +43,7 @@
             prop="status"
             label="status">
             <template slot-scope="scope">
-              <el-switch 
+              <el-switch
                 v-model="scope.row.status"
                 active-text=""
                 inactive-text=""
@@ -61,33 +61,36 @@
           </el-table-column>
         </el-table>
         <div class="panel-options">
-          <el-button type="primary" size="small" @click="openAnnouncementDialog(null)" icon="el-icon-plus">Create</el-button>
+          <el-button icon="el-icon-plus" type="primary" size="small" @click="openAnnouncementDialog(null)">Create</el-button>
           <el-pagination
             v-if="!contestID"
             class="page"
             layout="prev, pager, next"
-            @current-change="currentChange"
             :page-size="pageSize"
-            :total="total">
+            :total="total"
+            @current-change="currentChange">
           </el-pagination>
         </div>
       </div>
     </Panel>
     <!-- 编辑栏 -->
-    <el-dialog :title="announcementDialogTitle" :visible.sync="showEditAnnouncementDialog"
-               @open="onOpenEditDialog" :close-on-click-modal="false">
+    <el-dialog :title="announcementDialogTitle"
+               :visible.sync="showEditAnnouncementDialog"
+               :close-on-click-modal="false"
+               @open="onOpenEditDialog">
       <el-form label-position="top">
         <el-form-item :label="$t('m.Announcement_Title')" required>
           <el-input
             v-model="announcement.title"
-            :placeholder="$t('m.Announcement_Title')" class="title-input">
+            class="title-input"
+            :placeholder="$t('m.Announcement_Title')">
           </el-input>
         </el-form-item>
         <el-form-item :label="$t('m.Announcement_Content')" required>
-          <Simditor v-model="announcement.content"></Simditor>
+          <Simditor v-model="announcement.content" />
         </el-form-item>
         <div class="visible-box">
-          <span>{{$t('m.Announcement_visible')}}</span>
+          <span>{{ $t('m.Announcement_visible') }}</span>
           <el-switch
             v-model="announcement.status"
             active-text=""
@@ -140,6 +143,11 @@
         currentPage: 0
       }
     },
+    watch: {
+      $route () {
+        this.init()
+      }
+    },
     mounted () {
       this.init()
     },
@@ -158,10 +166,10 @@
         this.currentPage = page
         this.getAnnouncementList(page)
       },
-      // 对应接口: true 1 0 | 1 true false 
+      // 对应接口: true 1 0 | 1 true false
       exchangeStatus (go, tol, tow) {
         Object.keys(this.announcementList).forEach(res => {
-          let status = this.announcementList[res].status
+          const status = this.announcementList[res].status
           this.announcementList[res].status = status === go ? tol : tow
         })
       },
@@ -192,7 +200,7 @@
         // 暂时解决 文本编辑器显示异常bug
         setTimeout(() => {
           if (document.createEvent) {
-            let event = document.createEvent('HTMLEvents')
+            const event = document.createEvent('HTMLEvents')
             event.initEvent('resize', true, true)
             window.dispatchEvent(event)
           } else if (document.createEventObject) {
@@ -252,11 +260,6 @@
           content: row.content,
           status: row.status ? 1 : 0
         })
-      }
-    },
-    watch: {
-      $route () {
-        this.init()
       }
     }
   }

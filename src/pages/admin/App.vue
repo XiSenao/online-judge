@@ -1,27 +1,29 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <router-view />
   </div>
 </template>
 
 <script>
   export default {
-    name: 'app',
+    name: 'App',
     components: {},
     created () {
       try {
         console.log(` %c                                                                                                                                                                                      
                          ▍ ★∴
-     　 　s ．t ．▍▍a．..r．█▍ ☆ ★∵t .... 
-      　　◥█▅▅██▅▅██▅▅▅▅▅███◤
-       　 ．◥███████████████◤ 
+          s ．t ．▍▍a．..r．█▍ ☆ ★∵t .... 
+          ◥█▅▅██▅▅██▅▅▅▅▅███◤
+          ．◥███████████████◤ 
       ～～～～◥█████████████◤～～～～ 
       ～～～～～～～～～～～～～～～～～～～～～～～～
       ～～～～～～～～～～～～～～～～～～～～～～～～                             
-          `, "color: #00a1d6;")
-        console.log("\n%c Welcome to management system! %c %c Github: https://github.com/FinalAshen/Online-Judge\n", "color: #73c9e5; font-weight:600","","color:orange;font-weight:900")
-      } catch (_) {}
-    },
+          `, 'color: #00a1d6;')
+        console.log('\n%c Welcome to management system! %c %c Github: https://github.com/FinalAshen/Online-Judge\n', 'color: #73c9e5; font-weight:600', '', 'color:orange;font-weight:900')
+      } catch (_) {
+        console.log(_)
+      }
+    }
   }
 </script>
 

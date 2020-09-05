@@ -32,7 +32,7 @@ import 'echarts/lib/component/legend'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/toolbox'
 import 'echarts/lib/component/markPoint'
-import { behavior } from '@/utils/behavior'
+
 import '@/utils/cache'
 import './userPermission'
 
@@ -42,7 +42,7 @@ Object.keys(filters).forEach(key => {
 })
 
 Vue.config.productionTip = false
-Vue.use(iView, {locale})
+Vue.use(iView, { locale })
 Vue.use(ElementUI)
 Vue.use(VueClipboard)
 Vue.use(highlight)
@@ -69,5 +69,5 @@ Vue.prototype.$Message.config({
 Vue.prototype.$error = (s) => Vue.prototype.$Message.error(s)
 Vue.prototype.$info = (s) => Vue.prototype.$Message.info(s)
 Vue.prototype.$success = (s) => Vue.prototype.$Message.success(s)
-Vue.prototype.$behavior = behavior
-new Vue(Vue.util.extend({router, store, i18n}, App)).$mount('#app')
+
+new Vue(Vue.util.extend({ router, store, i18n }, App)).$mount('#app')

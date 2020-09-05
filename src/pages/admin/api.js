@@ -8,7 +8,7 @@ axios.defaults.baseURL = '/api'
 // axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 // axios.defaults.xsrfCookieName = 'csrftoken'
 // 配置axios请求头, axios每次发起请求携带token,在Network中的headers看的到, 写多少个方法就执行多少个方法
-// axios.interceptors.request.use(config => {  
+// axios.interceptors.request.use(config => {
 //   if (!!getToken()) {
 //     config.headers.common.token = getToken()  //Authorization  是请求头要求加上的字段
 //   }
@@ -75,26 +75,26 @@ export default {
   },
   // 获取用户列表
   getUserList (offset, limit, paramData = {}) {
-    let data = {offset, limit, paramData}
-    let URLTAIL = data.paramData ? 'searchResult' : 'userInfoList'
+    const data = { offset, limit, paramData }
+    const URLTAIL = data.paramData ? 'searchResult' : 'userInfoList'
     return ajax(`admin/userManager/${URLTAIL}`, 'post', {
       data
     })
   },
   // 获取管理员列表
   getAdminList (offset, limit, paramData = {}) {
-    let data = {offset, limit, paramData}
-    let URLTAIL = data.paramData ? 'searchResult' : 'adminInfoList'
+    const data = { offset, limit, paramData }
+    const URLTAIL = data.paramData ? 'searchResult' : 'adminInfoList'
     return ajax(`admin/adminManager/${URLTAIL}`, 'post', {
       data
     })
   },
   resetPassword (username, role) {
-    let funcName = role ? 'userManager' : 'adminManager'
+    const funcName = role ? 'userManager' : 'adminManager'
     return ajax(`admin/${funcName}/password/update/${username}`, 'post', {})
   },
   exchangeAccountStatus (username, status, role) {
-    let funcName = role ? 'userManager' : 'adminManager'
+    const funcName = role ? 'userManager' : 'adminManager'
     return ajax(`admin/${funcName}/account/update/${username}`, 'post', {
       params: {
         status
@@ -102,7 +102,7 @@ export default {
     })
   },
   addNewAccount (data, role) {
-    let funcName = role === 'Admin' ? 'adminManager' : 'userManager'
+    const funcName = role === 'Admin' ? 'adminManager' : 'userManager'
     return ajax(`admin/${funcName}/save`, 'post', {
       data
     })
@@ -152,7 +152,6 @@ export default {
       data,
       responseType: 'blob'
     })
-
   },
   getAuthenticatedUserList (offset, limit, paramData = null) {
     return ajax('admin/userManager/appliedCertificationList', 'post', {
@@ -239,7 +238,7 @@ export default {
       headers: {
         'Content-Type': 'application/zip'
       },
-      responseType: "blob" // 文件流必须设置
+      responseType: 'blob' // 文件流必须设置
     })
   },
   exchangeStatus (params) {
@@ -330,8 +329,8 @@ export default {
       data
     })
   },
-  getContestList (offset, limit, paramData={}) {
-    let data = {offset, limit, paramData}
+  getContestList (offset, limit, paramData = {}) {
+    const data = { offset, limit, paramData }
     return ajax('admin/contestManager/contestList', 'post', {
       data
     })
@@ -355,7 +354,7 @@ export default {
     })
   },
   createContestAnnouncement (data) {
-    let params = {
+    const params = {
       contestId: data.contestId
     }
     delete data.contestId
@@ -372,7 +371,7 @@ export default {
     })
   },
   updateContestAnnouncement (data) {
-    let params = {
+    const params = {
       contestId: data.contestId
     }
     delete data.contestId
@@ -409,7 +408,7 @@ export default {
       }
     })
   },
-  deleteFiles (params) { 
+  deleteFiles (params) {
     return ajax('admin/problemManager/file/remove', 'post', {
       params
     })
@@ -419,7 +418,7 @@ export default {
     return ajax('admin/problemManager/downloadFile', 'get', {
       params,
       headers: {
-        'Content-Type': 'text/x-c++src' 
+        'Content-Type': 'text/x-c++src'
       }
     })
   },
@@ -472,14 +471,14 @@ export default {
   },
   getProblemList (data) {
     data = utils.filterEmptyValue(data)
-    let URLTAIL = data.paramData ? 'searchResult' : 'problemList'
+    const URLTAIL = data.paramData ? 'searchResult' : 'problemList'
     return ajax('admin/problemManager/' + URLTAIL, 'post', {
       data
     })
   },
   getContestProblemList (params) {
     params = utils.filterEmptyValue(params)
-    let { contestId } = params
+    const { contestId } = params
     return ajax('admin/contestManager/problemIdList', 'get', {
       params: {
         contestId
@@ -554,11 +553,11 @@ export default {
  */
 function ajax (url, method, options) {
   if (options !== undefined) {
-    var {params = {}, data = {}, headers = {}, responseType = {}} = options
+    var { params = {}, data = {}, headers = {}, responseType = {}} = options
   } else {
     params = data = headers = responseType = {}
   }
-  if (!!getToken()) {
+  if (getToken()) {
     headers.token = getToken()
   }
   return new Promise((resolve, reject) => {

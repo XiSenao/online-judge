@@ -6,10 +6,10 @@
     <div :class="{ 'header': true, 'cheheader': !sidebar.opened }">
       <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
       <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
-      <i class="el-icon-fa-font katex-editor" @click="katexVisible=true" ></i>
-      <screen-full :width="14" :height="14" class="screen-full"></screen-full>
+      <i class="el-icon-fa-font katex-editor" @click="katexVisible=true" />
+      <screen-full :width="14" :height="14" class="screen-full" />
       <el-dropdown @command="handleCommand">
-        <span style="cursor: pointer;">{{ account }}<i class="el-icon-caret-bottom el-icon--right"></i></span>
+        <span style="cursor: pointer;">{{ account }}<i class="el-icon-caret-bottom el-icon--right" /></span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="logout">Logout</el-dropdown-item>
         </el-dropdown-menu>
@@ -20,7 +20,7 @@
     </div>
     <div :class="{ 'content-app': true, 'cheheader': !sidebar.opened }" :style="{ 'margin-left': !sidebar.opened ? '5px' : '0' }">
       <transition name="fadeInUp" mode="out-in">
-        <router-view></router-view>
+        <router-view />
       </transition>
       <div class="footer">
         <p><a href="#">闽ICP备20011652</a></p>
@@ -35,7 +35,6 @@
 </template>
 
 <script>
-  import { types } from '@/store'
   import { mapGetters, mapState } from 'vuex'
   import SideMenu from '@/layout/admin/components/Sidebar'
   import TagsView from '@/layout/admin/components/TagsView'
@@ -43,16 +42,9 @@
   import KatexEditor from '@admin/components/KatexEditor.vue'
   import Hamburger from '@admin/components/Hamburger'
   import Breadcrumb from '@admin/components/Breadcrumb'
-  import api from '../api'
 
   export default {
-    name: 'app',
-    data () {
-      return {
-        version: process.env.VERSION,
-        katexVisible: false
-      }
-    },
+    name: 'App',
     components: {
       SideMenu,
       KatexEditor,
@@ -60,6 +52,20 @@
       TagsView,
       Hamburger,
       Breadcrumb
+    },
+    data () {
+      return {
+        version: process.env.VERSION,
+        katexVisible: false
+      }
+    },
+    computed: {
+      ...mapGetters({
+        account: 'admin/account'
+      }),
+      ...mapState({
+        sidebar: state => state.app.sidebar
+      })
     },
     methods: {
       toggleSideBar() {
@@ -70,21 +76,13 @@
           this.$store.dispatch('admin/logout')
             .then(() => {
               this.$success('Successfully Logged Out')
-              this.$router.push({name: 'Login'})
+              this.$router.push({ name: 'Login' })
             })
             .catch(_ => {
 
             })
         }
       }
-    },
-    computed: {
-      ...mapGetters({
-        account: 'admin/account'
-      }),
-      ...mapState({
-        sidebar: state => state.app.sidebar
-      })
     }
   }
 </script>
@@ -144,7 +142,7 @@
       margin-right: 8px;
     }
   }
-  
+
   .cheheader {
     padding-left: 54px !important;
   }
@@ -185,7 +183,5 @@
     margin-right: 5px;
     /*font-size: 18px;*/
   }
-
-
 
 </style>

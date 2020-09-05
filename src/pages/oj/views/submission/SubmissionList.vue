@@ -2,55 +2,54 @@
   <div class="flex-container">
     <div id="main">
       <Panel shadow>
-        <div slot="title">{{title}}</div>
-        <div slot="extra" v-if="!contestID">
+        <div slot="title">{{ title }}</div>
+        <div v-if="!contestID" slot="extra">
           <ul class="filter">
             <li>
               <Dropdown @on-click="handleResultChange">
-                <span>{{status}}
-                  <Icon type="arrow-down-b"></Icon>
+                <span>{{ status }}
+                  <Icon type="arrow-down-b" />
                 </span>
                 <Dropdown-menu slot="list">
-                  <Dropdown-item name="">{{$t('m.All')}}</Dropdown-item>
-                  <Dropdown-item v-for="status in Object.keys(JUDGE_STATUS)" :key="status" :name="status">
-                    {{$t('m.' + statusName(status))}}
+                  <Dropdown-item name="">{{ $t('m.All') }}</Dropdown-item>
+                  <Dropdown-item v-for="currentStatus in Object.keys(JUDGE_STATUS)" :key="currentStatus" :name="currentStatus">
+                    {{ $t('m.' + statusName(currentStatus)) }}
                   </Dropdown-item>
                 </Dropdown-menu>
               </Dropdown>
             </li>
             <li>
-              <el-tooltip effect="dark" :content="!this.profile.id ? 'Please Login First' : formFilter.myself ? 'Show All' : 'Show Mine'" placement="top-start">
-                <i-switch size="large" v-model="formFilter.myself" @on-change="handleQueryChange" :disabled="!this.profile.id">
-                  <span slot="open">{{$t('m.Mine')}}</span>
-                  <span slot="close">{{$t('m.All')}}</span>
+              <el-tooltip effect="dark" :content="!profile.id ? 'Please Login First' : formFilter.myself ? 'Show All' : 'Show Mine'" placement="top-start">
+                <i-switch v-model="formFilter.myself" size="large" :disabled="!profile.id" @on-change="handleQueryChange">
+                  <span slot="open">{{ $t('m.Mine') }}</span>
+                  <span slot="close">{{ $t('m.All') }}</span>
                 </i-switch>
               </el-tooltip>
             </li>
             <li>
-              <Input v-model="formFilter.username" :placeholder="$t('m.Search_Author')" @on-enter="handleQueryChange"/>
+              <Input v-model="formFilter.username" :placeholder="$t('m.Search_Author')" @on-enter="handleQueryChange" />
             </li>
             <li>
-              <Button type="info" icon="refresh" @click="getSubmissions">{{$t('m.Refresh')}}</Button>
+              <Button type="info" icon="refresh" @click="getSubmissions">{{ $t('m.Refresh') }}</Button>
             </li>
           </ul>
         </div>
-        <Table stripe :disabled-hover="true" :columns="columns" :data="submissions" :loading="loadingTable"></Table>
-        <Pagination :total="total" :page-size="limit" @on-change="changeRoute" :current.sync="page"></Pagination>
+        <Table stripe :disabled-hover="true" :columns="columns" :data="submissions" :loading="loadingTable" />
+        <Pagination :total="total" :page-size="limit" :current.sync="page" @on-change="changeRoute" />
       </Panel>
     </div>
   </div>
 </template>
 
 <script>
-  import { mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
   import api from '@oj/api'
   import { JUDGE_STATUS, USER_TYPE } from '@/utils/constants'
   import utils from '@/utils/utils'
-  import time from '@/utils/time'
   import Pagination from '@/pages/oj/components/Pagination'
-  let Base64 = require('js-base64').Base64;
+  const Base64 = require('js-base64').Base64
   export default {
-    name: 'submissionList',
+    name: 'SubmissionList',
     components: {
       Pagination
     },
@@ -96,10 +95,10 @@
                         this.$router.push(
                           {
                             name: 'contest-problem-details',
-                            params: {problemID: params.row.problemId, contestID: this.contestID}
+                            params: { problemID: params.row.problemId, contestID: this.contestID }
                           })
                       } else {
-                        this.$router.push({name: 'problem-details', params: {problemID: params.row.problemId}})
+                        this.$router.push({ name: 'problem-details', params: { problemID: params.row.problemId }})
                       }
                     }
                   }
@@ -139,7 +138,7 @@
                 }, params.row.language)
               } else {
                 return h('span', params.row.language)
-              } 
+              }
             }
           },
           {
@@ -156,7 +155,7 @@
                     this.$router.push(
                       {
                         name: 'user-home',
-                        query: {id: params.row.creatorId}
+                        query: { id: params.row.creatorId }
                       })
                   }
                 }
@@ -176,6 +175,40 @@
         rejudge_column: false
       }
     },
+    computed: {
+      ...mapGetters({
+        isAuthenticated: 'user/isAuthenticated',
+        profile: 'user/profile'
+      }),
+      title () {
+        if (!this.contestID) {
+          return this.$i18n.t('m.Status')
+        } else if (this.problemID) {
+          return this.$i18n.t('m.Problem_Submissions')
+        } else {
+          return this.$i18n.t('m.Submissions')
+        }
+      },
+      status () {
+        return !this.formFilter.result ? this.$i18n.t('m.Status') : this.$i18n.t('m.' + JUDGE_STATUS[this.formFilter.result].name.replace(/ /g, '_'))
+      },
+      rejudgeColumnVisible () {
+        return !this.contestID && this.profile.admin_type === USER_TYPE.SUPER_ADMIN
+      }
+    },
+    watch: {
+      '$route' (newVal, oldVal) {
+        if (newVal !== oldVal) {
+          this.init()
+        }
+      },
+      'rejudgeColumnVisible' () {
+        this.adjustRejudgeColumn()
+      },
+      'isAuthenticated' () {
+        this.init()
+      }
+    },
     mounted () {
       this.init()
       this.JUDGE_STATUS = Object.assign({}, JUDGE_STATUS)
@@ -186,7 +219,7 @@
       ...mapActions(['changeModalStatus']),
       init () {
         this.contestID = this.$route.params.contestID
-        let query = this.$route.query
+        const query = this.$route.query
         this.problemID = query.problemID
         this.formFilter.result = query.submitStatus || null
         this.formFilter.username = query.creatorKey || null
@@ -216,11 +249,11 @@
         }
       },
       getSubmissions () {
-        let params = this.buildQuery()
-        let func = this.contestID ? 'getContestSubmissionList' : 'getSubmissionList'
+        const params = this.buildQuery()
+        const func = this.contestID ? 'getContestSubmissionList' : 'getSubmissionList'
         this.loadingTable = true
         api[func](params).then(res => {
-          let data = res.data.data.records
+          const data = res.data.data.records
           for (let i = 0; i < data.length; ++i) {
             data[i].show_link = this.profile.username === data[i].creator
           }
@@ -233,21 +266,22 @@
         })
       },
       statusName (status) {
-        let length = status.length, res = []
+        const length = status.length
+        const res = []
         for (let i = 0; i < length; ++i) {
           if (i && /[A-Z]/.test(status[i])) {
             res.push('_')
-          } 
+          }
           res.push(status[i])
         }
         return res.toString().replace(/,/g, '')
       },
       // 改变route， 通过监听route变化请求数据，这样可以产生route history， 用户返回时就会保存之前的状态
       changeRoute () {
-        let query = this.buildQuery()
+        const query = this.buildQuery()
         query.contestID = this.contestID
         query.problemID = this.problemID
-        let routeName = query.contestID ? 'contest-submission-list' : 'submission-list'
+        const routeName = query.contestID ? 'contest-submission-list' : 'submission-list'
         this.$router.push({
           name: routeName,
           query
@@ -285,6 +319,7 @@
       },
       handleResultChange (status) {
         this.page = 1
+        console.log(status)
         this.formFilter.result = status
         this.changeRoute()
       },
@@ -300,7 +335,7 @@
             })
           }
         }
-        this.changeRoute() 
+        this.changeRoute()
       },
       handleRejudge (id, index) {
         this.submissions[index].loading = true
@@ -311,40 +346,6 @@
         }, () => {
           this.submissions[index].loading = false
         })
-      }
-    },
-    computed: {
-      ...mapGetters({
-        isAuthenticated: 'user/isAuthenticated',
-        profile: 'user/profile'
-      }),
-      title () {
-        if (!this.contestID) {
-          return this.$i18n.t('m.Status')
-        } else if (this.problemID) {
-          return this.$i18n.t('m.Problem_Submissions')
-        } else {
-          return this.$i18n.t('m.Submissions')
-        }
-      },
-      status () {
-        return !this.formFilter.result ? this.$i18n.t('m.Status') : this.$i18n.t('m.' + JUDGE_STATUS[this.formFilter.result].name.replace(/ /g, '_'))
-      },
-      rejudgeColumnVisible () {
-        return !this.contestID && this.profile.admin_type === USER_TYPE.SUPER_ADMIN
-      }
-    },
-    watch: {
-      '$route' (newVal, oldVal) {
-        if (newVal !== oldVal) {
-          this.init()
-        }
-      },
-      'rejudgeColumnVisible' () {
-        this.adjustRejudgeColumn()
-      },
-      'isAuthenticated' () {
-        this.init()
       }
     }
   }

@@ -38,7 +38,7 @@ Vue.use(VueAnalytics, {
 })
 Vue.use(VueWorker)
 Vue.use(iView)
-Vue.use(Element, {locale})
+Vue.use(Element, { locale })
 Vue.use(katex)
 Vue.component(IconBtn.name, IconBtn)
 Vue.component(Panel.name, Panel)
@@ -52,19 +52,19 @@ Vue.use(Element, {
 Vue.prototype.Clipboard = Clipboard
 
 Vue.prototype.$error = (msg) => {
-  Vue.prototype.$message({'message': msg, 'type': 'error'})
+  Vue.prototype.$message({ 'message': msg, 'type': 'error' })
 }
 
 Vue.prototype.$warning = (msg) => {
-  Vue.prototype.$message({'message': msg, 'type': 'warning'})
+  Vue.prototype.$message({ 'message': msg, 'type': 'warning' })
 }
 
 Vue.prototype.$success = (msg) => {
   if (!msg) {
-    Vue.prototype.$message({'message': 'Succeeded', 'type': 'success'})
+    Vue.prototype.$message({ 'message': 'Succeeded', 'type': 'success' })
   } else {
-    Vue.prototype.$message({'message': msg, 'type': 'success'})
+    Vue.prototype.$message({ 'message': msg, 'type': 'success' })
   }
 }
 
-new Vue(Vue.util.extend({router, store, i18n}, App)).$mount('#app')
+new Vue(Vue.util.extend({ router, store, i18n }, App)).$mount('#app')

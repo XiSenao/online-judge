@@ -1,113 +1,130 @@
 <template>
   <div class="view">
-    <icon-btn name="Machine Judge Server" icon="android" :disabled="isJudgeServer" @click.native="exchangeIdentity('JudgeServer')"></icon-btn>
-    <icon-btn name="SpiderServer" icon="first-order" :disabled="!isJudgeServer" @click.native="exchangeIdentity('SpiderServer')"></icon-btn>
+    <icon-btn name="Machine Judge Server" icon="android" :disabled="isJudgeServer" @click.native="exchangeIdentity('JudgeServer')" />
+    <icon-btn name="SpiderServer" icon="first-order" :disabled="!isJudgeServer" @click.native="exchangeIdentity('SpiderServer')" />
     <Panel :title="isJudgeServer ? 'Machine Judge Server' : 'Spider Judge Server'">
       <el-table
         :data="servers"
         :default-expand-all="true"
-        border>
+        border
+      >
         <el-table-column
-          type="expand">
+          type="expand"
+        >
           <template slot-scope="props">
-            <p><span class="ex-tip">{{$t('m.Service_URL')}}:</span><code>{{ props.row.url }}</code></p>
-            <p><span class="ex-tip">{{$t('m.Last_Heartbeat')}}:</span>{{ props.row.lastHeartBeat }}</p>
-            <p><span class="ex-tip">{{$t('m.Create_Time')}}:</span>{{ props.row.crtTs }}</p>
+            <p><span class="ex-tip">{{ $t('m.Service_URL') }}:</span><code>{{ props.row.url }}</code></p>
+            <p><span class="ex-tip">{{ $t('m.Last_Heartbeat') }}:</span>{{ props.row.lastHeartBeat }}</p>
+            <p><span class="ex-tip">{{ $t('m.Create_Time') }}:</span>{{ props.row.crtTs }}</p>
             <p><span class="ex-tip">Visit Token:</span><code>{{ props.row.visitToken || '-' }}</code></p>
             <p v-show="isJudgeServer"><span class="ex-tip">Judge Version:</span>{{ props.row.judgeVersion }}</p>
           </template>
         </el-table-column>
         <el-table-column
           prop="status"
-          label="Status">
+          label="Status"
+        >
           <template slot-scope="scope">
             <el-tag
-              :type="scope.row.status === 1 ? 'success' : scope.row.status === -1 ? 'danger' : 'info'">
+              :type="scope.row.status === 1 ? 'success' : scope.row.status === -1 ? 'danger' : 'info'"
+            >
               {{ scope.row.status === 1 ? 'Normal' : scope.row.status === -1 ? 'Abnormal' : 'disabled' }}
             </el-tag>
           </template>
         </el-table-column>
         <el-table-column
-          label="Hostname">
+          label="Hostname"
+        >
           <template slot-scope="scope">
-            {{scope.row.hostname || '-'}}
+            {{ scope.row.hostname || '-' }}
           </template>
         </el-table-column>
         <el-table-column
           prop="name"
-          label="Name">
-        </el-table-column>
+          label="Name"
+        />
         <el-table-column
-          label="Task Number">
+          label="Task Number"
+        >
           <template slot-scope="scope">
             {{ scope.row.taskNumber || 0 }}
           </template>
         </el-table-column>
         <el-table-column
           prop="cpuCore"
-          label="CPU Core">
+          label="CPU Core"
+        >
           <template slot-scope="scope">{{ scope.row.cpuCore || '-' }}</template>
         </el-table-column>
         <el-table-column
           prop="cpuUsage"
-          label="CPU Usage">
+          label="CPU Usage"
+        >
           <template slot-scope="scope">{{ scope.row.cpuUsage ? scope.row.cpuUsage + '%' : '-' }}</template>
         </el-table-column>
         <el-table-column
           prop="memoryUsage"
-          label="Memory Usage">
+          label="Memory Usage"
+        >
           <template slot-scope="scope">{{ scope.row.memoryUsage ? scope.row.memoryUsage + '%' : '-' }}</template>
         </el-table-column>
         <el-table-column
           fixed="right"
-          label="Options">
+          label="Options"
+        >
           <template slot-scope="scope">
-            <icon-btn name="Edit" icon="edit" @click.native="openJudgeServerDialog(scope.row.id)"></icon-btn>
+            <icon-btn name="Edit" icon="edit" @click.native="openJudgeServerDialog(scope.row.id)" />
           </template>
         </el-table-column>
       </el-table>
       <div class="panel-options">
-        <el-button type="primary" size="small" @click="openJudgeServerDialog(null)" icon="el-icon-plus" disabled>Create</el-button>
+        <el-button type="primary" size="small" icon="el-icon-plus" disabled @click="openJudgeServerDialog(null)">Create</el-button>
       </div>
     </Panel>
-    <el-dialog :title="judgeServerDialogTitle" :visible.sync="showEditJudgeServerDialog"
-               @open="onOpenJudgeServerDialog" :close-on-click-modal="false">
+    <el-dialog
+      :title="judgeServerDialogTitle"
+      :visible.sync="showEditJudgeServerDialog"
+      :close-on-click-modal="false"
+      @open="onOpenJudgeServerDialog"
+    >
       <el-form label-position="top">
         <el-form-item :label="'Name'" required>
           <el-input
             v-model="judgeServer.name"
+            class="title-input"
             disabled
-            :placeholder="'name'" class="title-input">
-          </el-input>
+            :placeholder="'name'"
+          />
         </el-form-item>
         <el-form-item :label="'Hostname'" required>
           <el-input
             v-model="judgeServer.hostname"
+            class="title-input"
             disabled
-            :placeholder="'hostname'" class="title-input">
-          </el-input>
+            :placeholder="'hostname'"
+          />
         </el-form-item>
         <el-form-item :label="'URL'" required>
           <el-input
             v-model="judgeServer.url"
+            class="title-input"
             disabled
-            :placeholder="'URL'" class="title-input">
-          </el-input>
+            :placeholder="'URL'"
+          />
         </el-form-item>
         <Radio-group v-model="judgeServer.status">
           <Radio :label="0" :disabled="judgeServer.status === -1">
-            <Icon type="ios-circle-filled"></Icon>
+            <Icon type="ios-circle-filled" />
             <span>停用</span>
           </Radio>
           <Radio :label="1" :disabled="judgeServer.status === -1">
-            <Icon type="ios-checkmark"></Icon>
+            <Icon type="ios-checkmark" />
             <span>正常</span>
           </Radio>
         </Radio-group>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <cancel @click.native="showEditJudgeServerDialog = false"></cancel>
-        <save type="primary" @click.native="submitJudgeServer"></save>
+        <cancel @click.native="showEditJudgeServerDialog = false" />
+        <save type="primary" @click.native="submitJudgeServer" />
       </span>
     </el-dialog>
   </div>
@@ -141,6 +158,12 @@
     mounted () {
       this.init()
     },
+    beforeDestroy () {
+      // 清除定时器
+      if (this.intervalId) {
+        clearTimeout(this.intervalId)
+      }
+    },
     methods: {
       exchangeIdentity (identity) {
         this.executedImmediate = true
@@ -173,10 +196,10 @@
         }
       },
       submitJudgeServer () {
-        let params = {
+        const params = {
           judgeTypeId: this.judgeServer.id,
           status: this.judgeServer.status
-        } 
+        }
         api.updateJudgeOrSpiderServer(params).then(res => {
           this.showEditJudgeServerDialog = false
           this.executedImmediate = true
@@ -189,7 +212,7 @@
         // 暂时解决 文本编辑器显示异常bug
         setTimeout(() => {
           if (document.createEvent) {
-            let event = document.createEvent('HTMLEvents')
+            const event = document.createEvent('HTMLEvents')
             event.initEvent('resize', true, true)
             window.dispatchEvent(event)
           } else if (document.createEventObject) {
@@ -241,21 +264,15 @@
         clearInterval(this.intervalId)
       }
       next()
-    },
-    beforeDestroy () {
-      // 清除定时器
-      if (this.intervalId) {
-        clearTimeout(this.intervalId)
-      }
     }
   }
 </script>
 <style scoped>
   .ex-tip {
-    color: #464c5b; 
-		font-size: 15px; 
-		font-weight: 700; 
-		font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif; 
+    color: #464c5b;
+		font-size: 15px;
+		font-weight: 700;
+		font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
 		margin: 0 9px;
   }
 </style>

@@ -1,2 +1,7 @@
-build/*.js
 config/*.js
+build/*.js
+src/assets
+src/pages/admin/views/problem/cProblem.vue
+src/pages/admin/views/problem/cProblemList.vue
+public
+dist

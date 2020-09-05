@@ -4,25 +4,25 @@
       <el-card class="admin-info">
         <el-row :gutter="20">
           <el-col :span="10">
-            <img class="avatar" :src="user.avatar"/>
+            <img class="avatar" :src="user.avatar" />
           </el-col>
           <el-col :span="14">
-            <p class="admin-info-name">{{user.username}}</p>
-            <p>{{user.admin_type}}</p>
+            <p class="admin-info-name">{{ user.username }}</p>
+            <p>{{ user.admin_type }}</p>
           </el-col>
         </el-row>
-        <hr/>
+        <hr />
         <div class="last-info">
-          <p class="last-info-title">{{$t('m.Last_Login')}}</p>
+          <p class="last-info-title">{{ $t('m.Last_Login') }}</p>
           <el-form label-width="80px" class="last-info-body">
             <el-form-item label="Time:">
-              <span>{{session.last_activity | localtime}}</span>
+              <span>{{ session.last_activity | localtime }}</span>
             </el-form-item>
             <el-form-item label="OS">
-              <span>{{os}}</span>
+              <span>{{ os }}</span>
             </el-form-item>
             <el-form-item label="Browser:">
-              <span>{{browser}}</span>
+              <span>{{ browser }}</span>
             </el-form-item>
           </el-form>
         </div>
@@ -34,14 +34,9 @@
 <script>
   import { mapGetters } from 'vuex'
   import browserDetector from 'browser-detect'
-  import InfoCard from '@admin/components/infoCard.vue'
-  import api from '@admin/api'
 
   export default {
-    name: 'dashboard',
-    components: {
-      InfoCard
-    },
+    name: 'Dashboard',
     data () {
       return {
         infoData: {
@@ -58,9 +53,6 @@
         user: {}
       }
     },
-    mounted () {
-      this.user = JSON.parse(JSON.stringify(this.profile))
-    },
     computed: {
       ...mapGetters({
         profile: 'admin/user'
@@ -75,7 +67,7 @@
         return this.infoData.env.FORCE_HTTPS
       },
       browser () {
-        let b = browserDetector(this.session.user_agent)
+        const b = browserDetector(this.session.user_agent)
         if (b.name && b.version) {
           return b.name + ' ' + b.version
         } else {
@@ -83,9 +75,12 @@
         }
       },
       os () {
-        let b = browserDetector(this.session.user_agent)
+        const b = browserDetector(this.session.user_agent)
         return b.os ? b.os : 'Unknown'
       }
+    },
+    mounted () {
+      this.user = JSON.parse(JSON.stringify(this.profile))
     }
   }
 </script>
@@ -101,6 +96,8 @@
     }
     .avatar {
       max-width: 100%;
+      width: 130px;
+      height: 100px;
     }
     .last-info {
       &-title {

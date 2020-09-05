@@ -1,19 +1,19 @@
 <template>
   <div>
-    <NavBar></NavBar>
+    <NavBar />
     <div class="content-app">
       <transition name="fadeInUp" mode="out-in">
-        <router-view></router-view>
+        <router-view />
       </transition>
       <div class="footer">
-        <p v-html="website.website_footer"></p>
+        <p v-html="website.website_footer" />
         <p><a href="#">闽ICP备20011652</a></p>
         <p>Powered by <a href="https://github.com/czeta/online-judge">OnlineJudge</a>
           <span v-if="version">&nbsp; Version: {{ version }}</span>
         </p>
       </div>
     </div>
-    <BackTop></BackTop>
+    <BackTop />
   </div>
 </template>
 
@@ -24,7 +24,7 @@
   import storage from '@/utils/storage'
 
   export default {
-    name: 'app',
+    name: 'App',
     components: {
       NavBar
     },
@@ -33,45 +33,6 @@
         version: process.env.VERSION,
         planeNumber: 0
       }
-    },
-    created () {
-      try {
-        document.body.removeChild(document.getElementById('app-loader'))  
-        console.log(` %c                                                                                                                                                                                      
-                         ▍ ★∴
-     　 　s ．t ．▍▍a．..r．█▍ ☆ ★∵t .... 
-      　　◥█▅▅██▅▅██▅▅▅▅▅███◤
-       　 ．◥███████████████◤ 
-      ～～～～◥█████████████◤～～～～ 
-      ～～～～～～～～～～～～～～～～～～～～～～～～
-      ～～～～～～～～～～～～～～～～～～～～～～～～                             
-          `, "color: #00a1d6;")
-        console.log("\n%c Welcome to Online Judge! %c %c Github: https://github.com/FinalAshen/Online-Judge\n", "color: #73c9e5; font-weight:600","","color:orange;font-weight:900")
-        utils.changeTheme(this.theme() || 'white')
-        document.onkeydown = event => {
-          var event = event || window.event, key = null
-          if (this.planeNumber > 4) { return }
-          if (event.keyCode == 86 && event.ctrlKey) {  
-            var KICKASSVERSION='2.0'
-            var s = document.createElement('script')
-            s.type='text/javascript'
-            document.body.appendChild(s)
-            s.src='/static/js/PlaneGame.js'
-            this.planeNumber++
-          } 
-          if (event.keyCode == 27) {
-            this.planeNumber = this.planeNumber && this.planeNumber--
-          }
-        }
-      } catch (_) {}
-    },
-    mounted () {
-      this.getWebsiteConfig()
-      storage.clearCache('LRU')
-	    storage.clearCache('LFU')
-    },
-    methods: {
-      ...mapActions(['getWebsiteConfig', 'changeDomTitle'])
     },
     computed: {
       ...mapState(['website']),
@@ -86,6 +47,46 @@
       '$route' () {
         this.changeDomTitle()
       }
+    },
+    created () {
+      try {
+        document.body.removeChild(document.getElementById('app-loader'))
+        console.log(` %c                                                                                                                                                                                      
+                         ▍ ★∴
+         s ．t ．▍▍a．..r．█▍ ☆ ★∵t .... 
+         ◥█▅▅██▅▅██▅▅▅▅▅███◤
+         ．◥███████████████◤ 
+      ～～～～◥█████████████◤～～～～ 
+      ～～～～～～～～～～～～～～～～～～～～～～～～
+      ～～～～～～～～～～～～～～～～～～～～～～～～                             
+          `, 'color: #00a1d6;')
+        console.log('\n%c Welcome to Online Judge! %c %c Github: https://github.com/FinalAshen/Online-Judge\n', 'color: #73c9e5; font-weight:600', '', 'color:orange;font-weight:900')
+        utils.changeTheme(this.theme() || 'white')
+        document.onkeydown = event => {
+          event = event || window.event
+          if (this.planeNumber > 4) { return }
+          if (event.keyCode === 86 && event.ctrlKey) {
+            var s = document.createElement('script')
+            s.type = 'text/javascript'
+            document.body.appendChild(s)
+            s.src = '/static/js/PlaneGame.js'
+            this.planeNumber++
+          }
+          if (event.keyCode === 27) {
+            this.planeNumber = this.planeNumber && this.planeNumber--
+          }
+        }
+      } catch (_) {
+        console.log(_)
+      }
+    },
+    mounted () {
+      this.getWebsiteConfig()
+      storage.clearCache('LRU')
+      storage.clearCache('LFU')
+    },
+    methods: {
+      ...mapActions(['getWebsiteConfig', 'changeDomTitle'])
     }
   }
 </script>
@@ -106,7 +107,6 @@
     }
   }
 
-
   .content-app {
     margin-top: 80px;
     padding: 0 2%;
@@ -122,6 +122,4 @@
   .fadeInUp-enter-active {
     animation: fadeInUp .8s;
   }
-
-
 </style>

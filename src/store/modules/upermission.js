@@ -52,7 +52,7 @@ const mutations = {
   SET_ROUTES: (state, routes) => {
     state.addRoutes = routes
     state.routes = constantRoutes.concat(routes)
-    let routesName = new Set()
+    const routesName = new Set()
     utils.serializationDFS(constantRoutes.concat(routes), routesName, 'name')
     state.availableRoutesName = Array.from(routesName)
   },
@@ -64,11 +64,10 @@ const mutations = {
 const actions = {
   generateRoutes({ commit }, roles) {
     return new Promise(resolve => {
-      let accessedRoutes
-      accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+      const accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
       let routesPath = new Set()
       utils.serializationDFS(constantRoutes.concat(asyncRoutes), routesPath, 'path')
-      routesPath = [ ...routesPath ]
+      routesPath = [...routesPath]
       commit('SET_SUM_ROUTES_PATH', routesPath)
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)

@@ -1,38 +1,39 @@
 <template>
   <Panel shadow :padding="10">
     <div slot="title">
-      {{title}}
+      {{ title }}
     </div>
     <div slot="extra">
-      <Button v-if="listVisible" type="info" @click="init" :loading="btnLoading">{{$t('m.Refresh')}}</Button>
-      <Button v-else type="ghost" icon="ios-undo" @click="goBack">{{$t('m.Back')}}</Button>
+      <Button v-if="listVisible" type="info" :loading="btnLoading" @click="init">{{ $t('m.Refresh') }}</Button>
+      <Button v-else type="ghost" icon="ios-undo" @click="goBack">{{ $t('m.Back') }}</Button>
     </div>
 
     <transition-group name="announcement-animate" mode="in-out">
-      <div class="no-announcement" v-if="!announcements.length" key="no-announcement">
-        <p>{{$t('m.No_Announcements')}}</p>
+      <div v-if="!announcements.length" key="no-announcement" class="no-announcement">
+        <p>{{ $t('m.No_Announcements') }}</p>
       </div>
       <template v-if="listVisible">
-        <ul class="announcements-container" key="list">
-          <li v-for="announcement in announcements" :key="announcement.id">
+        <ul key="list" class="announcements-container">
+          <li v-for="message in announcements" :key="message.id">
             <div class="flex-container">
-              <div class="title"><a :class="[showMyMessage && !announcement.status ? 'add-blue' : '', 'entry']" @click="goAnnouncement(announcement)">
-                {{announcement.title}}</a></div>
-              <div :class="[showMyMessage && !announcement.status ? 'add-blue' : '', 'date']">{{announcement.crtTs | localtime }}</div>
-              <div :class="[showMyMessage && !announcement.status ? 'add-blue' : '', 'creator']"> {{$t('m.By')}} {{announcement.creator}}</div>
+              <div class="title"><a :class="[showMyMessage && !message.status ? 'add-blue' : '', 'entry']" @click="goAnnouncement(message)">
+                {{ message.title }}</a></div>
+              <div :class="[showMyMessage && !message.status ? 'add-blue' : '', 'date']">{{ message.crtTs | localtime }}</div>
+              <div :class="[showMyMessage && !message.status ? 'add-blue' : '', 'creator']"> {{ $t('m.By') }} {{ message.creator }}</div>
             </div>
           </li>
         </ul>
-        <Pagination v-if="!isContest"
-                    key="page"
-                    :total="total"
-                    :page-size="limit"
-                    @on-change="getAnnouncementList">
-        </Pagination>
+        <Pagination
+          v-if="!isContest"
+          key="page"
+          :total="total"
+          :page-size="limit"
+          @on-change="getAnnouncementList"
+        />
       </template>
 
       <template v-else>
-        <div v-katex v-html="announcement.content" key="content" class="content-container markdown-body"></div>
+        <div key="content" v-katex class="content-container markdown-body" v-html="announcement.content" />
       </template>
     </transition-group>
   </Panel>
@@ -56,6 +57,20 @@
         announcement: '',
         listVisible: true,
         showMyMessage: false
+      }
+    },
+    computed: {
+      title () {
+        if (this.showMyMessage) {
+          return this.$i18n.t('m.Message')
+        } else if (this.listVisible) {
+          return this.isContest ? this.$i18n.t('m.Contest_Announcements') : this.$i18n.t('m.Announcements')
+        } else {
+          return this.announcement.title
+        }
+      },
+      isContest () {
+        return !!this.$route.params.contestID
       }
     },
     mounted () {
@@ -96,32 +111,18 @@
           api.hasReadMessage(announcement.id).then(res => {
             announcement.status = 1
             this.announcement = announcement
-            this.listVisible = false   
+            this.listVisible = false
           }).catch(_ => {
             this.listVisible = false
           })
         } else {
           this.announcement = announcement
-          this.listVisible = false 
+          this.listVisible = false
         }
       },
       goBack () {
         this.listVisible = true
         this.announcement = ''
-      }
-    },
-    computed: {
-      title () {
-        if (this.showMyMessage) {
-          return this.$i18n.t('m.Message')
-        } else if (this.listVisible) {
-          return this.isContest ? this.$i18n.t('m.Contest_Announcements') : this.$i18n.t('m.Announcements')
-        } else {
-          return this.announcement.title
-        }
-      },
-      isContest () {
-        return !!this.$route.params.contestID
       }
     }
   }
