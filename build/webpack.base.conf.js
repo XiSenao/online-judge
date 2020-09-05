@@ -65,6 +65,17 @@ module.exports = {
       '~': resolve('src/components')
     }
   },
+  externals: {
+    vue: 'Vue',
+    'vue-router': 'VueRouter',
+    vuex: 'Vuex',
+    axios: 'axios',
+    'element-ui': 'ElementUI',
+    iview: 'iview',
+    katex: 'katex',
+    codemirror: 'codemirror',
+    jszip: 'jszip'
+  },
   module: {
     rules: [
       // {

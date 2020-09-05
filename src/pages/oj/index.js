@@ -7,11 +7,11 @@ import i18n from '@/i18n'
 import VueClipboard from 'vue-clipboard2'
 import VueAnalytics from 'vue-analytics'
 import { GOOGLE_ANALYTICS_ID } from '@/utils/constants'
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
-import iView from 'iview'
-import locale from 'iview/dist/locale/en-US'
-import 'iview/dist/styles/iview.css'
+// import ElementUI from 'element-ui'
+// import 'element-ui/lib/theme-chalk/index.css'
+// import iView from 'iview'
+// import locale from 'iview/dist/locale/en-US'
+// import 'iview/dist/styles/iview.css'
 
 import Panel from '@oj/components/Panel.vue'
 import VerticalMenu from '@oj/components/verticalMenu/verticalMenu.vue'
@@ -42,11 +42,11 @@ Object.keys(filters).forEach(key => {
 })
 
 Vue.config.productionTip = false
-Vue.use(iView, { locale })
-Vue.use(ElementUI)
+// Vue.use(iView, { locale })
+// Vue.use(ElementUI)
 Vue.use(VueClipboard)
 Vue.use(highlight)
-Vue.use(katex)
+// Vue.use(katex)
 
 Vue.use(VueAnalytics, {
   id: GOOGLE_ANALYTICS_ID,
