@@ -10,6 +10,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+// const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -27,17 +28,6 @@ const webpackConfig = merge(baseWebpackConfig, {
     path: config.build.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
-  },
-  externals: {
-    vue: 'Vue',
-    'vue-router': 'VueRouter',
-    vuex: 'Vuex',
-    axios: 'axios',
-    'element-ui': 'ElementUI',
-    iview: 'iview',
-    katex: 'katex',
-    codemirror: 'codemirror',
-    jszip: 'jszip'
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
@@ -58,6 +48,25 @@ const webpackConfig = merge(baseWebpackConfig, {
         safe: true
       }
     }),
+
+    // new ParallelUglifyPlugin({
+    //   exclude: /\.min\.js$/,
+    //   sourceMap: false,
+    //   workerCount: 4,
+    //   uglifyJS: {
+    //     output: {
+    //       beautify: false,
+    //       comments: false
+    //     },
+    //     compress: {
+    //       warnings: false,
+    //       drop_console: false,
+    //       collapse_vars: true,
+    //       reduce_vars: true
+    //     }
+    //   }
+    // }),
+
     new UglifyJSPlugin({
       exclude: /\.min\.js$/,
       cache: true,
