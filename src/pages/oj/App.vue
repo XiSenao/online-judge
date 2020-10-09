@@ -50,6 +50,7 @@
     },
     created () {
       try {
+        // console.log(process.env)
         document.body.removeChild(document.getElementById('app-loader'))
         console.log(` %c                                                                                                                                                                                      
                          ▍ ★∴

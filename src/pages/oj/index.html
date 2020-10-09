@@ -7,14 +7,17 @@
    # 无法成功数字化你的心情 但我一直在这里 #-->
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Online Judge</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-  <meta name="keywords" content="在线编程, 刷题, 题库, 数据结构, 代码, 互联网, 编程, 开发, 程序员, 工程师, 码农, 程序猿, OJ, online judge" data-react-helmet="true">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="keywords" content="在线编程, 刷题, 题库, 数据结构, 代码, 互联网, 编程, 开发, 程序员, 工程师, 码农, 程序猿, OJ, online judge"
+    data-react-helmet="true">
   <meta name="description" content="Talk is cheap. Show me the code." data-react-helmet="true">
-  <meta name="renderer" content="webkit"/>
+  <meta name="renderer" content="webkit" />
+  <!-- <meta http-equiv="Content-Security-Policy" content="script-src yfoj.org.cn cdn.jsdelivr.net 'unsafe-inline'; object-src 'none'; style-src yfoj.org.cn cdn.jsdelivr.net 'unsafe-inline'; child-src https:; img-src cdn.yfoj.org.cn yfoj.org.cn data: wpimg.wallstcn.com;"> -->
   <meta http-equiv="x-dns-prefetch-control" content="on">
   <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
   <link rel="shortcut icon" href="/static/image/favicon.ico">
@@ -22,20 +25,21 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui@2.4.10/lib/theme-chalk/index.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/iview@2.14.3/dist/styles/iview.css">
 </head>
-<body>
-<div id="app-loader">
-  <div class="square"></div>
-  <div class="square"></div>
-  <div class="square last"></div>
-  <div class="square clear"></div>
-  <div class="square"></div>
-  <div class="square last"></div>
-  <div class="square clear"></div>
-  <div class="square "></div>
-  <div class="square last"></div>
-</div>
 
-<div id="app"></div>
+<body>
+  <div id="app-loader">
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square last"></div>
+    <div class="square clear"></div>
+    <div class="square"></div>
+    <div class="square last"></div>
+    <div class="square clear"></div>
+    <div class="square "></div>
+    <div class="square last"></div>
+  </div>
+
+  <div id="app"></div>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.runtime.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue-router@3.0.6/dist/vue-router.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vuex@3.1.1/dist/vuex.min.js"></script>
@@ -51,18 +55,45 @@
       window.location = 'http://outdatedbrowser.com'
     }
     // Check that service workers are supported
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker
-          .register('/service-wroker.js')
-          .then(registration => {
-            console.log('SW registered: ', registration);
-          })
-          .catch(registrationError => {
-            console.log('SW registration failed: ', registrationError);
-          });
-      });
+    const SERVICE_WORKER_API = 'serviceWorker';
+    const SERVICE_WORKER_FILE_PATH = '/service-worker.js';
+
+    const isSupportServiceWorker = () => SERVICE_WORKER_API in navigator;
+
+    if (isSupportServiceWorker()) {
+      navigator
+        .serviceWorker
+        .register(SERVICE_WORKER_FILE_PATH)
+        .then(() => console.log('Load service worker Success.'))
+        .catch(() => console.error('Load service worker fail'));
+    } else {
+      console.info('Browser not support Service Worker.');
     }
+    // if ('serviceWorker' in navigator) {
+    //   window.addEventListener('load', function () {
+    //     if ('serviceWorker' in navigator) {
+    //       navigator.serviceWorker.getRegistrations()
+    //         .then(function (registrations) {
+    //           for (let registration of registrations) {
+    //             //安装在网页的service worker不止一个，找到我们的那个并删除
+    //             if (registration && registration.scope === 'https://seed.futunn.com/') {
+    //               registration.unregister();
+    //             }
+    //           }
+    //         });
+    //     }
+    //     navigator.serviceWorker.register('serviceWorker.js')
+    //       .then(function (registration) {
+    //         // 注册成功
+    //         console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    //       })
+    //       .catch(function (err) {
+    //         // 注册失败
+    //         console.log('ServiceWorker registration failed: ', err);
+    //       });
+    //   });
+    // }
   </script>
 </body>
+
 </html>

@@ -11,11 +11,11 @@ const WorkboxPlugin = require('workbox-webpack-plugin')
 const HappyPack = require('happypack')
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
 
-function resolve (dir) {
+function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
 
-function getEntries () {
+function getEntries() {
   const base = {
     'oj': ['./src/pages/oj/index.js'],
     'admin': ['./src/pages/admin/index.js']
@@ -40,7 +40,7 @@ Object.keys(entries).forEach(entry => {
 })
 
 // prepare vendor asserts
-const globOptions = {cwd: resolve('static/js')};
+const globOptions = { cwd: resolve('static/js') };
 let vendorAssets = glob.sync('vendor.dll.*.js', globOptions);
 vendorAssets = vendorAssets.map(file => 'static/js/' + file)
 
@@ -109,12 +109,12 @@ module.exports = {
       //   include: [resolve('src'), resolve('test')]
       // },
       {
-        test: /\.worker\.js$/, 
+        test: /\.worker\.js$/,
         use: {
-          loader: 'worker-loader' ,
-          options: { 
-            inline: true, 
-            name: 'workerName.[hash].js' 
+          loader: 'worker-loader',
+          options: {
+            inline: true,
+            name: 'workerName.[hash].js'
           }
         }
       },
@@ -170,33 +170,56 @@ module.exports = {
     //   verbose: true
     // }),
     new WorkboxPlugin.GenerateSW({
-      importWorkboxFrom: 'local',
-      skipWaiting: true,
-      clientsClaim: true,
+      cacheId: 'seed-cache',
+
+      importWorkboxFrom: 'disabled', // 可填`cdn`,`local`,`disabled`,
+      importScripts: '/scripts-build/commseed/workboxswMain.js',
+
+      skipWaiting: true, //跳过waiting状态
+      clientsClaim: true, //通知让新的sw立即在页面上取得控制权
+      cleanupOutdatedCaches: true,//删除过时、老版本的缓存
+
+      //最终生成的service worker地址，这个地址和webpack的output地址有关
+      swDest: '/workboxServiceWorker.js',
+      include: [
+
+      ],
+      //缓存规则，可用正则匹配请求，进行缓存
+      //这里将js、css、还有图片资源分开缓存，可以区分缓存时间(虽然这里没做区分。。)
+      //由于种子农场此站点较长时间不更新，所以缓存时间可以稍微长一些
       runtimeCaching: [
         {
-          // To match cross-origin requests, use a RegExp that matches
-          // the start of the origin:
-          urlPattern: new RegExp('^https://api'),
-          handler: 'StaleWhileRevalidate',
+          urlPattern: /.*\.js.*/i,
+          handler: 'CacheFirst',
           options: {
-            // Configure which responses are considered cacheable.
-            cacheableResponse: {
-              statuses: [200]
-            }
-          }
+            cacheName: 'seed-js',
+            expiration: {
+              maxEntries: 50,  //最多缓存50个，超过的按照LRU原则删除
+              maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+            },
+          },
         },
         {
-          urlPattern: new RegExp('^https://cdn'),
-          // Apply a network-first strategy.
-          handler: 'NetworkFirst',
+          urlPattern: /.*css.*/,
+          handler: 'CacheFirst',
           options: {
-            // Fall back to the cache after 2 seconds.
-            networkTimeoutSeconds: 2,
-            cacheableResponse: {
-              statuses: [200]
-            }
-          }
+            cacheName: 'seed-css',
+            expiration: {
+              maxEntries: 50,  //最多缓存50个，超过的按照LRU原则删除
+              maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+            },
+          },
+        },
+        {
+          urlPattern: /.*(jpg|png|svga).*/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'seed-image',
+            expiration: {
+              maxEntries: 30,  //最多缓存30个，超过的按照LRU原则删除
+              maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+            },
+          },
         }
       ]
     })

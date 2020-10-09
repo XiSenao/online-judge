@@ -2,17 +2,19 @@
 // Template version: 1.1.1
 // see http://vuejs-templates.github.io/webpack for documentation.
 const path = require('path')
+const DEV_ENV = require('./dev.env')
+const BUILD_ENV = require('./prod.env')
 const commonProxy = {
   onProxyReq: (proxyReq, req, res) => {
-    proxyReq.setHeader('Referer', process.env.Target)
+    proxyReq.setHeader('Referer', process.env.Target || DEV_ENV.Target)
   },
-  target: process.env.Target,
+  target: process.env.Target || DEV_ENV.Target,
   changeOrigin: true
 }
 
 module.exports = {
   build: {
-    env: require('./prod.env'),
+    env: BUILD_ENV,
     ojIndex: path.resolve(__dirname, '../dist/index.html'),
     ojTemplate: path.resolve(__dirname, '../src/pages/oj/index.html'),
     adminIndex: path.resolve(__dirname, '../dist/admin/index.html'),
@@ -25,23 +27,23 @@ module.exports = {
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
     // npm install --save-dev compression-webpack-plugin
-    productionGzip: true,
+    productionGzip: BUILD_ENV.Gzip,
     productionGzipExtensions: ['js', 'css'],
     // Run the build command with an extra argument to
     // View the bundle analyzer report after build finishes:
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
-    bundleAnalyzerReport: process.env.npm_config_report
+    bundleAnalyzerReport: process.env.npm_config_report || BUILD_ENV.report
   },
   dev: {
-    env: require('./dev.env'),
+    env: DEV_ENV,
     port: process.env.PORT || 8080,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
       "/api": commonProxy,
-      "/public": commonProxy
+      "/resource": commonProxy
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
