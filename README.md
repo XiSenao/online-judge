@@ -27,7 +27,7 @@ git clone https://github.com/FinalAshen/Online-Judge.git
 # Install project dependencies
 npm install
 
-# the config/dev.env.js will set proxy api to your backend
+# the `config/dev.env.js` will set proxy api to your backend
 TARGET=http://Your-backend
 
 # serve with hot reload at localhost:8080
@@ -44,14 +44,14 @@ npm run new
 npm run lint
 
 # code format check and auto fix
-npm run lint -- --fix
+npm run lint:fix
 ```
 
 ## Online Demo
 [Preview](http://yfoj.org.cn/). 
-**If you want to restructure the project, [api documentation](http://cdn.yfoj.org.cn/doc.html) may be suitable for you.
-You can review [project](https://github.com/czeta/online-judge) if you have doubts about the services provided by the project.
-Enjoy It!**
++ **If you want to restructure the project, [api documentation](http://cdn.yfoj.org.cn/doc.html) may be suitable for you.**
++ **You can review [project](https://github.com/czeta/online-judge) if you have doubts about the services provided by the project.**
+**Enjoy It!**
 
 ## Browser Support
 
