@@ -3,10 +3,10 @@
     <Card :padding="0">
       <div class="flex-container">
         <div class="menu">
-          <Menu accordion :active-name="activeName" style="text-align: center;" width="auto" @on-select="goRoute">
+          <Menu :active-name="activeName" accordion style="text-align: center;" width="auto" @on-select="goRoute">
             <div class="avatar-editor">
               <div class="avatar-container">
-                <img class="avatar" :src="userIMGBuffer" />
+                <img :src="userIMGBuffer" class="avatar" />
                 <div class="avatar-mask">
                   <a @click.stop="goRoute({name: 'profile-setting'})">
                     <div class="mask-content">

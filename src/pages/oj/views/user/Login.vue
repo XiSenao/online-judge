@@ -2,20 +2,20 @@
   <div>
     <Form ref="formLogin" :model="formLogin" :rules="ruleLogin">
       <FormItem prop="username">
-        <Input v-model="formLogin.username" type="text" :placeholder="$t('m.LoginUsername')" size="large" @on-enter="handleLogin" />
+        <Input v-model="formLogin.username" :placeholder="$t('m.LoginUsername')" type="text" size="large" @on-enter="handleLogin" />
         <Icon slot="prepend" type="ios-person-outline" />
       </FormItem>
       <FormItem prop="password">
-        <Input v-model="formLogin.password" type="password" :placeholder="$t('m.LoginPassword')" size="large" @on-enter="handleLogin" />
+        <Input v-model="formLogin.password" :placeholder="$t('m.LoginPassword')" type="password" size="large" @on-enter="handleLogin" />
         <Icon slot="prepend" type="ios-locked-outline" />
       </FormItem>
     </Form>
     <div class="footer">
       <Button
+        :loading="btnLoginLoading"
         type="primary"
         class="btn"
         long
-        :loading="btnLoginLoading"
         @click="handleLogin">
         {{ $t('m.UserLogin') }}
       </Button>

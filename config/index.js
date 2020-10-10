@@ -6,9 +6,9 @@ const DEV_ENV = require('./dev.env')
 const BUILD_ENV = require('./prod.env')
 const commonProxy = {
   onProxyReq: (proxyReq, req, res) => {
-    proxyReq.setHeader('Referer', process.env.Target || DEV_ENV.Target)
+    proxyReq.setHeader('Referer', process.env.TARGET || DEV_ENV.TARGET)
   },
-  target: process.env.Target || DEV_ENV.Target,
+  target: process.env.TARGET || DEV_ENV.TARGET,
   changeOrigin: true
 }
 
@@ -37,6 +37,14 @@ module.exports = {
   },
   dev: {
     env: DEV_ENV,
+    // Use Eslint Loader?
+    // If true, your code will be linted during bundling and
+    // linting errors and warnings will be shown in the console.
+    useEslint: true,
+    // If true, eslint errors and warnings will also be shown in the error overlay
+    // in the browser.
+    showEslintErrorsInOverlay: false,
+
     port: process.env.PORT || 8080,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',

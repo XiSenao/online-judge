@@ -30,25 +30,28 @@
 </template>
 
 <script>
-  import { types } from '@/store'
   import { mapGetters } from 'vuex'
   import SideMenu from './components/Sidebar'
   import ScreenFull from '@admin/components/ScreenFull.vue'
   import KatexEditor from '@admin/components/KatexEditor.vue'
-  import api from '../api'
 
   export default {
-    name: 'app',
+    name: 'App',
+    components: {
+      SideMenu,
+      KatexEditor,
+      ScreenFull
+    },
     data () {
       return {
         version: process.env.VERSION,
         katexVisible: false
       }
     },
-    components: {
-      SideMenu,
-      KatexEditor,
-      ScreenFull
+    computed: {
+      ...mapGetters({
+        account: 'admin/account'
+      })
     },
     methods: {
       handleCommand (command) {
@@ -56,18 +59,13 @@
           this.$store.dispatch('admin/logout')
             .then(() => {
               this.$success('Successfully Logged Out')
-              this.$router.push({name: 'login'})
+              this.$router.push({ name: 'login' })
             })
             .catch(_ => {
 
             })
         }
       }
-    },
-    computed: {
-      ...mapGetters({
-        account: 'admin/account'
-      })
     }
   }
 </script>

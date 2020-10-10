@@ -14,7 +14,7 @@
                 {{ contest.title }}
               </div>
               <div slot="extra">
-                <Tag type="dot" :color="countdownColor">
+                <Tag :color="countdownColor" type="dot">
                   <span id="countdown">{{ countdown }}</span>
                 </Tag>
               </div>
@@ -22,12 +22,12 @@
               <div class="contest-password">
                 <Input v-if="passwordFormVisible && !currentStatus"
                        v-model="contestPassword"
+                       :disabled="currentStatus"
                        class="contest-password-input"
                        type="password"
-                       :disabled="currentStatus"
                        placeholder="contest password"
                        @on-enter="checkPassword" />
-                <Button type="info" :disabled="contest_table[0].permission || currentStatus" @click="checkPassword">{{ enrollmentStatus }}</Button>
+                <Button :disabled="contest_table[0].permission || currentStatus" type="info" @click="checkPassword">{{ enrollmentStatus }}</Button>
               </div>
             </Panel>
             <Table :columns="columns" :data="contest_table" disabled-hover style="margin-bottom: 40px;" />

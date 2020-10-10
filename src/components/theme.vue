@@ -1,27 +1,27 @@
 <template>
   <div class="theme">
     <el-popover
-      placement="top"
       v-model="visible"
+      placement="top"
       width="230"
     >
       <div class="themes">
         <div
-          :key="index"
-          @click="changeTheme(themeKey)"
-          class="theme-item"
           v-for="(themeValue, themeKey, index) in themeMap"
+          :key="index"
+          class="theme-item"
+          @click="changeTheme(themeKey)"
         >
           <div
             :style="themeValue.style"
             class="theme-icon"
           ></div>
-          <p>{{themeValue.title}}</p>
+          <p>{{ themeValue.title }}</p>
         </div>
       </div>
       <Icon
-        :backdrop="true"
         slot="reference"
+        :backdrop="true"
         type="skin"
       />
     </el-popover>
@@ -29,57 +29,56 @@
 </template>
 
 <script type="text/ecmascript-6">
-import variables from "@/styles/themes/variables"
-import variablesWhite from "@/styles/themes/variables-white"
-import variablesRed from "@/styles/themes/variables-red"
+import variables from '@/styles/themes/variables'
+import variablesWhite from '@/styles/themes/variables-white'
+import variablesRed from '@/styles/themes/variables-red'
 import { mapGetters, mapMutations } from 'vuex'
-import { THEME_KEY } from '@/utils/constants'
 
 const themes = {
-  white: "white",
-  dark: "dark",
-  red: "red"
+  white: 'white',
+  dark: 'dark',
+  red: 'red'
 }
 export default {
+  data() {
+    return {
+      visible: false
+    }
+  },
+  computed: {
+    ...mapGetters(['theme'])
+  },
   created() {
     this.themeMap = {
       [themes.dark]: {
-        title: "深色",
+        title: '深色',
         file: variables,
         style: {
-          backgroundColor: "#202020"
+          backgroundColor: '#202020'
         }
       },
       [themes.white]: {
-        title: "浅色",
+        title: '浅色',
         file: variablesWhite,
         style: {
-          backgroundColor: "#F6F6F6",
-          border: "1px solid #EBEAEA"
+          backgroundColor: '#F6F6F6',
+          border: '1px solid #EBEAEA'
         }
       },
       [themes.red]: {
-        title: "红色",
+        title: '红色',
         file: variablesRed,
         style: {
-          backgroundColor: "#D33A31"
+          backgroundColor: '#D33A31'
         }
       }
     }
     // 默认浅色
     this.changeTheme(this.theme)
   },
-  computed: {
-    ...mapGetters(['theme'])
-  },
-  data() {
-    return {
-      visible: false
-    }
-  },
   methods: {
     ...mapMutations({
-        changeMyTheme: 'changeTheme'
+      changeMyTheme: 'changeTheme'
     }),
     changeTheme(themeKey) {
       this.changeMyTheme(themeKey)
@@ -89,8 +88,7 @@ export default {
         document.documentElement.style.setProperty(key, value)
       })
     }
-  },
-  components: {}
+  }
 }
 </script>
 

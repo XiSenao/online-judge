@@ -3,11 +3,11 @@
     <div class="section-title">{{ $t('m.Avatar_Setting') }}</div>
     <template v-if="!avatarOption.imgSrc">
       <Upload
+        :before-upload="handleSelectFile"
         type="drag"
         class="mini-container"
         accept=".jpg,.jpeg,.png,.bmp,.gif"
-        action=""
-        :before-upload="handleSelectFile">
+        action="">
         <div style="padding: 30px 0">
           <Icon type="ios-cloud-upload" size="52" style="color: #3399ff" />
           <p>Drop here, or click to select manually</p>
@@ -20,14 +20,14 @@
         <div class="cropper-main inline">
           <vueCropper
             ref="cropper"
-            auto-crop
-            fixed
             :auto-crop-width="200"
             :auto-crop-height="200"
             :img="avatarOption.imgSrc"
             :output-size="avatarOption.size"
             :output-type="avatarOption.outputType"
             :info="true"
+            auto-crop
+            fixed
             @realTime="realTime"
           />
         </div>
@@ -45,7 +45,7 @@
             <Icon type="checkmark-round" size="20" />
           </Button>
         </ButtonGroup>
-        <div class="cropper-preview" :style="previewStyle">
+        <div :style="previewStyle" class="cropper-preview">
           <div :style=" preview.div">
             <img :src="avatarOption.imgSrc" :style="preview.img">
           </div>
@@ -66,7 +66,7 @@
 
     <div class="section-title">{{ $t('m.Profile_Setting') }}</div>
     <Form ref="formProfile" :model="formProfile" :rules="formValidate">
-      <Row type="flex" :gutter="30" justify="space-around">
+      <Row :gutter="30" type="flex" justify="space-around">
         <Col :span="11">
         <FormItem label="Mood" prop="mood">
           <Input v-model="formProfile.mood" />
@@ -77,7 +77,7 @@
           </Select>
         </FormItem>
         <Form-item>
-          <Button type="primary" :loading="loadingSaveBtn" @click="updateProfile">Save All</Button>
+          <Button :loading="loadingSaveBtn" type="primary" @click="updateProfile">Save All</Button>
         </Form-item>
         </Col>
         <Col :span="11">

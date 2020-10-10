@@ -29,7 +29,7 @@
     <div v-show="showChart" class="echarts">
       <ECharts ref="chart" :options="options" auto-resize />
     </div>
-    <Table ref="tableRank" class="auto-resize" :columns="columns" :data="dataRank" disabled-hover />
+    <Table ref="tableRank" :columns="columns" :data="dataRank" class="auto-resize" disabled-hover />
     <Pagination
       :total="total"
       :page-size.sync="limit"

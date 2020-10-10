@@ -2,7 +2,6 @@
   <div :class="{'upload': inlineBlock}">
     <Upload
       ref="upload"
-      multiple
       :name="fileName"
       :type="uploadType"
       :accept="'.zip'"
@@ -12,13 +11,14 @@
       :format="formatSuffix"
       :on-format-error="handleFormatError"
       :disabled="disabled"
-      :action="action">
-      <el-tooltip effect="dark" :content="tipContent" :placement="tipPosition">
+      :action="action"
+      multiple>
+      <el-tooltip :content="tipContent" :placement="tipPosition" effect="dark">
         <div v-if="uploadType" style="padding: 20px 0">
           <Icon type="ios-cloud-upload" size="52" style="color: #3399ff" />
           <p>点击或将文件拖拽到这里上传</p>
         </div>
-        <Button v-if="!uploadType" type="ghost" icon="ios-cloud-upload-outline" :disabled="disabled">{{ buttonName }}</Button>
+        <Button v-if="!uploadType" :disabled="disabled" type="ghost" icon="ios-cloud-upload-outline">{{ buttonName }}</Button>
       </el-tooltip>
     </Upload>
     <div v-for="(item, index) in file" :key="item.keyID">Upload file: {{ item.name }}

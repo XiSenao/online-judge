@@ -5,7 +5,7 @@
       <!--problem main-->
       <Panel :padding="40" shadow>
         <div slot="title">{{ problem.title }}</div>
-        <div id="problem-content" v-katex class="markdown-body">
+        <div v-katex id="problem-content" class="markdown-body">
           <p class="title">{{ $t('m.Description') }}</p>
           <p class="content" v-html="problem.description" /><p class="title">{{ $t('m.Input') }} <span v-if="problem.ioMode=='File IO'">({{ $t('m.FromFile') }}: {{ problem.ioMode }})</span></p>
           <p class="content" v-html="problem.inputDescription" /><p class="title">{{ $t('m.Output') }} <span v-if="problem.ioMode=='File IO'">({{ $t('m.ToFile') }}: {{ problem.ioMode }})</span></p>
@@ -35,7 +35,7 @@
           <div v-if="problem.hint">
             <p class="title">{{ $t('m.Hint') }}</p>
             <Card dis-hover>
-              <div class="content" v-html="problem.hint" /></Card>
+            <div class="content" v-html="problem.hint" /></Card>
           </div>
 
           <div v-if="problem.sourceName">
@@ -61,7 +61,7 @@
           <div v-if="statusVisible" class="status">
             <template v-if="!contestID || (contestID && OIContestRealTimePermission)">
               <span>{{ $t('m.Status') }}</span>
-              <Tag type="dot" :color="submissionStatus.color" @click.native="handleRoute('/status/'+submissionId)">
+              <Tag :color="submissionStatus.color" type="dot" @click.native="handleRoute('/status/'+submissionId)">
                 {{ submissionStatus.text }}
               </Tag>
             </template>
@@ -89,11 +89,11 @@
             </div>
           </template>
           <Button
+            :loading="submitting"
+            :disabled="!isAuthenticated || ((contestID && problemSubmitDisabled) || submitted)"
             class="fl-right"
             type="warning"
             icon="edit"
-            :loading="submitting"
-            :disabled="!isAuthenticated || ((contestID && problemSubmitDisabled) || submitted)"
             @click="submitCode">
             <span v-if="submitting">{{ $t('m.Submitting') }}</span>
             <span v-else>{{ $t('m.Submit') }}</span>
@@ -146,23 +146,23 @@
         </div>
         <ul>
           <li><p>{{ $t('m.ID') }}</p>
-            <p>{{ problem.id }}</p></li>
+          <p>{{ problem.id }}</p></li>
           <li>
             <p>{{ $t('m.Time_Limit') }}</p>
-            <p>{{ problem.timeLimit }}MS</p></li>
+          <p>{{ problem.timeLimit }}MS</p></li>
           <li>
             <p>{{ $t('m.Memory_Limit') }}</p>
-            <p>{{ problem.memoryLimit }}MB</p></li>
+          <p>{{ problem.memoryLimit }}MB</p></li>
           <li /><li>
             <p>{{ $t('m.IOMode') }}</p>
             <p>{{ problem.ioMode }}</p>
           </li>
           <li>
             <p>{{ $t('m.Created') }}</p>
-            <p>{{ problem.creator }}</p></li>
+          <p>{{ problem.creator }}</p></li>
           <li v-if="problem.level">
             <p>{{ $t('m.Level') }}</p>
-            <p>{{ $t('m.' + problem.level.charAt(0).toUpperCase() + problem.level.slice(1)) }}</p></li>
+          <p>{{ $t('m.' + problem.level.charAt(0).toUpperCase() + problem.level.slice(1)) }}</p></li>
           <li v-if="problem.total_score">
             <p>{{ $t('m.Score') }}</p>
             <p>{{ problem.total_score }}</p>

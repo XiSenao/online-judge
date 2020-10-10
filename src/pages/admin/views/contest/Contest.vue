@@ -2,7 +2,7 @@
   <div class="view">
     <Spin v-if="utilSpin" size="large" fix />
     <Panel :title="title">
-      <el-form ref="contest" label-position="top" :model="contest" :rules="contentRules">
+      <el-form ref="contest" :model="contest" :rules="contentRules" label-position="top">
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item :label="$t('m.ContestTitle')" prop="title">
@@ -18,8 +18,8 @@
             <el-form-item :label="$t('m.Contest_Start_Time')" prop="startTime" required>
               <el-date-picker
                 v-model="contest.startTime"
-                type="datetime"
                 :placeholder="$t('m.Contest_Start_Time')"
+                type="datetime"
               />
             </el-form-item>
           </el-col>
@@ -27,8 +27,8 @@
             <el-form-item :label="$t('m.Contest_End_Time')" prop="endTime" required>
               <el-date-picker
                 v-model="contest.endTime"
-                type="datetime"
                 :placeholder="$t('m.Contest_End_Time')"
+                type="datetime"
               />
             </el-form-item>
           </el-col>
@@ -43,9 +43,9 @@
           </el-col>
           <el-col :span="8">
             <el-form-item :label="'Rank Rule'">
-              <el-radio v-model="contest.rankModel" class="radio" :label="CONTEST_QUERY_VALUE.ACM_ICPC" :disabled="disableRuleType">ACM/ICPC</el-radio>
-              <el-radio v-model="contest.rankModel" class="radio" :label="CONTEST_QUERY_VALUE.WARM_UP" :disabled="disableRuleType">Exercise</el-radio>
-              <el-radio v-model="contest.rankModel" class="radio" :label="CONTEST_QUERY_VALUE.INTEGRAL" :disabled="disableRuleType">Rating</el-radio>
+              <el-radio v-model="contest.rankModel" :label="CONTEST_QUERY_VALUE.ACM_ICPC" :disabled="disableRuleType" class="radio">ACM/ICPC</el-radio>
+              <el-radio v-model="contest.rankModel" :label="CONTEST_QUERY_VALUE.WARM_UP" :disabled="disableRuleType" class="radio">Exercise</el-radio>
+              <el-radio v-model="contest.rankModel" :label="CONTEST_QUERY_VALUE.INTEGRAL" :disabled="disableRuleType" class="radio">Rating</el-radio>
             </el-form-item>
           </el-col>
           <el-col :span="8">

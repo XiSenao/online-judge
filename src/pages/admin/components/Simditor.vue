@@ -27,6 +27,20 @@
         currentValue: this.value
       }
     },
+    watch: {
+      'value' (val) {
+        if (this.currentValue !== val) {
+          this.currentValue = val
+          this.editor.setValue(val)
+        }
+      },
+      'currentValue' (newVal, oldVal) {
+        if (newVal !== oldVal) {
+          this.$emit('change', newVal)
+          this.$emit('input', newVal)
+        }
+      }
+    },
     mounted () {
       this.editor = new Simditor({
         textarea: this.$refs.editor,
@@ -52,20 +66,6 @@
       })
 
       this.editor.setValue(this.value)
-    },
-    watch: {
-      'value' (val) {
-        if (this.currentValue !== val) {
-          this.currentValue = val
-          this.editor.setValue(val)
-        }
-      },
-      'currentValue' (newVal, oldVal) {
-        if (newVal !== oldVal) {
-          this.$emit('change', newVal)
-          this.$emit('input', newVal)
-        }
-      }
     }
   }
 </script>

@@ -1,10 +1,10 @@
 <template>
-  <el-row type="flex" :gutter="20" justify="center" align="middle" style="margin-bottom: 230px;">
+  <el-row :gutter="20" type="flex" justify="center" align="middle" style="margin-bottom: 230px;">
     <el-col :md="24" :lg="8">
       <el-card class="admin-info">
         <el-row :gutter="20">
           <el-col :span="10">
-            <img class="avatar" :src="user.avatar" />
+            <img :src="user.avatar" class="avatar" />
           </el-col>
           <el-col :span="14">
             <p class="admin-info-name">{{ user.username }}</p>

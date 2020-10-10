@@ -1,5 +1,5 @@
 <template>
-  <Row type="flex" :gutter="18">
+  <Row :gutter="18" type="flex">
     <Col :span="19">
     <Panel shadow>
       <div slot="title">{{ $t('m.Problem_List') }}</div>
@@ -41,10 +41,10 @@
           </li>
         </ul>
       </div>
-      <Table style="width: 100%; font-size: 16px;"
-             :columns="problemTableColumns"
+      <Table :columns="problemTableColumns"
              :data="problemList"
              :loading="loadings.table"
+             style="width: 100%; font-size: 16px;"
              disabled-hover></Table>
     </Panel>
     <Pagination :total="total" :page-size="limit" :current.sync="query.page" @on-change="pushRouter" />
@@ -55,8 +55,8 @@
       <div slot="title" class="taglist-title">{{ $t('m.Tags') }}</div>
       <Button v-for="tag in tagList"
               :key="tag.name"
-              type="ghost"
               :disabled="query.tag === tag.id"
+              type="ghost"
               shape="circle"
               class="tag-btn"
               @click="filterByTag(tag.id)">{{ tag.name }}

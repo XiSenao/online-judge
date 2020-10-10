@@ -1,7 +1,7 @@
 <template>
   <div class="view">
     <Panel :title="$t('m.SMTP_Config')">
-      <el-form label-position="left" label-width="70px" :model="smtp">
+      <el-form :model="smtp" label-position="left" label-width="70px">
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item :label="$t('m.Server')" required>
@@ -37,7 +37,7 @@
     </Panel>
 
     <Panel :title="$t('m.Website_Config')">
-      <el-form ref="form" label-position="left" label-width="100px" :model="websiteConfig">
+      <el-form ref="form" :model="websiteConfig" label-position="left" label-width="100px">
         <el-row :gutter="20">
           <el-col :span="8">
             <el-form-item :label="$t('m.Base_Url')" required>
@@ -56,7 +56,7 @@
           </el-col>
           <el-col :span="24">
             <el-form-item :label="$t('m.Footer')" required>
-              <el-input v-model="websiteConfig.website_footer" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="Website Footer HTML" />
+              <el-input v-model="websiteConfig.website_footer" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Website Footer HTML" />
             </el-form-item>
           </el-col>
           <el-col :span="24">

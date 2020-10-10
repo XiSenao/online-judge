@@ -1,5 +1,5 @@
 <template>
-  <codemirror v-model="currentValue" :options="options" ref="editor"></codemirror>
+  <codemirror ref="editor" v-model="currentValue" :options="options"></codemirror>
 </template>
 <script>
   import { codemirror } from 'vue-codemirror-lite'
@@ -9,6 +9,19 @@
 
   export default {
     name: 'CodeMirror',
+    components: {
+      codemirror
+    },
+    props: {
+      value: {
+        type: String,
+        default: ''
+      },
+      mode: {
+        type: String,
+        default: 'text/x-csrc'
+      }
+    },
     data () {
       return {
         currentValue: '',
@@ -25,23 +38,6 @@
         }
       }
     },
-    components: {
-      codemirror
-    },
-    props: {
-      value: {
-        type: String,
-        default: ''
-      },
-      mode: {
-        type: String,
-        default: 'text/x-csrc'
-      }
-    },
-    mounted () {
-      this.currentValue = this.value
-      this.$refs.editor.editor.setOption('mode', this.mode)
-    },
     watch: {
       'value' (val) {
         if (this.currentValue !== val) {
@@ -57,6 +53,10 @@
       'mode' (newVal) {
         this.$refs.editor.editor.setOption('mode', newVal)
       }
+    },
+    mounted () {
+      this.currentValue = this.value
+      this.$refs.editor.editor.setOption('mode', this.mode)
     }
   }
 </script>

@@ -4,7 +4,7 @@
       <Col :span="12">
       <div>
         <span>{{ $t('m.Language') }}:</span>
-        <Select class="adjust" :value="language" @on-change="onLangChange">
+        <Select :value="language" class="adjust" @on-change="onLangChange">
           <Option v-for="item in languages" :key="item" :value="item">{{ item }}
           </Option>
         </Select>
@@ -20,7 +20,7 @@
       <Col :span="12">
       <div class="fl-right">
         <span>{{ $t('m.Theme') }}:</span>
-        <Select class="adjust" :value="theme" @on-change="onThemeChange">
+        <Select :value="theme" class="adjust" @on-change="onThemeChange">
           <Option v-for="item in themes" :key="item.label" :value="item.value">{{ item.label }}
           </Option>
         </Select>

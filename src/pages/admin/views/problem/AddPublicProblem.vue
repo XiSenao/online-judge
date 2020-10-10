@@ -2,8 +2,8 @@
   <div>
     <el-input
       v-model="keyword"
-      placeholder="Keywords"
       :disabled="disabled"
+      placeholder="Keywords"
       prefix-icon="el-icon-search"
     />
     <el-table v-loading="loading" :data="problems">
@@ -38,10 +38,10 @@
     </el-table>
 
     <el-pagination
-      class="page"
-      layout="prev, pager, next"
       :page-size="limit"
       :total="total"
+      class="page"
+      layout="prev, pager, next"
       @current-change="getPublicProblem"
     />
   </div>

@@ -6,7 +6,7 @@
         <el-row type="flex" justify="center">
           <el-col :span="6">
             <el-form :model="spiderProblem">
-              <el-tooltip effect="dark" :content="spiderProblem.tipDescription" placement="top-start">
+              <el-tooltip :content="spiderProblem.tipDescription" effect="dark" placement="top-start">
                 <el-form-item prop="title">
                   <md-input v-model="spiderProblem.title" icon="el-icon-search" name="title" placeholder="输入标题">
                     Title
@@ -21,9 +21,9 @@
             <el-form-item label="Judge Server" required>
               <el-autocomplete
                 v-model="spiderProblem.judgeType"
-                class="inline-input"
                 :fetch-suggestions="queryjudgeType"
                 :trigger-on-focus="true"
+                class="inline-input"
                 placeholder="请输入内容"
                 @keyup="handleJudgeTypeSelect(spiderProblem)"
                 @select="handleJudgeTypeSelect(spiderProblem)"
@@ -38,7 +38,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item :label="$t('m.Difficulty')" prop="difficulty">
-              <el-select v-model="spiderProblem.difficulty" class="difficulty-select" size="small" :placeholder="$t('m.Difficulty')">
+              <el-select v-model="spiderProblem.difficulty" :placeholder="$t('m.Difficulty')" class="difficulty-select" size="small">
                 <el-option :label="$t('m.Low')" value="easy"></el-option>
                 <el-option :label="$t('m.Mid')" value="medium"></el-option>
                 <el-option :label="$t('m.High')" value="hard"></el-option>
@@ -71,10 +71,10 @@
               <el-autocomplete
                 v-if="inputVisible"
                 v-model="tagInput"
-                size="mini"
-                class="input-new-tag"
                 :trigger-on-focus="true"
                 :fetch-suggestions="querySearch"
+                size="mini"
+                class="input-new-tag"
                 @keyup.enter.native="addTag(tagInput, spiderProblem)"
                 @select="addTag(tagInput, spiderProblem)"
                 @blur="addTag(tagInput, spiderProblem)">

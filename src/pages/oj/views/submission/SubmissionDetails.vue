@@ -19,7 +19,7 @@
 
     <!--后台返info就显示出来， 权限控制放后台 -->
     <Col v-if="submission.info && !isCE" :span="20">
-    <Table stripe :loading="loading" :disabled-hover="true" :columns="columns" :data="submission.info.data" />
+    <Table :loading="loading" :disabled-hover="true" :columns="columns" :data="submission.info.data" stripe />
     </Col>
 
     <Col :span="20">

@@ -5,7 +5,7 @@
       <div slot="title">
         <Button type="text" class="contest-title" @click="goContest">{{ contests[index].title }}</Button>
       </div>
-      <Carousel v-model="index" trigger="hover" autoplay :autoplay-speed="6000" class="contest">
+      <Carousel v-model="index" :autoplay-speed="6000" trigger="hover" autoplay class="contest">
         <CarouselItem v-for="contest of contests" :key="contest">
           <div class="contest-content">
             <div class="contest-content-tags">

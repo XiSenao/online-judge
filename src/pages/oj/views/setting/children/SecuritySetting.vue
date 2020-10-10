@@ -3,7 +3,7 @@
     <p class="section-title">{{ $t('m.Sessions') }}</p>
     <div class="flex-container setting-content">
       <template v-for="session in sessions">
-        <Card :key="session.ip" class="flex-child" :padding="20">
+        <Card :key="session.ip" :padding="20" class="flex-child">
           <span slot="title" style="line-height: 20px">{{ session.ip }}</span>
           <div slot="extra">
             <Tag v-if="session.current_session" color="green">Current</Tag>
@@ -52,15 +52,15 @@
           </FormItem>
           <Button
             v-if="!TFAOpened"
-            type="primary"
             :loading="loadingBtn"
+            type="primary"
             @click="updateTFA(false)"
           >Open TFA
           </Button>
           <Button
             v-else
-            type="error"
             :loading="loadingBtn"
+            type="error"
             @click="closeTFA"
           >Close TFA
           </Button>

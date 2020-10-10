@@ -1,6 +1,6 @@
 <template>
   <div id="header">
-    <Menu class="oj-menu" theme="light" mode="horizontal" :active-name="activeMenu" @on-select="handleRoute">
+    <Menu :active-name="activeMenu" class="oj-menu" theme="light" mode="horizontal" @on-select="handleRoute">
       <div class="logo"><span>Online Judge</span></div>
       <Menu-item name="/">
         <Icon type="home" />
@@ -77,7 +77,7 @@
     </Menu>
     <Modal v-model="modalVisible" :width="400">
       <div slot="header" class="modal-title">{{ $t('m.Welcome_to') }}</div>
-      <component :is="modalStatus.mode" v-if="modalVisible"></component>
+      <component v-if="modalVisible" :is="modalStatus.mode"></component>
       <div slot="footer" style="display: none"></div>
     </Modal>
   </div>

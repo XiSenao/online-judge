@@ -2,7 +2,7 @@
   <div class="container">
     <Spin v-show="spinShow" size="large" fix />
     <div class="avatar-container">
-      <img class="avatar" :src="userIMGBuffer">
+      <img :src="userIMGBuffer" class="avatar">
     </div>
     <Card :padding="100">
       <div v-if="profile.id">

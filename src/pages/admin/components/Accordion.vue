@@ -1,12 +1,12 @@
 <template>
   <div class="accordion">
     <header>
-      <h2>{{title}}</h2>
+      <h2>{{ title }}</h2>
       <div class="header_right">
         <slot name="header"></slot>
       </div>
     </header>
-    <div class="body" v-show="isOpen">
+    <div v-show="isOpen" class="body">
       <slot></slot>
     </div>
     <footer @click="isOpen = !isOpen"><i :class="{'rotate': !isOpen}" class="el-icon-caret-top"></i></footer>

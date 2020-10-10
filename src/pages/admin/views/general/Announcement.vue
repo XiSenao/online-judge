@@ -3,10 +3,10 @@
     <Panel :title="$t('m.General_Announcement')">
       <div class="list">
         <el-table
-          ref="table"
           v-loading="loading"
-          element-loading-text="loading"
+          ref="table"
           :data="announcementList"
+          element-loading-text="loading"
           style="width: 100%">
           <el-table-column
             width="100"
@@ -64,10 +64,10 @@
           <el-button icon="el-icon-plus" type="primary" size="small" @click="openAnnouncementDialog(null)">Create</el-button>
           <el-pagination
             v-if="!contestID"
-            class="page"
-            layout="prev, pager, next"
             :page-size="pageSize"
             :total="total"
+            class="page"
+            layout="prev, pager, next"
             @current-change="currentChange">
           </el-pagination>
         </div>
@@ -82,8 +82,8 @@
         <el-form-item :label="$t('m.Announcement_Title')" required>
           <el-input
             v-model="announcement.title"
-            class="title-input"
-            :placeholder="$t('m.Announcement_Title')">
+            :placeholder="$t('m.Announcement_Title')"
+            class="title-input">
           </el-input>
         </el-form-item>
         <el-form-item :label="$t('m.Announcement_Content')" required>

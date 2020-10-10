@@ -2,7 +2,7 @@
   <div>
     <Form ref="formRegister" :model="formRegister" :rules="ruleRegister">
       <FormItem prop="username">
-        <Input v-model="formRegister.username" type="text" :placeholder="$t('m.RegisterUsername')" size="large" @on-enter="handleRegister" />
+        <Input v-model="formRegister.username" :placeholder="$t('m.RegisterUsername')" type="text" size="large" @on-enter="handleRegister" />
         <Icon slot="prepend" type="ios-person-outline" />
       </FormItem>
       <FormItem prop="email">
@@ -10,11 +10,11 @@
         <Icon slot="prepend" type="ios-email-outline" />
       </FormItem>
       <FormItem prop="password">
-        <Input v-model="formRegister.password" type="password" :placeholder="$t('m.RegisterPassword')" size="large" @on-enter="handleRegister" />
+        <Input v-model="formRegister.password" :placeholder="$t('m.RegisterPassword')" type="password" size="large" @on-enter="handleRegister" />
         <Icon slot="prepend" type="ios-locked-outline" />
       </FormItem>
       <FormItem prop="passwordAgain">
-        <Input v-model="formRegister.passwordAgain" type="password" :placeholder="$t('m.Password_Again')" size="large" @on-enter="handleRegister" />
+        <Input v-model="formRegister.passwordAgain" :placeholder="$t('m.Password_Again')" type="password" size="large" @on-enter="handleRegister" />
         <Icon slot="prepend" type="ios-locked-outline" />
       </FormItem>
       <FormItem prop="captcha" style="margin-bottom:10px">
@@ -33,10 +33,10 @@
     </Form>
     <div class="footer">
       <Button
+        :loading="btnRegisterLoading"
         type="primary"
         class="btn"
         long
-        :loading="btnRegisterLoading"
         @click="handleRegister">
         {{ $t('m.UserRegister') }}
       </Button>

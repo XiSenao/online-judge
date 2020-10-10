@@ -1,7 +1,7 @@
 <template>
   <div class="view">
-    <icon-btn name="Machine Judge Server" icon="android" :disabled="isJudgeServer" @click.native="exchangeIdentity('JudgeServer')" />
-    <icon-btn name="SpiderServer" icon="first-order" :disabled="!isJudgeServer" @click.native="exchangeIdentity('SpiderServer')" />
+    <icon-btn :disabled="isJudgeServer" name="Machine Judge Server" icon="android" @click.native="exchangeIdentity('JudgeServer')" />
+    <icon-btn :disabled="!isJudgeServer" name="SpiderServer" icon="first-order" @click.native="exchangeIdentity('SpiderServer')" />
     <Panel :title="isJudgeServer ? 'Machine Judge Server' : 'Spider Judge Server'">
       <el-table
         :data="servers"
@@ -90,25 +90,25 @@
         <el-form-item :label="'Name'" required>
           <el-input
             v-model="judgeServer.name"
+            :placeholder="'name'"
             class="title-input"
             disabled
-            :placeholder="'name'"
           />
         </el-form-item>
         <el-form-item :label="'Hostname'" required>
           <el-input
             v-model="judgeServer.hostname"
+            :placeholder="'hostname'"
             class="title-input"
             disabled
-            :placeholder="'hostname'"
           />
         </el-form-item>
         <el-form-item :label="'URL'" required>
           <el-input
             v-model="judgeServer.url"
+            :placeholder="'URL'"
             class="title-input"
             disabled
-            :placeholder="'URL'"
           />
         </el-form-item>
         <Radio-group v-model="judgeServer.status">

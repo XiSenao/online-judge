@@ -9,13 +9,13 @@
         />
       </div>
       <el-table
-        ref="table"
         v-loading="loading"
-        element-loading-text="loading"
-        style="width: 100%"
+        ref="table"
         :data="problemList.filter(res => {
           return contestId ? res.status !== -1 : true
         })"
+        element-loading-text="loading"
+        style="width: 100%"
         @row-dblclick="handleDblclick"
       >
         <el-table-column
@@ -105,18 +105,18 @@
         >Add From Public Problem
         </el-button>
         <el-pagination
-          class="page"
-          layout="prev, pager, next"
           :page-size="pageSize"
           :total="total"
+          class="page"
+          layout="prev, pager, next"
           @current-change="currentChange"
         />
       </div>
     </Panel>
     <el-dialog
+      :visible.sync="InlineEditDialogVisible"
       title="Sure to update the problem? "
       width="20%"
-      :visible.sync="InlineEditDialogVisible"
       @close-on-click-modal="false"
     >
       <div>
@@ -130,9 +130,9 @@
     </el-dialog>
     <el-dialog
       v-if="contestId"
+      :visible.sync="addProblemDialogVisible"
       title="Add Contest Problem"
       width="80%"
-      :visible.sync="addProblemDialogVisible"
       @close-on-click-modal="false"
     >
       <add-problem-component :contest-i-d="contestId" @on-change="getProblemList" />

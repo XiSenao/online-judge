@@ -1,7 +1,7 @@
 <template>
   <el-form>
     <el-form-item :label="$t('m.Input')">
-      <el-input type="textarea" v-model="input" @change="changeInput" @keyup.enter.native="changeInput"></el-input>
+      <el-input v-model="input" type="textarea" @change="changeInput" @keyup.enter.native="changeInput"></el-input>
     </el-form-item>
 
     <el-form-item :label="$t('m.Output')">

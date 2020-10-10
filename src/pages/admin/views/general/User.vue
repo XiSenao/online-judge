@@ -1,7 +1,7 @@
 <template>
   <div class="view">
-    <icon-btn name="User" icon="user" :disabled="showUser" @click.native="exchangeIdentity('User')" />
-    <icon-btn name="Admin" icon="user-circle" :disabled="!showUser" @click.native="exchangeIdentity('Admin')" />
+    <icon-btn :disabled="showUser" name="User" icon="user" @click.native="exchangeIdentity('User')" />
+    <icon-btn :disabled="!showUser" name="Admin" icon="user-circle" @click.native="exchangeIdentity('Admin')" />
     <icon-btn name="Add New Account" icon="plus" @click.native="showUserDialog = !showUserDialog" />
     <Panel :title="showUser ? $t('m.User_User') : 'Admin'">
       <div slot="header">
@@ -32,10 +32,10 @@
         </el-row>
       </div>
       <el-table
-        ref="table"
         v-loading="loadingTable"
-        element-loading-text="loading"
+        ref="table"
         :data="showUser ? userList : adminList"
+        element-loading-text="loading"
         style="width: 100%"
         @selection-change="selectedAll = arguments[0]">
         <el-table-column type="selection" width="55" />
@@ -64,10 +64,10 @@
       </el-table>
       <div class="panel-options">
         <el-pagination
-          class="page"
-          layout="prev, pager, next"
           :page-size="pageSize"
           :total="total"
+          class="page"
+          layout="prev, pager, next"
           @current-change="currentChange"
         />
       </div>
@@ -105,11 +105,11 @@
           <a id="downloadGenerateUsers" href="" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-fa-users" :loading="loadingGenerate" @click="generateUser">Generate & Export
+          <el-button :loading="loadingGenerate" type="primary" icon="el-icon-fa-users" @click="generateUser">Generate & Export
           </el-button>
           <span
             v-if="formGenerateUser.number_from && formGenerateUser.number_to &&
-              formGenerateUser.number_from <= formGenerateUser.number_to"
+            formGenerateUser.number_from <= formGenerateUser.number_to"
             class="userPreview">
             The usernames will be {{ formGenerateUser.prefix + formGenerateUser.number_from + formGenerateUser.suffix }},
             <span v-if="formGenerateUser.number_from + 1 < formGenerateUser.number_to">
@@ -123,7 +123,7 @@
       </el-form>
     </Panel>
     <!-- 创建新用户 -->
-    <el-dialog title="Create New Account" :visible.sync="showUserDialog" :close-on-click-modal="false">
+    <el-dialog :visible.sync="showUserDialog" :close-on-click-modal="false" title="Create New Account">
       <el-form ref="user" :model="user" label-width="120px" label-position="left">
         <el-row :gutter="20">
           <el-col :span="user.admin_type==='Regular User' ? 12 : 13">
@@ -147,10 +147,10 @@
                 </div>
                 <input
                   v-model="user.password"
-                  type="password"
-                  class="el-input__inner"
                   :style="`border-color: ${passwordStrength.COLOR}`"
                   :placeholder="$t('m.password')"
+                  type="password"
+                  class="el-input__inner"
                   @input="checkPasswordStrength">
               </Poptip>
             </el-form-item>

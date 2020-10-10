@@ -1,10 +1,10 @@
 <template>
-  <Panel shadow :padding="10">
+  <Panel :padding="10" shadow>
     <div slot="title">
       {{ title }}
     </div>
     <div slot="extra">
-      <Button v-if="listVisible" type="info" :loading="btnLoading" @click="init">{{ $t('m.Refresh') }}</Button>
+      <Button v-if="listVisible" :loading="btnLoading" type="info" @click="init">{{ $t('m.Refresh') }}</Button>
       <Button v-else type="ghost" icon="ios-undo" @click="goBack">{{ $t('m.Back') }}</Button>
     </div>
 
@@ -33,7 +33,7 @@
       </template>
 
       <template v-else>
-        <div key="content" v-katex class="content-container markdown-body" v-html="announcement.content" />
+        <div v-katex key="content" class="content-container markdown-body" v-html="announcement.content" />
       </template>
     </transition-group>
   </Panel>

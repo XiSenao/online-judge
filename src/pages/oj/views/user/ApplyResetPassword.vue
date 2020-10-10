@@ -22,10 +22,10 @@
         </Form-item>
       </Form>
       <Button
+        :loading="btnLoading"
         type="primary"
         class="btn"
         long
-        :loading="btnLoading"
         @click="sendEmail"
       >
         {{ $t('m.Send_Password_Reset_Email') }}

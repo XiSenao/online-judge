@@ -1,7 +1,7 @@
 <template>
   <div>
     <panel>
-      <span slot="title">{{$t('m.Test_Case_Prune_Test_Case')}}
+      <span slot="title">{{ $t('m.Test_Case_Prune_Test_Case') }}
         <el-popover placement="right" trigger="hover">
           These test cases are not owned by any problem, you can clean them safely.
           <i slot="reference" class="el-icon-fa-question-circle import-user-icon" />
@@ -30,9 +30,9 @@
       </el-table>
       <div v-show="data.length > 0" class="panel-options">
         <el-button
+          :loading="loading"
           type="warning"
           size="small"
-          :loading="loading"
           icon="el-icon-fa-trash"
           @click="deleteTestCase()"
         >

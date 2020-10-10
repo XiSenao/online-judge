@@ -1,7 +1,7 @@
 <template>
   <div>
     <Panel>
-      <div slot="title">{{$t('m.Problems_List')}}</div>
+      <div slot="title">{{ $t('m.Problems_List') }}</div>
       <Table
         v-if="contestRuleType == 'ACM/ICPC' || OIContestRealTimePermission"
         :columns="ACMTableColumns"
@@ -62,6 +62,16 @@
         ]
       }
     },
+    computed: {
+      ...mapState({
+        problems: state => state.contest.contestProblems
+      }),
+      ...mapGetters({
+        isAuthenticated: 'user/isAuthenticated',
+        contestRuleType: 'contest/contestRuleType',
+        OIContestRealTimePermission: 'contest/OIContestRealTimePermission'
+      })
+    },
     mounted () {
       this.getContestProblems()
     },
@@ -86,16 +96,6 @@
           }
         })
       }
-    },
-    computed: {
-      ...mapState({
-        problems: state => state.contest.contestProblems
-      }),
-      ...mapGetters({
-        isAuthenticated: 'user/isAuthenticated',
-        contestRuleType: 'contest/contestRuleType',
-        OIContestRealTimePermission: 'contest/OIContestRealTimePermission'
-      })
     }
   }
 </script>

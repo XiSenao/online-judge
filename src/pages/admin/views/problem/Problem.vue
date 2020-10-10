@@ -9,9 +9,9 @@
             <el-form-item label="Judge Server" required>
               <el-autocomplete
                 v-model="problem.judgeType"
-                class="inline-input"
                 :fetch-suggestions="queryjudgeType"
                 :trigger-on-focus="true"
+                class="inline-input"
                 placeholder="请输入内容"
                 @keyup.enter.native="handleJudgeTypeSelect(problem)"
                 @select="handleJudgeTypeSelect(problem)"
@@ -19,26 +19,26 @@
             </el-form-item>
           </el-col>
           <el-col :span="18">
-            <el-form-item prop="title" :label="$t('m.Title')" required>
+            <el-form-item :label="$t('m.Title')" prop="title" required>
               <el-input v-model="problem.title" :placeholder="$t('m.Title')"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="24">
-            <el-form-item prop="description" :label="$t('m.Description')" required>
+            <el-form-item :label="$t('m.Description')" prop="description" required>
               <Simditor v-model="problem.description" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="24">
-            <el-form-item prop="input_description" :label="$t('m.Input_Description')" required>
+            <el-form-item :label="$t('m.Input_Description')" prop="input_description" required>
               <Simditor v-model="problem.input_description" />
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item prop="output_description" :label="$t('m.Output_Description')" required>
+            <el-form-item :label="$t('m.Output_Description')" prop="output_description" required>
               <Simditor v-model="problem.output_description" />
             </el-form-item>
           </el-col>
@@ -46,17 +46,17 @@
         <el-row :gutter="20">
           <el-col :span="8">
             <el-form-item :label="$t('m.Time_Limit') + ' (ms)' " required>
-              <el-input v-model="problem.time_limit" type="Number" :placeholder="$t('m.Time_Limit')"></el-input>
+              <el-input v-model="problem.time_limit" :placeholder="$t('m.Time_Limit')" type="Number"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="$t('m.Memory_limit') + ' (MB)' " required>
-              <el-input v-model="problem.memory_limit" type="Number" :placeholder="$t('m.Memory_limit')"></el-input>
+              <el-input v-model="problem.memory_limit" :placeholder="$t('m.Memory_limit')" type="Number"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="$t('m.Difficulty')">
-              <el-select v-model="problem.difficulty" class="difficulty-select" size="small" :placeholder="$t('m.Difficulty')">
+              <el-select v-model="problem.difficulty" :placeholder="$t('m.Difficulty')" class="difficulty-select" size="small">
                 <el-option :label="$t('m.Low')" value="easy"></el-option>
                 <el-option :label="$t('m.Mid')" value="medium"></el-option>
                 <el-option :label="$t('m.High')" value="hard"></el-option>
@@ -90,10 +90,10 @@
               <el-autocomplete
                 v-if="inputVisible"
                 v-model="tagInput"
-                size="mini"
-                class="input-new-tag"
                 :trigger-on-focus="true"
                 :fetch-suggestions="querySearch"
+                size="mini"
+                class="input-new-tag"
                 @keyup.enter.native="addTag(tagInput, problem)"
                 @blur="addTag(tagInput, problem)"
                 @select="addTag(tagInput, problem)" />
@@ -105,9 +105,9 @@
               <el-checkbox-group v-model="problem.languages" :min="1">
                 <el-tooltip v-for="lang in allLanguage.languages"
                             :key="lang.name"
+                            :content="lang.description"
                             class="spj-radio"
                             effect="dark"
-                            :content="lang.description"
                             placement="top-start">
                   <el-checkbox :label="lang.name"></el-checkbox>
                 </el-tooltip>
@@ -127,8 +127,8 @@
                     <el-input
                       v-model="sample.input"
                       :rows="5"
-                      type="textarea"
-                      :placeholder="$t('m.Input_Samples')">
+                      :placeholder="$t('m.Input_Samples')"
+                      type="textarea">
                     </el-input>
                   </el-form-item>
                 </el-col>
@@ -137,8 +137,8 @@
                     <el-input
                       v-model="sample.output"
                       :rows="5"
-                      type="textarea"
-                      :placeholder="$t('m.Output_Samples')">
+                      :placeholder="$t('m.Output_Samples')"
+                      type="textarea">
                     </el-input>
                   </el-form-item>
                 </el-col>
@@ -150,7 +150,7 @@
           <button type="button" class="add-samples" @click="addSample()"><i class="el-icon-plus"></i>{{ $t('m.Add_Sample') }}
           </button>
         </div>
-        <el-form-item style="margin-top: 20px" :label="$t('m.Hint')">
+        <el-form-item :label="$t('m.Hint')" style="margin-top: 20px">
           <Simditor v-model="problem.hint" />
         </el-form-item>
         <el-form-item :label="$t('m.Code_Template')">
@@ -177,18 +177,18 @@
               <el-radio-group v-model="problem.spj_language">
                 <el-tooltip v-for="lang in allLanguage.spj_languages"
                             :key="lang.name"
+                            :content="lang.description"
                             class="spj-radio"
                             effect="dark"
-                            :content="lang.description"
                             placement="top-start">
                   <el-radio :label="lang.name">{{ lang.name }}</el-radio>
                 </el-tooltip>
               </el-radio-group>
               <el-button :type="compileSuccess ? 'success' : 'primary'"
-                         size="small"
                          :icon="compileSuccess ? 'el-icon-check' : 'el-icon-fa-random'"
                          :disabled="compileSuccess"
                          :loading="loadingCompile"
+                         size="small"
                          @click="compileSPJ">
                 {{ $t('m.Compile') }}
               </el-button>
@@ -201,16 +201,16 @@
             <el-form-item :label="$t('m.TestCase')">
               <UploadDemo
                 ref="uploadZipDemo"
-                button-name="Upload"
-                file-name="file"
-                tip-content="Upload test samples"
-                tip-position="top"
                 :show-button="false"
                 :format-suffix="['zip']"
                 :is-spj="!!problem.spj"
                 :limit-number="1"
                 :disabled="spiderFlag"
-                :get-zip-file-value-lists="getZIPFileValueLists" />
+                :get-zip-file-value-lists="getZIPFileValueLists"
+                button-name="Upload"
+                file-name="file"
+                tip-content="Upload test samples"
+                tip-position="top" />
             </el-form-item>
           </el-col>
 
@@ -232,34 +232,34 @@
                   <el-form class="demo-table-expand">
                     <el-row :gutter="20" type="flex">
                       <el-col :span="12" style="position: relative;">
-                        <icon-btn icon="clipboard"
+                        <icon-btn :data-clipboard-text="props.row.inputFile.fileValue"
+                                  icon="clipboard"
                                   name="Copy"
                                   class="sample-read"
-                                  :data-clipboard-text="props.row.inputFile.fileValue"
                                   @click.native="copySamples"></icon-btn>
                         <el-form-item :label="$t('m.Input_Samples')">
                           <el-input
                             v-model="props.row.inputFile.fileValue"
                             :rows="7"
+                            :placeholder="$t('m.Input_Samples')"
                             type="textarea"
-                            disabled
-                            :placeholder="$t('m.Input_Samples')">
+                            disabled>
                           </el-input>
                         </el-form-item>
                       </el-col>
                       <el-col :span="12" style="position: relative;">
-                        <icon-btn icon="clipboard"
+                        <icon-btn :data-clipboard-text="props.row.outputFile.fileValue"
+                                  icon="clipboard"
                                   name="Copy"
                                   class="sample-read"
-                                  :data-clipboard-text="props.row.outputFile.fileValue"
                                   @click.native="copySamples"></icon-btn>
                         <el-form-item :label="!problem.spj ? $t('m.Output_Samples') : $t('m.Input_Samples')">
                           <el-input
                             v-model="props.row.outputFile.fileValue"
                             :rows="7"
+                            :placeholder="$t('m.Output_Samples')"
                             type="textarea"
-                            disabled
-                            :placeholder="$t('m.Output_Samples')">
+                            disabled>
                           </el-input>
                         </el-form-item>
                       </el-col>

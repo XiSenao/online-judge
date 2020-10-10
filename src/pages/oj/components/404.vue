@@ -14,8 +14,8 @@
         </div>
         <div class="bullshit__headline">{{ message }}</div>
         <div class="bullshit__info">Please check that the URL you entered is correct, or click the button below to return to the homepage.</div>
-        <a @click="$router.replace({ name: 'home' })" class="bullshit__return-home">Back to home</a>
-        <a @click="$router.go(-1)" class="bullshit__return-home">Go Back</a>
+        <a class="bullshit__return-home" @click="$router.replace({ name: 'home' })">Back to home</a>
+        <a class="bullshit__return-home" @click="$router.go(-1)">Go Back</a>
       </div>
     </div>
   </div>

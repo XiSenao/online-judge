@@ -8,10 +8,10 @@
           placeholder="Keywords" />
       </div>
       <el-table
-        ref="table"
         v-loading="loading"
-        element-loading-text="loading"
+        ref="table"
         :data="contestList"
+        element-loading-text="loading"
         style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
@@ -76,10 +76,10 @@
       </el-table>
       <div class="panel-options">
         <el-pagination
-          class="page"
-          layout="prev, pager, next"
           :page-size="pageSize"
           :total="total"
+          class="page"
+          layout="prev, pager, next"
           @current-change="currentChange" />
       </div>
     </Panel>

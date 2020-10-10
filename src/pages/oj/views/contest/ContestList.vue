@@ -92,7 +92,7 @@
             </ul>
             </Col>
             <Col :span="4" style="text-align: center">
-            <Tag type="dot" :color="showStatus(contest.startTime, contest.endTime).color">{{ $t('m.' + showStatus(contest.startTime, contest.endTime).name.replace(/\s+/g, '_')) }}</Tag>
+            <Tag :color="showStatus(contest.startTime, contest.endTime).color" type="dot">{{ $t('m.' + showStatus(contest.startTime, contest.endTime).name.replace(/\s+/g, '_')) }}</Tag>
             </Col>
           </Row>
         </li>

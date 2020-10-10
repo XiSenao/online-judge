@@ -3,7 +3,7 @@
     <div class="flex-container">
       <div class="left">
         <p class="section-title">{{ $t('m.ChangePassword') }}</p>
-        <Form ref="formPassword" class="setting-content" :model="formPassword" :rules="rulePassword">
+        <Form ref="formPassword" :model="formPassword" :rules="rulePassword" class="setting-content">
           <FormItem label="Old Password" prop="old_password">
             <Input v-model="formPassword.old_password" type="password" />
           </FormItem>
@@ -27,7 +27,7 @@
 
       <div class="right">
         <p class="section-title">{{ $t('m.ChangeEmail') }}</p>
-        <Form ref="formEmail" class="setting-content" :model="formEmail" :rules="ruleEmail">
+        <Form ref="formEmail" :model="formEmail" :rules="ruleEmail" class="setting-content">
           <FormItem label="Current Password" prop="password">
             <Input v-model="formEmail.password" type="password" />
           </FormItem>

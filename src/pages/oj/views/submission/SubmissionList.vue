@@ -19,8 +19,8 @@
               </Dropdown>
             </li>
             <li>
-              <el-tooltip effect="dark" :content="!profile.id ? 'Please Login First' : formFilter.myself ? 'Show All' : 'Show Mine'" placement="top-start">
-                <i-switch v-model="formFilter.myself" size="large" :disabled="!profile.id" @on-change="handleQueryChange">
+              <el-tooltip :content="!profile.id ? 'Please Login First' : formFilter.myself ? 'Show All' : 'Show Mine'" effect="dark" placement="top-start">
+                <i-switch v-model="formFilter.myself" :disabled="!profile.id" size="large" @on-change="handleQueryChange">
                   <span slot="open">{{ $t('m.Mine') }}</span>
                   <span slot="close">{{ $t('m.All') }}</span>
                 </i-switch>
@@ -34,7 +34,7 @@
             </li>
           </ul>
         </div>
-        <Table stripe :disabled-hover="true" :columns="columns" :data="submissions" :loading="loadingTable" />
+        <Table :disabled-hover="true" :columns="columns" :data="submissions" :loading="loadingTable" stripe />
         <Pagination :total="total" :page-size="limit" :current.sync="page" @on-change="changeRoute" />
       </Panel>
     </div>

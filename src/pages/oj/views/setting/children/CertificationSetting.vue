@@ -3,14 +3,14 @@
     <template v-if="!formCertification.id || opChangeCertification">
       <div class="section-title">{{ $t('m.Certification_Setting') }}</div>
       <Form ref="formCertification" :model="formCertification" :rules="ruleCertification">
-        <Row type="flex" :gutter="30" justify="space-around">
+        <Row :gutter="30" type="flex" justify="space-around">
           <Col :span="11">
           <FormItem :label="$t('m.Quick_Select')">
             <el-cascader
               v-model="cValue"
               :placeholder="$t('m.Quick_Select_Info')"
-              class="el-icascader"
               :options="options"
+              class="el-icascader"
               clearable
               filterable
             />
@@ -28,7 +28,7 @@
             <Input v-model="formCertification.class0" />
           </Form-item>
           <Form-item>
-            <Button type="primary" :loading="loadingApplyBtn" @click="opChangeCertification ? updateCertification() : applyCertification()">
+            <Button :loading="loadingApplyBtn" type="primary" @click="opChangeCertification ? updateCertification() : applyCertification()">
               {{ opChangeCertification ? $t('m.Update') : $t('m.Submit') }}
             </Button>
           </Form-item>
@@ -66,7 +66,7 @@
         <i-col span="11">
           <Card>
             <div class="i-title">
-              <el-row type="flex" :gutter="20" align="middle" justify="center">
+              <el-row :gutter="20" type="flex" align="middle" justify="center">
                 <el-col>
                   <img :src="showStatus(false)" class="i-certTypeImage" width="50px" height="50px">
                   <span>{{ showStatus(true) }}</span>

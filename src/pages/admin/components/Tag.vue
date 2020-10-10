@@ -3,8 +3,8 @@
     <el-tag
       v-for="(tag, index) in showDynamicTags"
       :key="tag.name"
-      closable
       :disable-transitions="false"
+      closable
       @click.native="editTag(tag, index)"
       @close="handleClose(tag)">
       <span v-if="index != num">{{ tag.name }}</span>

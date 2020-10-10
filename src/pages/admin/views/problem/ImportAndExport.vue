@@ -52,10 +52,10 @@
                    @click="exportProblems">Export
         </el-button>
         <el-pagination
-          class="page"
-          layout="prev, pager, next"
           :page-size="limit"
           :total="total"
+          class="page"
+          layout="prev, pager, next"
           @current-change="getProblems">
         </el-pagination>
       </div>
@@ -63,8 +63,6 @@
     <panel title="Import QDUOJ Problems (beta)">
       <el-upload
         ref="QDU"
-        action="/api/admin/import_problem"
-        name="file"
         :file-list="fileList1"
         :show-file-list="true"
         :with-credentials="true"
@@ -72,7 +70,9 @@
         :on-change="onFile1Change"
         :auto-upload="false"
         :on-success="uploadSucceeded"
-        :on-error="uploadFailed">
+        :on-error="uploadFailed"
+        action="/api/admin/import_problem"
+        name="file">
         <el-button slot="trigger" size="small" type="primary" icon="el-icon-fa-upload">Choose File</el-button>
         <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('QDU')">Upload</el-button>
       </el-upload>
@@ -81,8 +81,6 @@
     <panel title="Import FPS Problems (beta)">
       <el-upload
         ref="FPS"
-        action="/api/admin/import_fps"
-        name="file"
         :file-list="fileList2"
         :show-file-list="true"
         :with-credentials="true"
@@ -90,7 +88,9 @@
         :on-change="onFile2Change"
         :auto-upload="false"
         :on-success="uploadSucceeded"
-        :on-error="uploadFailed">
+        :on-error="uploadFailed"
+        action="/api/admin/import_fps"
+        name="file">
         <el-button slot="trigger" size="small" type="primary" icon="el-icon-fa-upload">Choose File</el-button>
         <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload('FPS')">Upload</el-button>
       </el-upload>

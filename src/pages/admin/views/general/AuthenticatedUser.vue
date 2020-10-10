@@ -6,10 +6,10 @@
       </div>
       <div class="list">
         <el-table
-          ref="table"
           v-loading="loading"
-          element-loading-text="loading"
+          ref="table"
           :data="contestID ? contestAuthUserList : authenticatedUserList"
+          element-loading-text="loading"
           style="width: 100%">
           <template v-if="!contestID">
             <el-table-column
@@ -110,16 +110,16 @@
             width="180"
             label="Operation">
             <template slot-scope="scope">
-              <icon-btn name="同意" icon="check" @click.native="exStatus(scope.row.id, 1)" v-show="!scope.row.status || scope.row.status === -1"></icon-btn>
-              <icon-btn name="拒绝" icon="times" @click.native="exStatus(scope.row.id, -1)" v-show="!scope.row.status || scope.row.status === 1"></icon-btn>
+              <icon-btn v-show="!scope.row.status || scope.row.status === -1" name="同意" icon="check" @click.native="exStatus(scope.row.id, 1)"></icon-btn>
+              <icon-btn v-show="!scope.row.status || scope.row.status === 1" name="拒绝" icon="times" @click.native="exStatus(scope.row.id, -1)"></icon-btn>
             </template>
           </el-table-column>
         </el-table>
         <div class="panel-options">
           <el-pagination
-            class="page"
             :page-size="pageSize"
             :total="total"
+            class="page"
             layout="prev, pager, next"
             @current-change="currentChange">
           </el-pagination>
@@ -127,10 +127,10 @@
       </div>
     </Panel>
     <el-dialog
-      class="s-dialog"
-      title="Authentication Type"
       :visible.sync="showAuthenticationTypeDialog"
       :close-on-click-modal="false"
+      class="s-dialog"
+      title="Authentication Type"
       @open="onOpenEditDialog">
       <Spin v-show="spinShow" size="large" fix />
       <p class="a-tip">已使用认证标签<i class="el-icon-circle-check" style="margin-left: 4px; color: green;"></i></p>

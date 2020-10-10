@@ -4,11 +4,11 @@
     <template v-if="!resetSuccess">
       <Form ref="formResetPassword" :model="formResetPassword" :rules="ruleResetPassword">
         <Form-item prop="password">
-          <Input v-model="formResetPassword.password" type="password" :placeholder="$t('m.RPassword')" size="large" />
+          <Input v-model="formResetPassword.password" :placeholder="$t('m.RPassword')" type="password" size="large" />
           <Icon slot="prepend" type="ios-locked-outline" />
         </Form-item>
         <Form-item prop="passwordAgain">
-          <Input v-model="formResetPassword.passwordAgain" type="password" :placeholder="$t('m.RPassword_Again')" size="large" />
+          <Input v-model="formResetPassword.passwordAgain" :placeholder="$t('m.RPassword_Again')" type="password" size="large" />
           <Icon slot="prepend" type="ios-locked-outline" />
         </Form-item>
         <Form-item prop="captcha" style="margin-bottom:10px">
@@ -29,10 +29,10 @@
         </Form-item>
       </Form>
       <Button
+        :loading="btnLoading"
         type="primary"
         class="btn"
         long
-        :loading="btnLoading"
         @click="resetPassword"
       >
         {{ $t('m.Reset_Password') }}

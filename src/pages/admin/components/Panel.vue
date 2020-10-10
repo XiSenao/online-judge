@@ -1,12 +1,12 @@
 <template>
-  <div class="panel" :class="{'small': small}">
+  <div :class="{'small': small}" class="panel">
     <header>
       <div class="title">
         <template v-if="$slots.title">
           <slot name="title"></slot>
         </template>
         <template v-else>
-          {{title}}
+          {{ title }}
         </template>
       </div>
 
