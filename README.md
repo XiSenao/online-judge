@@ -8,10 +8,6 @@
 
 ### A multiple pages app built for Online-Judge. 
 
->### [Back End](https://github.com/czeta/online-judge)
->### [Demo](http://yfoj.org.cn/)
->### [API Document](http://cdn.yfoj.org.cn/doc.html)
-
 ## Features
 
 + Webpack3 multiple pages with bundle size optimization
@@ -38,7 +34,24 @@ TARGET=http://Your-backend
 npm run dev
 ```
 
+## Advanced
 
+```bash
+# create templates quickly
+npm run new
+
+# code format check
+npm run lint
+
+# code format check and auto fix
+npm run lint -- --fix
+```
+
+## Online Demo
+[Preview](http://yfoj.org.cn/). 
+**If you want to restructure the project, [api documentation](http://cdn.yfoj.org.cn/doc.html) may be suitable for you.
+You can review [project](https://github.com/czeta/online-judge) if you have doubts about the services provided by the project.
+Enjoy It!**
 
 ## Browser Support
 
