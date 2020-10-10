@@ -12,6 +12,9 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
   baseWebpackConfig.entry[name] = ['./build/dev-client'].concat(baseWebpackConfig.entry[name])
 })
 
+const externalConfig = JSON.parse(JSON.stringify(utils.externalConfig));  // 读取配置
+utils.getExternalModules(externalConfig);
+
 module.exports = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
@@ -31,13 +34,17 @@ module.exports = merge(baseWebpackConfig, {
       filename: config.build.ojIndex,
       template: config.build.ojTemplate,
       chunks: ['oj'],
-      inject: true
+      cdnConfig: externalConfig,
+      inject: true,
+      onlyCss: true
     }),
     new HtmlWebpackPlugin({
       filename: config.build.adminIndex,
       template: config.build.adminTemplate,
       chunks: ['admin'],
-      inject: true
+      cdnConfig: externalConfig,
+      inject: true,
+      onlyCss: true
     }),
     new FriendlyErrorsPlugin()
   ]

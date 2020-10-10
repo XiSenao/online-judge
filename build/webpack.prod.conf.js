@@ -12,9 +12,8 @@ const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 // const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin')
 
-function resolve (dir) {
-  return path.join(__dirname, '..', dir)
-}
+const externalConfig = JSON.parse(JSON.stringify(utils.externalConfig)); // 读取配置
+const externalModules = utils.getExternalModules(externalConfig);
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -29,6 +28,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
+  externals: externalModules,
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
@@ -122,6 +122,8 @@ const webpackConfig = merge(baseWebpackConfig, {
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
+      cdnConfig: externalConfig, // cdn配置
+      onlyCss: true, //加载css
       ga: 'UA-170628607-1'
     }),
     // admin
@@ -137,6 +139,8 @@ const webpackConfig = merge(baseWebpackConfig, {
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
+      cdnConfig: externalConfig, // cdn配置
+      onlyCss: true, //加载css
       ga: 'UA-170628607-1'
     }),
     // new HappyPack({

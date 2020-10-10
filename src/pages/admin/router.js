@@ -1,9 +1,15 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 // 引入 view 组件
-import { Announcement, AuthenticatedUser, Contest, ContestList, Home, JudgeServer, Login,
-  Problem, SpiderProblem, ProblemList, User, Dashboard, Redirect, Error401, Error404 } from './views'
-Vue.use(VueRouter)
+import {
+  Announcement, AuthenticatedUser, Contest, ContestList,
+  Home, JudgeServer, Login, Problem, SpiderProblem, ProblemList,
+  User, Dashboard, Redirect, Error401, Error404
+} from './views'
+
+if (process.env.NODE_ENV === 'development') {
+  Vue.use(VueRouter)
+}
 
 export const constantRoutes = [
   {

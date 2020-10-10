@@ -10,7 +10,6 @@ import Clipboard from 'clipboard'
 
 import filters from '@/utils/filters'
 import router from './router'
-import { GOOGLE_ANALYTICS_ID } from '@/utils/constants'
 import VueAnalytics from 'vue-analytics'
 import katex from '@/plugins/katex'
 
@@ -28,26 +27,29 @@ import './permission'
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
-Vue.use(VueAnalytics, {
-  id: GOOGLE_ANALYTICS_ID,
-  disableScriptLoader: true,
-  router,
-  autoTracking: {
-    pageviewOnLoad: false
-  }
-})
-Vue.use(VueWorker)
-Vue.use(iView)
-Vue.use(Element, { locale })
-Vue.use(katex)
 Vue.component(IconBtn.name, IconBtn)
 Vue.component(Panel.name, Panel)
 Vue.component(Save.name, Save)
 Vue.component(Cancel.name, Cancel)
 
-Vue.use(Element, {
-  i18n: (key, value) => i18n.t(key, value)
-})
+if (process.env.NODE_ENV === 'development') {
+  Vue.use(VueWorker)
+  Vue.use(iView)
+  Vue.use(Element, { locale })
+  Vue.use(katex)
+  Vue.use(Element, {
+    i18n: (key, value) => i18n.t(key, value)
+  })
+} else {
+  Vue.use(VueAnalytics, {
+    id: process.env.GA,
+    disableScriptLoader: true,
+    router,
+    autoTracking: {
+      pageviewOnLoad: false
+    }
+  })
+}
 
 Vue.prototype.Clipboard = Clipboard
 
