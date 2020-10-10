@@ -7,6 +7,6 @@ console.log(`current version is ${version}`)
 module.exports = {
   NODE_ENV: '"development"',
   VERSION: version,
-  Target: 'http://cdn.yfoj.org.cn',
+  TARGET: 'http://cdn.yfoj.org.cn',
   USE_SENTRY: '0'
 }

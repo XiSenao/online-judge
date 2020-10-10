@@ -1,4 +1,4 @@
-# OnlineJudge Front End -- [Back End.](https://github.com/czeta/online-judge)
+# OnlineJudge Front End
 [![vue](https://img.shields.io/badge/vue-2.5.13-blue.svg?style=flat-square)](https://github.com/vuejs/vue)
 [![vuex](https://img.shields.io/badge/vuex-3.0.1-blue.svg?style=flat-square)](https://vuex.vuejs.org/)
 [![echarts](https://img.shields.io/badge/echarts-3.8.3-blue.svg?style=flat-square)](https://github.com/ecomfe/echarts)
@@ -7,6 +7,8 @@
 [![Build Status](https://travis-ci.org/QingdaoU/OnlineJudgeFE.svg?branch=master)](https://travis-ci.org/QingdaoU/OnlineJudgeFE)
 
 ### A multiple pages app built for OnlineJudge. 
+
+>### [Back End.](https://github.com/czeta/online-judge)
 >### [Demo](http://yfoj.org.cn/)
 >### [API Document](http://cdn.yfoj.org.cn/doc.html)
 
@@ -25,7 +27,7 @@ Install nodejs **v8.12.0** first.
 ```bash
 npm install
 
-# the package.json will set proxy table to your backend
+# the config/dev.env.js will set proxy api to your backend
 TARGET=http://Your-backend
 
 # serve with hot reload at localhost:8080

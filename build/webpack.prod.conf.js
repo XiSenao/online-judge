@@ -123,8 +123,6 @@ const webpackConfig = merge(baseWebpackConfig, {
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
       cdnConfig: externalConfig, // cdn配置
-      onlyCss: true, //加载css
-      ga: 'UA-170628607-1'
     }),
     // admin
     new HtmlWebpackPlugin({
@@ -139,9 +137,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
-      cdnConfig: externalConfig, // cdn配置
-      onlyCss: true, //加载css
-      ga: 'UA-170628607-1'
+      cdnConfig: externalConfig // cdn配置
     }),
     // new HappyPack({
     //   id: 'worker',
