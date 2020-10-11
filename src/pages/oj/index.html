@@ -56,11 +56,6 @@
       window.confirm('Your browser is not supported, click \'OK\' to update')) {
       window.location = 'http://outdatedbrowser.com'
     }
-     // IE 10 and earlier
-     if (window.navigator.userAgent.indexOf('MSIE ') > 0 &&
-      window.confirm('Your browser is not supported, click \'OK\' to update')) {
-      window.location = 'http://outdatedbrowser.com'
-    }
     // Check that service workers are supported
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {

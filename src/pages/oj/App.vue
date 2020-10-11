@@ -50,9 +50,8 @@
     },
     created () {
       try {
-        // console.log(process.env)
         document.body.removeChild(document.getElementById('app-loader'))
-        console.log(`                                                                                                                                                                                       
+        console.log(` %c                                                                                                                                                                                     
                          ▍ ★∴
          s ．t ．▍▍a．..r．█▍ ☆ ★∵t .... 
          ◥█▅▅██▅▅██▅▅▅▅▅███◤
@@ -65,7 +64,7 @@
         utils.changeTheme(this.theme() || 'white')
         document.onkeydown = event => {
           event = event || window.event
-          if (this.planeNumber > 4) { return }
+          if (this.planeNumber > 4) return
           if (event.keyCode === 86 && event.ctrlKey) {
             var s = document.createElement('script')
             s.type = 'text/javascript'

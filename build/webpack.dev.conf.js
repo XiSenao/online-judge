@@ -6,14 +6,15 @@ const merge = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.conf')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+const { TRUE } = require('node-sass')
 
 // add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
   baseWebpackConfig.entry[name] = ['./build/dev-client'].concat(baseWebpackConfig.entry[name])
 })
 
-const externalConfig = JSON.parse(JSON.stringify(utils.externalConfig));  // 读取配置
-utils.getExternalModules(externalConfig);
+const externalConfig = JSON.parse(JSON.stringify(utils.externalConfig))  // 读取配置
+utils.getExternalModules(externalConfig)
 
 module.exports = merge(baseWebpackConfig, {
   module: {
@@ -34,17 +35,13 @@ module.exports = merge(baseWebpackConfig, {
       filename: config.build.ojIndex,
       template: config.build.ojTemplate,
       chunks: ['oj'],
-      cdnConfig: externalConfig,
-      inject: true,
-      onlyCss: true
+      inject: true
     }),
     new HtmlWebpackPlugin({
       filename: config.build.adminIndex,
       template: config.build.adminTemplate,
       chunks: ['admin'],
-      cdnConfig: externalConfig,
-      inject: true,
-      onlyCss: true
+      inject: true
     }),
     new FriendlyErrorsPlugin()
   ]

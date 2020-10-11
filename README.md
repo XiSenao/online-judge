@@ -27,8 +27,11 @@ git clone https://github.com/FinalAshen/Online-Judge.git
 # Install project dependencies
 npm install
 
+# this command only needs execute once unless you upgrade the package in build/webpack.dll.conf.js
+npm run build:dll
+
 # the `config/dev.env.js` will set proxy api to your backend
-TARGET=http://Your-backend
+TARGET: 'http://Your-backend'
 
 # serve with hot reload at localhost:8080
 npm run dev

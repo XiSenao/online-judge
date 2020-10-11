@@ -12,8 +12,8 @@ const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 // const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin')
 
-const externalConfig = JSON.parse(JSON.stringify(utils.externalConfig)); // 读取配置
-const externalModules = utils.getExternalModules(externalConfig);
+const externalConfig = JSON.parse(JSON.stringify(utils.externalConfig)) // 读取配置
+const externalModules = utils.getExternalModules(externalConfig)
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -122,7 +122,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
-      cdnConfig: externalConfig, // cdn配置
+      cdnConfig: externalConfig
     }),
     // admin
     new HtmlWebpackPlugin({
@@ -137,20 +137,8 @@ const webpackConfig = merge(baseWebpackConfig, {
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
-      cdnConfig: externalConfig // cdn配置
-    }),
-    // new HappyPack({
-    //   id: 'worker',
-    //   loaders: [{
-    //     loader: 'worker-loader',
-    //     options: { 
-    //       inline: true, 
-    //       name: 'workerName.[hash].js' 
-    //     }
-    //   }],
-    //   threadPool: happyThreadPool,
-    //   verbose: true
-    // })
+      cdnConfig: externalConfig
+    })
   ]
 })
 

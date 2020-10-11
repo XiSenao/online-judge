@@ -71,12 +71,10 @@
     "copy-webpack-plugin": "^4.5.1",
     "cross-env": "^7.0.2",
     "css-loader": "^0.28.11",
-
     "eslint": "4.19.1",
     "eslint-friendly-formatter": "4.0.1",
     "eslint-loader": "2.0.0",
     "eslint-plugin-vue": "4.7.1",
-
     "eventsource-polyfill": "0.9.6",
     "express": "^4.16.3",
     "extract-text-webpack-plugin": "^3.0.0",
