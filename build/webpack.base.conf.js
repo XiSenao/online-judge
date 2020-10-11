@@ -55,6 +55,50 @@ const createLintingRule = () => ({
   }
 })
 
+const createHappyPack = () => ([
+  new HappyPack({
+    id: 'vue',
+    loaders: [{
+      loader: 'vue-loader',
+      cacheDirectory: true,
+      options: vueLoaderConfig 
+    }],
+    threadPool: happyThreadPool,
+  }),
+  new HappyPack({
+    id: 'js',
+    loaders: ['babel-loader?cacheDirectory=true'],
+    threadPool: happyThreadPool,
+    verbose: true
+  })
+])
+const createPrepackLoaders = () => {
+  const preLoaderLists = []
+  if (config.build.useHappyPack) {
+    preLoaderLists.push({
+      test: /\.vue$/,
+      loader: 'happypack/loader?id=vue'
+    }, {
+      test: /\.js$/,
+      loader: 'happypack/loader?id=js',
+      exclude: /node_modules/,
+      include: [resolve('src'), resolve('test')]
+    })
+  } else {
+    preLoaderLists.push({
+      test: /\.vue$/,
+      loader: 'vue-loader',
+      options: vueLoaderConfig
+    }, {
+      test: /\.js$/,
+      loader: 'babel-loader?cacheDirectory=true',
+      exclude: /node_modules/,
+      include: [resolve('src'), resolve('test')]
+    })
+  }
+  return preLoaderLists
+}
+
 module.exports = {
   entry: entries,
   output: {
@@ -78,27 +122,7 @@ module.exports = {
   module: {
     rules: [
       ...(config.dev.useEslint ? [createLintingRule()] : []),
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader',
-        options: vueLoaderConfig
-      },
-      {
-        test: /\.js$/,
-        loader: 'babel-loader?cacheDirectory=true',
-        exclude: /node_modules/,
-        include: [resolve('src'), resolve('test')]
-      },
-      // {
-      //   test: /\.vue$/,
-      //   loader: 'happypack/loader?id=vue'
-      // },
-      // {
-      //   test: /\.js$/,
-      //   loader: 'happypack/loader?id=js',
-      //   exclude: /node_modules/,
-      //   include: [resolve('src'), resolve('test')]
-      // },
+      ...createPrepackLoaders(),
       {
         test: /\.worker\.js$/,
         use: {
@@ -145,21 +169,7 @@ module.exports = {
       files: ['index.html', 'admin/index.html'],
       append: false
     }),
-    // new HappyPack({
-    //   id: 'vue',
-    //   loaders: [{
-    //     loader: 'vue-loader',
-    //     cacheDirectory: true,
-    //     options: vueLoaderConfig 
-    //   }],
-    //   threadPool: happyThreadPool,
-    // }),
-    // new HappyPack({
-    //   id: 'js',
-    //   loaders: ['babel-loader?cacheDirectory=true'],
-    //   threadPool: happyThreadPool,
-    //   verbose: true
-    // }),
+    ...(config.build.useHappyPack ? createHappyPack() : []),
     new WorkboxPlugin.GenerateSW({
       importWorkboxFrom: 'local',
       skipWaiting: true,

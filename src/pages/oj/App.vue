@@ -52,7 +52,7 @@
       try {
         // console.log(process.env)
         document.body.removeChild(document.getElementById('app-loader'))
-        console.log(` %c                                                                                                                                                                                      
+        console.log(`                                                                                                                                                                                       
                          ▍ ★∴
          s ．t ．▍▍a．..r．█▍ ☆ ★∵t .... 
          ◥█▅▅██▅▅██▅▅▅▅▅███◤

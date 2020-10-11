@@ -1,7 +1,9 @@
 'use strict'
+// 确定当前环境 node 和 npm 版本是否符合要求.
 require('./check-versions')()
 
 const config = require('../config')
+// 如果没有设置环境变量则默认为开发环境.
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
 }
@@ -10,6 +12,7 @@ const opn = require('opn')
 const path = require('path')
 const express = require('express')
 const webpack = require('webpack')
+// 开发环境中代理请求, 解决浏览器跨域问题.
 const proxyMiddleware = require('http-proxy-middleware')
 const webpackConfig = require('./webpack.dev.conf')
 
@@ -26,11 +29,11 @@ const compiler = webpack(webpackConfig)
 
 const devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,
-  quiet: true
+  quiet: true // 和 friendly-errors-webpack-plugin 插件配合
 })
 
 const hotMiddleware = require('webpack-hot-middleware')(compiler, {
-  log: false,
+  log: false, // 和 friendly-errors-webpack-plugin 插件配合
   heartbeat: 2000
 })
 // force page reload when html-webpack-plugin template changes
@@ -63,6 +66,16 @@ Object.keys(proxyTable).forEach(function (context) {
 *   This results in issues when the user hits the refresh button or is directly accessing a page other than the landing page, e.g. 
 *   help or /help/online as the web server bypasses the index file to locate the file at this location. 
 *   As your application is a SPA, the web server will fail trying to retrieve the file and return a 404 - Not Found message to the user.
+*   
+*   单页面应用程序(SPA)通常使用一个web浏览器可以访问的索引文件(默认index.html). JavaScript 借助 HTML5 History API 的帮助下处理应用程序中的导航, 
+*   但是当用户通过单击刷新按钮或直接通过输入地址的方式访问页面时, 由于这两种方式都绕开了 History API (无法捕获), 直接向服务器发起请求指令, 
+*   而服务器通常默认只有一个index.html, 则会出现找不到页面的问题(404).
+*   connect-history-api-fallback 中间件很好的解决了这个问题. 
+*   具体来说, 每当出现符合以下条件的请求时, 它将把请求定位到你指定的索引文件.
+*     + Get请求
+*     + Content-Type类型是text/html类型
+*     + 不是直接的文件请求, 即所请求的路径不包含`.`字符
+*     + 不匹配option参数中提供的模式
 */
 const rewrites = {
   rewrites: [{
@@ -90,7 +103,7 @@ var readyPromise = new Promise((resolve, reject) => {
 var server
 var portfinder = require('portfinder')
 portfinder.basePort = port
-console.log(` %c                                                                                                                                                                                      
+console.log(`                                                                                                                                                                                       
                          ▍ ★∴
      　 　s ．t ．▍▍a．..r．█▍ ☆ ★∵t .... 
       　　◥█▅▅██▅▅██▅▅▅▅▅███◤
